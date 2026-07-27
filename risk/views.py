@@ -1,0 +1,137 @@
+import logging
+from rest_framework import viewsets, filters
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+
+from .models import Risk, RiskLog
+from .serializers import RiskSerializer, RiskLogSerializer
+from .permissions import RiskPermission
+from .filters import RiskFilterSet, RiskLogFilterSet
+from . import services
+
+logger = logging.getLogger('colored')
+
+
+class ExportLogView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        export_type = request.data.get('export_type', 'unknown')
+        row_count = request.data.get('row_count', 0)
+        filters_applied = request.data.get('filters', {})
+        user = request.user
+
+        logger.info(
+            f"Excel ixracı - {user.username} '{export_type}' cədvəlini ixrac etdi "
+            f"({row_count} sətir, filtrlər={filters_applied})"
+        )
+
+        try:
+            services.log_exported(
+                user=user,
+                export_type=export_type,
+                row_count=row_count,
+                filters=filters_applied,
+                request=request,
+            )
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(f"ExportLogView - xəta ({user.username}): {str(e)}")
+            return Response({'detail': 'Export logu saxlanılmadı'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RiskViewSet(viewsets.ModelViewSet):
+    queryset = Risk.objects.select_related('created_by', 'updated_by').all()
+    serializer_class = RiskSerializer
+    permission_classes = [RiskPermission]
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = RiskFilterSet
+    search_fields = [
+        'designation', 'legal_basis', 'international_framework',
+        'national_legal_reference', 'standard_references',
+    ]
+    ordering_fields = ['risk_degree', 'created_at', 'updated_at', 'designation']
+    ordering = ['-created_at']
+
+    def update(self, request, *args, **kwargs):
+        logger.info(
+            f"RiskViewSet.update çağırıldı - method={request.method}, "
+            f"user={request.user}, pk={kwargs.get('pk')}, data={request.data}"
+        )
+        try:
+            response = super().update(request, *args, **kwargs)
+            logger.info(f"RiskViewSet.update nəticəsi - status={response.status_code}")
+            return response
+        except Exception as e:
+            logger.error(f"RiskViewSet.update - xəta: {str(e)}")
+            raise
+
+    def partial_update(self, request, *args, **kwargs):
+        logger.info(
+            f"RiskViewSet.partial_update çağırıldı - method={request.method}, "
+            f"user={request.user}, pk={kwargs.get('pk')}, data={request.data}"
+        )
+        try:
+            response = super().partial_update(request, *args, **kwargs)
+            logger.info(f"RiskViewSet.partial_update nəticəsi - status={response.status_code}")
+            return response
+        except Exception as e:
+            logger.error(f"RiskViewSet.partial_update - xəta: {str(e)}")
+            raise
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        try:
+            instance = serializer.save(created_by=user, updated_by=user)
+            services.log_created(instance, user, request=self.request)
+            logger.info(f"RiskViewSet - {user.username} yeni risk yaratdı (id={instance.id})")
+        except Exception as e:
+            logger.error(f"RiskViewSet.perform_create - xəta ({user.username}): {str(e)}")
+            raise
+
+    def perform_update(self, serializer):
+        from types import SimpleNamespace
+        user = self.request.user
+        try:
+            old_values = {f: getattr(serializer.instance, f) for f in services.TRACKED_FIELDS}
+            updated = serializer.save(updated_by=user)
+            services.log_updated(SimpleNamespace(**old_values), updated, user, request=self.request)
+            logger.info(f"RiskViewSet - {user.username} riski yenilədi (id={updated.id})")
+        except Exception as e:
+            logger.error(f"RiskViewSet.perform_update - xəta ({user.username}): {str(e)}")
+            raise
+
+    def perform_destroy(self, instance):
+        user = self.request.user
+        try:
+            services.log_deleted(instance, user, request=self.request)
+            risk_id = instance.id
+            instance.delete()
+            logger.info(f"RiskViewSet - {user.username} riski sildi (id={risk_id})")
+        except Exception as e:
+            logger.error(f"RiskViewSet.perform_destroy - xəta ({user.username}): {str(e)}")
+            raise
+
+
+class RiskLogViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = RiskLog.objects.select_related('user', 'risk').all()
+    serializer_class = RiskLogSerializer
+    permission_classes = [IsAuthenticated]
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = RiskLogFilterSet
+    search_fields = ['risk_designation', 'user_username_snapshot']
+    ordering_fields = ['timestamp']
+    ordering = ['-timestamp']
+
+    def get_queryset(self):
+        user = self.request.user
+        if not (user.is_superuser or user.has_perm('risk.view_risk')):
+            logger.info(f"RiskLogViewSet - {user.username} üçün icazə yoxdur, boş nəticə qaytarıldı")
+            return RiskLog.objects.none()
+        logger.info(f"RiskLogViewSet.get_queryset - {user.username} risk loglarını sorğuladı")
+        return super().get_queryset()

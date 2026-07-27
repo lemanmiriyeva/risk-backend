@@ -1,0 +1,262 @@
+INFO 2026-07-20 10:02:34,876 views Laman Bashirova logged out!
+INFO 2026-07-20 10:04:58,903 views root logged out!
+INFO 2026-07-20 10:05:45,590 views RiskViewSet - root riski sildi (id=4)
+INFO 2026-07-20 10:12:25,969 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 10:12:25,989 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 10:12:29,909 views RiskViewSet.partial_update çağırıldı - method=PATCH, user=root, pk=1, data={'designation': 'test', 'legal_basis': 'tgffg', 'international_framework': 'test', 'national_legal_reference': 'testaaa', 'asset_value': 4, 'probability': 5, 'impact': 4, 'treatment_option': 'prevention', 'residual_risk': '53w', 'update_frequency': '5', 'incident_notification_notes': '44', 'standard_references': '4', 'id': 1, 'risk_degree': 80, 'risk_level': 'critical', 'risk_level_display': 'Kritik', 'treatment_option_display': 'Qarşısının alınması', 'created_by': {'id': 1, 'username': 'root', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdm.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 1, 'username': 'root', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdm.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-15T16:32:12.034693+04:00', 'updated_at': '2026-07-20T10:10:19.183065+04:00'}
+INFO 2026-07-20 10:12:29,912 views RiskViewSet.update çağırıldı - method=PATCH, user=root, pk=1, data={'designation': 'test', 'legal_basis': 'tgffg', 'international_framework': 'test', 'national_legal_reference': 'testaaa', 'asset_value': 4, 'probability': 5, 'impact': 4, 'treatment_option': 'prevention', 'residual_risk': '53w', 'update_frequency': '5', 'incident_notification_notes': '44', 'standard_references': '4', 'id': 1, 'risk_degree': 80, 'risk_level': 'critical', 'risk_level_display': 'Kritik', 'treatment_option_display': 'Qarşısının alınması', 'created_by': {'id': 1, 'username': 'root', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdm.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 1, 'username': 'root', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdm.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-15T16:32:12.034693+04:00', 'updated_at': '2026-07-20T10:10:19.183065+04:00'}
+INFO 2026-07-20 10:12:29,929 views RiskViewSet - root riski yenilədi (id=1)
+INFO 2026-07-20 10:12:29,931 views RiskViewSet.update nəticəsi - status=200
+INFO 2026-07-20 10:12:29,932 views RiskViewSet.partial_update nəticəsi - status=200
+INFO 2026-07-20 11:04:04,147 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 11:04:04,167 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 15:21:52,650 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 15:22:05,836 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-20 15:22:06,052 views root uğurla daxil oldu
+INFO 2026-07-20 15:22:06,083 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 15:25:45,298 views root logged out!
+ERROR 2026-07-20 15:25:45,311 views LogoutView - token xətası (root): Token is blacklisted
+INFO 2026-07-20 15:25:50,886 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-20 15:25:51,099 views root uğurla daxil oldu
+INFO 2026-07-20 15:25:51,127 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 15:26:03,928 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-20 15:26:03,951 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-20 15:26:20,848 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 15:26:20,866 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-20 15:26:20,954 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 09:49:01,924 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-21 09:49:02,281 views root uğurla daxil oldu
+INFO 2026-07-21 09:49:02,323 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:50:32,505 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:50:32,522 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:51:21,395 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:51:21,413 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:51:23,167 views Excel ixracı - root 'risk_list' tipini ixrac etdi (1 sətir, filtrlər={'search': '', 'risk_level': '', 'treatment_option': '', 'ordering': '-created_at'})
+INFO 2026-07-21 09:51:31,013 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 09:51:31,037 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 09:52:41,630 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 09:52:43,538 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:52:43,597 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 09:52:43,661 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:01:02,678 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:01:02,700 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:02,184 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:03,470 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:04,621 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:05,889 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:06,704 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:08,859 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:03:49,161 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:04:05,526 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:06,537 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:21,274 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:42,464 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:43,550 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:45,016 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:46,175 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:47,550 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:50,951 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:51,591 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:52,805 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:05:55,402 views Excel ixracı - root 'risk_logs' tipini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-21 10:06:48,747 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:07:23,218 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:08:31,244 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:08:38,090 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:08:38,110 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:08:38,160 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:08:53,795 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:08:54,150 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:08:54,166 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:08:54,221 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:09:34,258 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:09:55,650 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:09:57,603 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:09:57,619 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:09:57,669 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:10:13,190 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:10:56,312 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:11:01,511 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:11:05,710 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:11:46,579 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:14:54,688 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:14:54,701 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:16:29,941 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:16:29,962 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:16:30,367 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:16:57,013 views Excel ixracı - root 'risk_logs' tipini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-21 10:18:12,838 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:18:12,855 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:18:51,088 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:18:51,107 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:18:51,768 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:22:44,238 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:22:44,259 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:23:13,772 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:23:13,791 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-21 10:23:13,891 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:23:24,650 views Excel ixracı - root 'risk_logs' cədvəlini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-21 10:24:11,784 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-21 10:24:19,078 views Excel ixracı - root 'risk_logs' cədvəlini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-21 10:24:51,378 views RiskLogViewSet.get_queryset - root risk loglarını sorğuladı
+INFO 2026-07-23 15:41:06,140 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-23 15:41:06,587 views root uğurla daxil oldu
+INFO 2026-07-23 15:43:04,838 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-23 15:43:05,148 views root uğurla daxil oldu
+INFO 2026-07-23 15:43:05,193 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 15:43:05,384 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 15:43:08,825 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 15:43:10,224 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 15:43:10,997 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 15:43:15,031 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 15:52:11,092 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-23 15:52:11,388 views root uğurla daxil oldu
+INFO 2026-07-23 15:52:11,432 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 16:12:11,713 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-23 16:12:13,037 views root logged out!
+INFO 2026-07-23 16:12:23,876 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-23 16:12:23,934 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-23 16:12:23,935 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-23 16:12:57,532 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-23 16:12:57,577 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-23 16:12:57,604 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-23 16:26:33,064 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-23 16:26:33,133 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-23 16:26:33,133 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 09:28:16,587 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 09:28:16,628 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-24 09:28:16,629 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 09:35:40,063 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 09:35:40,163 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-24 09:35:40,163 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 10:06:06,750 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 10:06:06,843 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-24 10:06:06,843 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 10:10:38,468 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 10:10:38,531 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-24 10:10:38,531 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 10:10:41,460 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 10:10:41,501 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-24 10:10:41,501 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 10:10:45,414 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 10:10:45,455 views laman.bashirova - risk/loq icazəsi olmadığı üçün giriş rədd edildi
+INFO 2026-07-24 10:10:45,455 views LoginView.post - laman.bashirova üçün icazə rədd edildi: Bu sistemə giriş icazəniz yoxdur. Zəhmət olmasa sistem administratoru ilə əlaqə saxlayın.
+INFO 2026-07-24 10:14:18,244 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 10:14:18,317 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-24 10:14:18,349 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:16:09,787 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:18:36,869 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:18:56,347 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:20,785 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:22,270 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:23,156 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:23,313 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:23,496 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:25,155 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:28,916 views laman.bashirova logged out!
+INFO 2026-07-24 10:19:41,928 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 10:19:41,970 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-24 10:19:41,999 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 10:19:43,514 views laman.bashirova logged out!
+INFO 2026-07-24 10:21:12,486 views LoginView.post - giriş cəhdi: rasim.aliyev
+ERROR 2026-07-24 10:21:12,829 views Login failed for new user rasim.aliyev: No active account found with the given credentials
+INFO 2026-07-24 10:21:20,121 views LoginView.post - giriş cəhdi: rasim.aliyev
+INFO 2026-07-24 10:21:20,163 views rasim.aliyev uğurla daxil oldu
+INFO 2026-07-24 10:21:20,191 views UserView.get - rasim.aliyev öz məlumatını sorğuladı
+INFO 2026-07-24 10:22:13,069 views UserView.get - rasim.aliyev öz məlumatını sorğuladı
+INFO 2026-07-24 11:31:17,317 views UserView.get - rasim.aliyev öz məlumatını sorğuladı
+INFO 2026-07-24 11:31:19,758 views UserView.get - rasim.aliyev öz məlumatını sorğuladı
+INFO 2026-07-24 11:31:21,240 views rasim.aliyev logged out!
+INFO 2026-07-24 11:31:22,937 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 11:31:22,979 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-24 11:31:23,007 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 11:31:34,129 views Excel ixracı - laman.bashirova 'risk_list' cədvəlini ixrac etdi (1 sətir, filtrlər={'search': '', 'risk_level': '', 'treatment_option': '', 'ordering': '-created_at'})
+INFO 2026-07-24 11:34:20,453 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 11:42:33,353 views laman.bashirova logged out!
+INFO 2026-07-24 11:42:44,696 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 11:42:44,737 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-24 11:42:44,769 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 11:43:04,166 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 11:56:22,226 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 11:56:24,066 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 12:13:14,693 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 12:13:15,973 views laman.bashirova logged out!
+INFO 2026-07-24 12:13:19,361 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 12:13:19,399 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-24 12:13:19,502 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 12:13:27,779 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 14:13:00,247 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 14:13:04,937 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 14:13:05,023 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 14:13:07,917 views laman.bashirova logged out!
+INFO 2026-07-24 14:13:09,773 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-24 14:13:09,818 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-24 14:13:09,841 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 15:10:46,556 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 15:10:46,644 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-24 15:10:48,452 views laman.bashirova logged out!
+INFO 2026-07-24 15:19:35,943 views LoginView.post - giriş cəhdi: araz.mustafa
+INFO 2026-07-24 15:19:35,988 views araz.mustafa uğurla daxil oldu
+INFO 2026-07-24 15:19:36,024 views UserView.get - araz.mustafa öz məlumatını sorğuladı
+INFO 2026-07-24 15:20:13,856 views UserView.get - araz.mustafa öz məlumatını sorğuladı
+INFO 2026-07-24 15:20:42,572 views UserView.get - araz.mustafa öz məlumatını sorğuladı
+INFO 2026-07-24 15:20:46,056 views UserView.get - araz.mustafa öz məlumatını sorğuladı
+INFO 2026-07-24 15:20:46,847 views UserView.get - araz.mustafa öz məlumatını sorğuladı
+INFO 2026-07-24 15:21:17,619 views UserView.get - araz.mustafa öz məlumatını sorğuladı
+INFO 2026-07-24 15:21:22,249 views RiskLogViewSet.get_queryset - araz.mustafa risk loglarını sorğuladı
+INFO 2026-07-24 15:30:07,446 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:07,749 views Login failed for new user DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:08,305 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:08,614 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:08,619 views LoginView.post - DSRM PassWord üçün fails sayı: 2
+INFO 2026-07-24 15:30:08,911 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:09,219 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:09,234 views LoginView.post - DSRM PassWord üçün fails sayı: 3
+INFO 2026-07-24 15:30:09,436 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:09,738 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:09,743 views LoginView.post - DSRM PassWord üçün fails sayı: 4
+INFO 2026-07-24 15:30:09,955 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:10,251 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:10,256 views LoginView.post - DSRM PassWord üçün fails sayı: 5
+INFO 2026-07-24 15:30:10,524 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:10,828 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:10,834 views LoginView.post - DSRM PassWord üçün fails sayı: 6
+INFO 2026-07-24 15:30:11,066 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:11,371 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:11,376 views LoginView.post - DSRM PassWord üçün fails sayı: 7
+INFO 2026-07-24 15:30:11,585 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:11,883 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:11,888 views LoginView.post - DSRM PassWord üçün fails sayı: 8
+INFO 2026-07-24 15:30:12,160 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:12,472 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:12,477 views LoginView.post - DSRM PassWord üçün fails sayı: 9
+INFO 2026-07-24 15:30:12,711 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:13,024 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:13,029 views LoginView.post - DSRM PassWord üçün fails sayı: 10
+INFO 2026-07-24 15:30:13,403 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:13,704 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:13,709 views LoginView.post - DSRM PassWord üçün fails sayı: 11
+INFO 2026-07-24 15:30:13,953 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:14,270 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:14,275 views LoginView.post - DSRM PassWord üçün fails sayı: 12
+INFO 2026-07-24 15:30:14,484 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:14,785 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:14,789 views LoginView.post - DSRM PassWord üçün fails sayı: 13
+INFO 2026-07-24 15:30:15,033 views LoginView.post - giriş cəhdi: DSRM PassWord
+ERROR 2026-07-24 15:30:15,335 views Login failed for DSRM PassWord: No active account found with the given credentials
+INFO 2026-07-24 15:30:15,339 views LoginView.post - DSRM PassWord üçün fails sayı: 14
+INFO 2026-07-24 15:31:00,978 views RiskViewSet - araz.mustafa yeni risk yaratdı (id=5)
+INFO 2026-07-24 15:31:34,452 views RiskViewSet.partial_update çağırıldı - method=PATCH, user=araz.mustafa, pk=5, data={'designation': 'Sosial kiber-fiziki sistemlərin (KFS) təhlükəsizliyi, məxfiliyi və risklərin qiymətləndirilməsi.', 'legal_basis': 'Azərbaycan Respublikasının "İnformasiya, informasiyalaşdırma və informasiyanın mühafizəsi haqqında" Qanunu.', 'international_framework': 'ISO/IEC 27001 (İnformasiya təhlükəsizliyinin idarə edilməsi sistemi) və ISO/IEC 27005.', 'national_legal_reference': 'Müdafiə Sənayesi Nazirliyinin daxili informasiya texnologiyaları siyasəti və Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidməti ilə birgə fəaliyyət sahələrinə dair protokollar.', 'asset_value': 5, 'probability': 3, 'impact': 5, 'treatment_option': 'mitigation', 'residual_risk': 'Şifrələmə, girişə nəzarət və monitorinq mexanizmləri tətbiq edildikdən sonra qəbul edilə bilən minimum səviyyəyə endirilmiş risk.', 'update_frequency': '3 aydan bir', 'incident_notification_notes': 'Hər hansı kiber insident baş verdikdə dərhal aidiyyəti üzrə Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidmətinə məlumat verilməlidir', 'standard_references': 'NIST SP 800-30 (Risklərin qiymətləndirilməsi üzrə rəhbərlik)', 'id': 5, 'risk_degree': 75, 'risk_level': 'critical', 'risk_level_display': 'Kritik', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-24T15:31:00.961735+04:00', 'updated_at': '2026-07-24T15:31:00.961764+04:00'}
+INFO 2026-07-24 15:31:34,453 views RiskViewSet.update çağırıldı - method=PATCH, user=araz.mustafa, pk=5, data={'designation': 'Sosial kiber-fiziki sistemlərin (KFS) təhlükəsizliyi, məxfiliyi və risklərin qiymətləndirilməsi.', 'legal_basis': 'Azərbaycan Respublikasının "İnformasiya, informasiyalaşdırma və informasiyanın mühafizəsi haqqında" Qanunu.', 'international_framework': 'ISO/IEC 27001 (İnformasiya təhlükəsizliyinin idarə edilməsi sistemi) və ISO/IEC 27005.', 'national_legal_reference': 'Müdafiə Sənayesi Nazirliyinin daxili informasiya texnologiyaları siyasəti və Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidməti ilə birgə fəaliyyət sahələrinə dair protokollar.', 'asset_value': 5, 'probability': 3, 'impact': 5, 'treatment_option': 'mitigation', 'residual_risk': 'Şifrələmə, girişə nəzarət və monitorinq mexanizmləri tətbiq edildikdən sonra qəbul edilə bilən minimum səviyyəyə endirilmiş risk.', 'update_frequency': '3 aydan bir', 'incident_notification_notes': 'Hər hansı kiber insident baş verdikdə dərhal aidiyyəti üzrə Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidmətinə məlumat verilməlidir', 'standard_references': 'NIST SP 800-30 (Risklərin qiymətləndirilməsi üzrə rəhbərlik)', 'id': 5, 'risk_degree': 75, 'risk_level': 'critical', 'risk_level_display': 'Kritik', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-24T15:31:00.961735+04:00', 'updated_at': '2026-07-24T15:31:00.961764+04:00'}
+INFO 2026-07-24 15:31:34,470 views RiskViewSet - araz.mustafa riski yenilədi (id=5)
+INFO 2026-07-24 15:31:34,471 views RiskViewSet.update nəticəsi - status=200
+INFO 2026-07-24 15:31:34,471 views RiskViewSet.partial_update nəticəsi - status=200
+INFO 2026-07-24 15:31:36,889 views RiskLogViewSet.get_queryset - araz.mustafa risk loglarını sorğuladı
+INFO 2026-07-24 15:32:43,874 views RiskViewSet.partial_update çağırıldı - method=PATCH, user=araz.mustafa, pk=5, data={'designation': 'Sosial təyinatlı kiber-fiziki sistemlərin (SKFS) təhlükəsizliyi, məxfiliyi və risklərin qiymətləndirilməsi.', 'legal_basis': 'Azərbaycan Respublikasının "İnformasiya, informasiyalaşdırma və informasiyanın mühafizəsi haqqında" Qanunu.', 'international_framework': 'ISO/IEC 27001 (İnformasiya təhlükəsizliyinin idarə edilməsi sistemi) və ISO/IEC 27005.', 'national_legal_reference': 'MSN-nin daxili informasiya texnologiyaları siyasəti və Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidməti ilə birgə fəaliyyət sahələrinə dair protokollar.', 'asset_value': 5, 'probability': 3, 'impact': 5, 'treatment_option': 'mitigation', 'residual_risk': 'Şifrələmə, girişə nəzarət və monitorinq mexanizmləri tətbiq edildikdən sonra qəbul edilə bilən minimum səviyyəyə endirilmiş risk.', 'update_frequency': 'Rüblük', 'incident_notification_notes': 'Hər hansı kiber insident baş verdikdə dərhal aidiyyəti üzrə Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidmətinə məlumat verilməlidir', 'standard_references': 'NIST SP 800-30 (Risklərin qiymətləndirilməsi üzrə rəhbərlik)', 'id': 5, 'risk_degree': 75, 'risk_level': 'critical', 'risk_level_display': 'Kritik', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-24T15:31:00.961735+04:00', 'updated_at': '2026-07-24T15:31:34.458045+04:00'}
+INFO 2026-07-24 15:32:43,874 views RiskViewSet.update çağırıldı - method=PATCH, user=araz.mustafa, pk=5, data={'designation': 'Sosial təyinatlı kiber-fiziki sistemlərin (SKFS) təhlükəsizliyi, məxfiliyi və risklərin qiymətləndirilməsi.', 'legal_basis': 'Azərbaycan Respublikasının "İnformasiya, informasiyalaşdırma və informasiyanın mühafizəsi haqqında" Qanunu.', 'international_framework': 'ISO/IEC 27001 (İnformasiya təhlükəsizliyinin idarə edilməsi sistemi) və ISO/IEC 27005.', 'national_legal_reference': 'MSN-nin daxili informasiya texnologiyaları siyasəti və Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidməti ilə birgə fəaliyyət sahələrinə dair protokollar.', 'asset_value': 5, 'probability': 3, 'impact': 5, 'treatment_option': 'mitigation', 'residual_risk': 'Şifrələmə, girişə nəzarət və monitorinq mexanizmləri tətbiq edildikdən sonra qəbul edilə bilən minimum səviyyəyə endirilmiş risk.', 'update_frequency': 'Rüblük', 'incident_notification_notes': 'Hər hansı kiber insident baş verdikdə dərhal aidiyyəti üzrə Xüsusi Rabitə və İnformasiya Təhlükəsizliyi Dövlət Xidmətinə məlumat verilməlidir', 'standard_references': 'NIST SP 800-30 (Risklərin qiymətləndirilməsi üzrə rəhbərlik)', 'id': 5, 'risk_degree': 75, 'risk_level': 'critical', 'risk_level_display': 'Kritik', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 5, 'username': 'araz.mustafa', 'name': 'Araz Mustafa', 'email': 'araz.mustafa@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-24T15:31:00.961735+04:00', 'updated_at': '2026-07-24T15:31:34.458045+04:00'}
+INFO 2026-07-24 15:32:43,887 views RiskViewSet - araz.mustafa riski yenilədi (id=5)
+INFO 2026-07-24 15:32:43,889 views RiskViewSet.update nəticəsi - status=200
+INFO 2026-07-24 15:32:43,889 views RiskViewSet.partial_update nəticəsi - status=200
+INFO 2026-07-24 15:32:46,663 views RiskLogViewSet.get_queryset - araz.mustafa risk loglarını sorğuladı
+INFO 2026-07-24 15:33:03,539 views Excel ixracı - araz.mustafa 'risk_logs' cədvəlini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-24 15:36:44,516 views Excel ixracı - araz.mustafa 'risk_list' cədvəlini ixrac etdi (2 sətir, filtrlər={'search': '', 'risk_level': '', 'treatment_option': '', 'ordering': '-created_at'})
