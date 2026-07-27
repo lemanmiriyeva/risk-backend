@@ -102,3 +102,32 @@ def log_exported(user, export_type, row_count, filters=None, request=None):
         ip_address=get_client_ip(request) if request else None,
         user_agent=request.META.get('HTTP_USER_AGENT', '') if request else '',
     )
+
+
+def log_viewed_list(user, row_count, filters=None, request=None):
+    """İstifadəçi Risk Reyestri siyahısına baxanda çağırılır."""
+    RiskLog.objects.create(
+        risk=None,
+        risk_id_ref=0,
+        risk_designation=f"Risk Reyestri siyahısına baxıldı ({row_count} sətir)",
+        user=user,
+        user_username_snapshot=user.username if user else '',
+        action_type=RiskLog.ACTION_VIEWED,
+        changes={'row_count': {'old': None, 'new': row_count}, 'filters': {'old': None, 'new': filters or {}}},
+        ip_address=get_client_ip(request) if request else None,
+        user_agent=request.META.get('HTTP_USER_AGENT', '') if request else '',
+    )
+
+
+def log_viewed_detail(instance, user, request=None):
+    """İstifadəçi tək bir riskin detalına baxanda çağırılır."""
+    RiskLog.objects.create(
+        risk=instance,
+        risk_id_ref=instance.id,
+        risk_designation=instance.designation,
+        user=user,
+        user_username_snapshot=user.username if user else '',
+        action_type=RiskLog.ACTION_VIEWED,
+        ip_address=get_client_ip(request) if request else None,
+        user_agent=request.META.get('HTTP_USER_AGENT', '') if request else '',
+    )

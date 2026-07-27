@@ -91,12 +91,14 @@ class RiskLog(models.Model):
     ACTION_CREATED = 'created'
     ACTION_UPDATED = 'updated'
     ACTION_DELETED = 'deleted'
-    ACTION_EXPORTED = 'exported'      
+    ACTION_EXPORTED = 'exported'
+    ACTION_VIEWED = 'viewed'
     ACTION_CHOICES = [
         (ACTION_CREATED, 'Yaradıldı'),
         (ACTION_UPDATED, 'Redaktə edildi'),
         (ACTION_DELETED, 'Silindi'),
         (ACTION_EXPORTED, 'Excel-ə ixrac edildi'),
+        (ACTION_VIEWED, 'Baxıldı'),
     ]
 
     risk = models.ForeignKey(

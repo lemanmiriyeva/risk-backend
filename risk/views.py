@@ -57,6 +57,32 @@ class RiskViewSet(viewsets.ModelViewSet):
     ordering_fields = ['risk_degree', 'created_at', 'updated_at', 'designation']
     ordering = ['-created_at']
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        try:
+            if isinstance(response.data, dict) and 'results' in response.data:
+                row_count = len(response.data['results'])
+            else:
+                row_count = len(response.data)
+            services.log_viewed_list(
+                user=request.user,
+                row_count=row_count,
+                filters=request.query_params.dict(),
+                request=request,
+            )
+        except Exception as e:
+            logger.error(f"RiskViewSet.list - baxış loqu yazıla bilmədi: {str(e)}")
+        return response
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        try:
+            services.log_viewed_detail(instance, request.user, request=request)
+        except Exception as e:
+            logger.error(f"RiskViewSet.retrieve - baxış loqu yazıla bilmədi: {str(e)}")
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
         logger.info(
             f"RiskViewSet.update çağırıldı - method={request.method}, "
@@ -130,7 +156,7 @@ class RiskLogViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if not (user.is_superuser or user.has_perm('risk.view_risk')):
+        if not (user.is_superuser or user.has_perm('risk.view_risklog')):
             logger.info(f"RiskLogViewSet - {user.username} üçün icazə yoxdur, boş nəticə qaytarıldı")
             return RiskLog.objects.none()
         logger.info(f"RiskLogViewSet.get_queryset - {user.username} risk loglarını sorğuladı")

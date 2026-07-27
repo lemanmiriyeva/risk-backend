@@ -1,4 +1,5 @@
 import logging
+import pyotp
 from django.contrib.auth.models import Group
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.status import HTTP_403_FORBIDDEN, \
@@ -146,12 +147,30 @@ class LoginView(TokenObtainPairView):
         serializer.is_valid(raise_exception=True)
         user = serializer.user
 
-#         # 2. İcazə yoxlaması
-#         if not user_has_any_risk_access(user):
-#             logger.info(f'{user.username} - risk/loq icazəsi olmadığı üçün giriş rədd edildi')
-#             raise PermissionDenied(NO_SYSTEM_ACCESS)
+        # 2. 2FA yoxlaması - quraşdırma tamamlanıbsa, HƏR giriş cəhdində kod tələb olunur
+        if user.two_fa_confirmed:
+            code = request.data.get('code')
+            if not code:
+                # Şifrə düzgündür, amma hələ 2FA kodu göndərilməyib -
+                # frontend bunu görüb kod input sahəsini göstərəcək
+                return Response(
+                    {'detail': 'Autentifikasiya tətbiqindəki 6 rəqəmli kodu daxil edin.', 'two_fa_required': True},
+                    status=HTTP_401_UNAUTHORIZED,
+                )
+            totp = pyotp.totp.TOTP(user.two_fa_secret)
+            if not totp.verify(code, valid_window=1):
+                logger.info(f'{user.username} - 2FA kodu yanlış daxil edildi')
+                raise PermissionDenied('2FA kodu yanlışdır.')
 
-        # 3. MÜHÜM DƏYİŞİKLİK: validated_data-nı sadə dictionary-ə çeviririk
+        # 3. İcazə yoxlaması
+        # Yalnız 2FA-nı quraşdırmış VƏ admin tərəfindən təsdiqlənmiş istifadəçilər üçün
+        # modul girişi tələb olunur. Əks halda hələ onboarding mərhələsində olan
+        # (2FA quraşdırılmamış / təsdiq gözləyən) istifadəçilər sistemə heç girə bilməzdi.
+        if user.two_fa_confirmed and user.is_approved and not user_has_any_risk_access(user):
+            logger.info(f'{user.username} - heç bir modula icazəsi olmadığı üçün giriş rədd edildi')
+            raise PermissionDenied(NO_SYSTEM_ACCESS)
+
+        # 4. MÜHÜM DƏYİŞİKLİK: validated_data-nı sadə dictionary-ə çeviririk
         data = dict(serializer.validated_data)
 
         logger.info(f'{user.username} uğurla daxil oldu')
