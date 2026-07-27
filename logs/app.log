@@ -365,3 +365,173 @@ INFO 2026-07-27 11:18:12,129 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-07-27 11:18:12,153 views UserView.get - laman.bashirova öz məlumatını sorğuladı
 INFO 2026-07-27 11:18:13,785 views UserView.get - laman.bashirova öz məlumatını sorğuladı
 INFO 2026-07-27 11:18:13,805 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:21:42,605 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:21:42,642 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:35:23,142 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:35:23,170 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:35:37,525 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:35:37,549 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:37:37,579 views laman.bashirova logged out!
+ERROR 2026-07-27 11:37:37,607 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 11:37:47,441 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:38:05,529 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:38:05,571 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:38:06,011 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:38:14,291 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:38:14,313 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:42:01,238 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:42:02,345 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:42:03,005 views laman.bashirova logged out!
+ERROR 2026-07-27 11:42:03,028 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 11:42:15,844 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-27 11:42:15,896 views Login failed for laman.bashirova: No active account found with the given credentials
+INFO 2026-07-27 11:42:15,907 views LoginView.post - laman.bashirova üçün fails sayı: 1
+INFO 2026-07-27 11:42:20,609 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:42:27,049 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:42:27,097 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:42:27,137 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:43:04,521 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-27 11:43:04,567 views Login failed for laman.bashirova: No active account found with the given credentials
+INFO 2026-07-27 11:43:04,577 views LoginView.post - laman.bashirova üçün fails sayı: 1
+INFO 2026-07-27 11:43:10,923 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:43:17,309 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:43:17,350 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:43:17,374 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:47:04,634 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:47:04,646 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:47:06,999 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:47:07,009 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:53:34,012 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:53:34,064 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:53:34,101 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:54:10,060 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:54:10,078 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:54:11,791 views laman.bashirova logged out!
+ERROR 2026-07-27 11:54:11,807 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 11:54:20,906 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:54:25,828 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:54:25,874 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:54:25,905 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:54:30,806 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:54:30,826 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:57:18,231 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:57:18,252 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:57:20,767 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:57:20,782 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:57:22,005 views laman.bashirova logged out!
+ERROR 2026-07-27 11:57:22,027 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 11:57:29,056 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:57:34,616 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:57:34,665 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:57:34,699 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:58:20,797 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 11:58:20,917 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 11:58:20,957 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:58:41,456 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 11:58:41,466 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:05:45,222 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:05:45,263 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:05:47,409 views laman.bashirova logged out!
+ERROR 2026-07-27 12:05:47,436 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 12:05:54,543 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:06:05,312 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:06:05,354 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:06:05,389 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:07:20,067 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:07:20,115 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:07:20,151 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:08:40,344 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:08:40,375 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:08:42,436 views laman.bashirova logged out!
+ERROR 2026-07-27 12:08:42,477 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 12:08:58,895 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:09:04,245 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:09:04,289 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:09:04,324 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:10:03,742 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:10:11,205 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:10:11,253 views laman.bashirova - 2FA kodu yanlış daxil edildi
+INFO 2026-07-27 12:10:11,253 views LoginView.post - laman.bashirova üçün icazə rədd edildi: 2FA kodu yanlışdır.
+INFO 2026-07-27 12:10:15,806 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:10:15,853 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:10:15,879 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:14:20,805 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:14:27,285 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:14:27,326 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:14:27,353 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:14:33,742 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:14:33,768 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:14:38,011 views laman.bashirova logged out!
+ERROR 2026-07-27 12:14:38,042 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 12:14:48,964 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:14:49,034 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:14:49,128 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:09,100 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:09,125 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:20,817 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:20,840 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:23,486 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:23,514 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:31,458 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:31,479 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:43,949 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:43,961 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:46,282 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:46,302 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:50,218 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:15:50,235 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:18:21,160 views laman.bashirova logged out!
+ERROR 2026-07-27 12:18:21,212 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 12:18:27,924 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:18:33,660 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 12:18:33,696 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 12:18:33,734 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 12:19:38,186 views RiskLogViewSet.get_queryset - laman.bashirova risk loglarını sorğuladı
+INFO 2026-07-27 12:19:38,231 views RiskLogViewSet.get_queryset - laman.bashirova risk loglarını sorğuladı
+INFO 2026-07-27 13:34:16,413 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:36:19,613 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 13:36:33,835 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 13:36:33,876 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 13:36:34,177 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:37:13,584 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:37:13,614 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:37:28,997 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:37:29,034 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:38:03,967 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:38:04,029 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:38:24,716 views RiskLogViewSet.get_queryset - laman.bashirova risk loglarını sorğuladı
+INFO 2026-07-27 13:38:24,748 views RiskLogViewSet.get_queryset - laman.bashirova risk loglarını sorğuladı
+INFO 2026-07-27 13:38:27,566 views laman.bashirova logged out!
+ERROR 2026-07-27 13:38:27,620 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-27 13:38:40,062 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 13:38:47,848 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-27 13:38:47,906 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-27 13:38:47,948 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:38:51,622 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:38:51,650 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:40:06,936 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:40:06,962 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:40:26,026 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:40:26,045 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:41:13,453 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:41:13,477 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:44:32,247 views RiskViewSet - laman.bashirova riski sildi (id=5)
+INFO 2026-07-27 13:44:34,390 views RiskViewSet - laman.bashirova riski sildi (id=1)
+INFO 2026-07-27 13:44:43,887 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:44:43,910 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:44:44,288 views RiskLogViewSet.get_queryset - laman.bashirova risk loglarını sorğuladı
+INFO 2026-07-27 13:44:55,360 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:44:55,379 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:55:48,086 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:55:48,103 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:00,598 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:00,622 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:04,848 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:04,862 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:05,445 views RiskLogViewSet.get_queryset - laman.bashirova risk loglarını sorğuladı
+INFO 2026-07-27 13:56:06,536 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:06,559 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:56:18,164 views RiskViewSet - laman.bashirova yeni risk yaratdı (id=6)
+INFO 2026-07-27 13:58:05,325 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 13:58:05,362 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-27 14:00:14,016 views Excel ixracı - laman.bashirova 'risk_table' cədvəlini ixrac etdi (1 sətir, filtrlər={'search': '', 'risk_level': '', 'treatment_option': ''})

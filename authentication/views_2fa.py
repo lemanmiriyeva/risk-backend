@@ -8,6 +8,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from riskBackend import settings
+
 
 class TwoFASetupView(APIView):
     permission_classes = [IsAuthenticated]
@@ -16,8 +18,17 @@ class TwoFASetupView(APIView):
     def get(self, request):
         user = request.user
         if user.two_fa_confirmed:
-            return Response({"detail": "2FA artiq tesdiqlenib"}, status=status.HTTP_400_BAD_REQUEST)
+            module_perms = get_module_permissions(user)
+            new_is_approved = bool(module_perms)
+            if user.is_approved != new_is_approved:
+                user.is_approved = new_is_approved
+                user.save(update_fields=["is_approved"])
 
+            return Response({
+                "detail": "2FA artiq tesdiqlenib",
+                "is_approved": user.is_approved,
+                "permissions": module_perms,
+            }, status=status.HTTP_400_BAD_REQUEST)
         if not user.two_fa_secret:
             user.two_fa_secret = pyotp.random_base32()
             user.save(update_fields=["two_fa_secret"])
@@ -35,6 +46,13 @@ class TwoFASetupView(APIView):
             "secret": user.two_fa_secret,
         })
 
+def get_module_permissions(user):
+    django_perms = user.get_all_permissions()
+    return [
+        p for p in django_perms
+        if p.split(".", 1)[0] in settings.MODULE_APPS
+    ]
+
 
 class TwoFAVerifyView(APIView):
     permission_classes = [IsAuthenticated]
@@ -48,9 +66,18 @@ class TwoFAVerifyView(APIView):
             return Response({"detail": "Evvelce 2FA qurasdirilmalidir"}, status=status.HTTP_400_BAD_REQUEST)
 
         totp = pyotp.totp.TOTP(user.two_fa_secret)
-        if totp.verify(code, valid_window=1):
-            user.two_fa_confirmed = True
-            user.save(update_fields=["two_fa_confirmed"])
-            return Response({"detail": "2FA tesdiqlendi"})
+        if not totp.verify(code, valid_window=1):
+            return Response({"detail": "Kod yanlisdir"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"detail": "Kod yanlisdir"}, status=status.HTTP_400_BAD_REQUEST)
+        user.two_fa_confirmed = True
+
+        module_perms = get_module_permissions(user)
+        user.is_approved = bool(module_perms)
+        user.save(update_fields=["two_fa_confirmed", "is_approved"])
+
+        return Response({
+            "detail": "2FA tesdiqlendi",
+            "is_approved": user.is_approved,
+            "is_superuser": user.is_superuser,
+            "permissions": module_perms,
+        })

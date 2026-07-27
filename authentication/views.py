@@ -99,6 +99,13 @@ class UserView(APIView):
 
     def get(self, request):
         user = request.user
+
+        if user.two_fa_confirmed:
+            should_be_approved = user_has_any_risk_access(user)
+            if user.is_approved != should_be_approved:
+                user.is_approved = should_be_approved
+                user.save(update_fields=["is_approved"])
+
         logger.info(f"UserView.get - {user.username} öz məlumatını sorğuladı")
         serializer = UserSerializer(user)
         return Response(serializer.data)
