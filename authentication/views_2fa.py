@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from riskBackend import settings
+from core.permissions import get_module_permissions
 
 
 class TwoFASetupView(APIView):
@@ -25,10 +25,11 @@ class TwoFASetupView(APIView):
                 user.save(update_fields=["is_approved"])
 
             return Response({
-                "detail": "2FA artiq tesdiqlenib",
+                "detail": "2FA artıq təsdiqlənib",
                 "is_approved": user.is_approved,
                 "permissions": module_perms,
-            }, status=status.HTTP_400_BAD_REQUEST)
+            }, status=status.HTTP_200_OK)
+
         if not user.two_fa_secret:
             user.two_fa_secret = pyotp.random_base32()
             user.save(update_fields=["two_fa_secret"])
@@ -46,13 +47,6 @@ class TwoFASetupView(APIView):
             "secret": user.two_fa_secret,
         })
 
-def get_module_permissions(user):
-    django_perms = user.get_all_permissions()
-    return [
-        p for p in django_perms
-        if p.split(".", 1)[0] in settings.MODULE_APPS
-    ]
-
 
 class TwoFAVerifyView(APIView):
     permission_classes = [IsAuthenticated]
@@ -63,11 +57,11 @@ class TwoFAVerifyView(APIView):
         code = request.data.get("code")
 
         if not user.two_fa_secret:
-            return Response({"detail": "Evvelce 2FA qurasdirilmalidir"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Əvvəlcə 2FA qurulmalıdır"}, status=status.HTTP_400_BAD_REQUEST)
 
         totp = pyotp.totp.TOTP(user.two_fa_secret)
         if not totp.verify(code, valid_window=1):
-            return Response({"detail": "Kod yanlisdir"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Kod yanlışdır"}, status=status.HTTP_400_BAD_REQUEST)
 
         user.two_fa_confirmed = True
 
@@ -76,7 +70,7 @@ class TwoFAVerifyView(APIView):
         user.save(update_fields=["two_fa_confirmed", "is_approved"])
 
         return Response({
-            "detail": "2FA tesdiqlendi",
+            "detail": "2FA təsdiqləndi",
             "is_approved": user.is_approved,
             "is_superuser": user.is_superuser,
             "permissions": module_perms,

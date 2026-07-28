@@ -1,5 +1,7 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from authentication.models import User, Role, Department
+from core.permissions import get_module_permissions
+
 
 class RoleSerializer(ModelSerializer):
 
@@ -51,7 +53,7 @@ class DepartmentListSerializer(DepartmentBaseSerializer):
     children = serializers.SerializerMethodField()
 
     class Meta(DepartmentBaseSerializer.Meta):
-        fields = DepartmentBaseSerializer.Meta.fields + ("order", "parent", "children","shortname",)
+        fields = DepartmentBaseSerializer.Meta.fields + ("order", "parent", "children", "shortname",)
 
     def get_parent(self, obj):
         if obj.parent is not None:
@@ -69,6 +71,7 @@ class DepartmentListSerializer(DepartmentBaseSerializer):
 class UserSerializer(ModelSerializer):
     main_department = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         depth = 2
@@ -79,7 +82,6 @@ class UserSerializer(ModelSerializer):
           "two_fa_confirmed", "is_approved",
         )
 
-
     def get_main_department(self, obj):
         if not obj.department:
             return None
@@ -87,8 +89,7 @@ class UserSerializer(ModelSerializer):
         return MainDepartmentSerializer(main_dep).data
 
     def get_permissions(self, obj):
-        return list(obj.get_all_permissions())
-
+        return get_module_permissions(obj)
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

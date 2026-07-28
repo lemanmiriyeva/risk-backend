@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 
+from core.permissions import ModuleAccessPermission
+from core.mixins import OrganizationScopedMixin
 from .models import Risk, RiskLog
 from .serializers import RiskSerializer, RiskLogSerializer
-from .permissions import RiskPermission
 from .filters import RiskFilterSet, RiskLogFilterSet
 from . import services
 
@@ -43,10 +44,11 @@ class ExportLogView(APIView):
             return Response({'detail': 'Export logu saxlanılmadı'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RiskViewSet(viewsets.ModelViewSet):
-    queryset = Risk.objects.select_related('created_by', 'updated_by').all()
+class RiskViewSet(OrganizationScopedMixin, viewsets.ModelViewSet):
+    queryset = Risk.objects.select_related('created_by', 'updated_by', 'organization').all()
     serializer_class = RiskSerializer
-    permission_classes = [RiskPermission]
+    permission_classes = [ModuleAccessPermission]
+    module_name = "Risk"
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = RiskFilterSet
@@ -111,8 +113,18 @@ class RiskViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
+        org_id = getattr(user, "organization_id", None)
+
+        if not org_id and not user.is_superuser:
+            logger.error(f"RiskViewSet.perform_create - {user.username} üçün organization təyin edilməyib")
+            raise Exception("İstifadəçinin qurumu təyin edilməyib.")
+
         try:
-            instance = serializer.save(created_by=user, updated_by=user)
+            instance = serializer.save(
+                created_by=user,
+                updated_by=user,
+                organization=user.organization if org_id else None,
+            )
             services.log_created(instance, user, request=self.request)
             logger.info(f"RiskViewSet - {user.username} yeni risk yaratdı (id={instance.id})")
         except Exception as e:
@@ -143,21 +155,15 @@ class RiskViewSet(viewsets.ModelViewSet):
             raise
 
 
-class RiskLogViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = RiskLog.objects.select_related('user', 'risk').all()
+class RiskLogViewSet(OrganizationScopedMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = RiskLog.objects.select_related('user', 'risk', 'organization').all()
     serializer_class = RiskLogSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [ModuleAccessPermission]
+    module_name = "Risk"
+    sub_module_name = "Risk Logs"  # əgər ayrıca SubModule yaratmısansa; yoxdursa bu sətri sil
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = RiskLogFilterSet
     search_fields = ['risk_designation', 'user_username_snapshot']
     ordering_fields = ['timestamp']
     ordering = ['-timestamp']
-
-    def get_queryset(self):
-        user = self.request.user
-        if not (user.is_superuser or user.has_perm('risk.view_risklog')):
-            logger.info(f"RiskLogViewSet - {user.username} üçün icazə yoxdur, boş nəticə qaytarıldı")
-            return RiskLog.objects.none()
-        logger.info(f"RiskLogViewSet.get_queryset - {user.username} risk loglarını sorğuladı")
-        return super().get_queryset()

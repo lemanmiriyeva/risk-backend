@@ -3,7 +3,7 @@ from django.contrib.auth.models import UserManager, AbstractBaseUser, Permission
 from django.utils import timezone
 from core.models import TimestampsModel
 from django.core.validators import FileExtensionValidator
-from django.contrib.auth.hashers import make_password  # Bunu import edin
+from django.contrib.auth.hashers import make_password
 
 
 class CustomUserManager(UserManager):
@@ -13,7 +13,7 @@ class CustomUserManager(UserManager):
 
         user = self.model(username=username, email=email, **extra_fields)
         if password:
-            user.set_password(password)  
+            user.set_password(password)
         else:
             user.set_unusable_password()
         user.save(using=self.db)
@@ -29,6 +29,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_superuser', True)
         return self._create_user(username, email, password, **extra_fields)
 
+
 class SpecialPermission(models.Model):
     name = models.CharField(max_length=255)
     codename = models.CharField(max_length=100)
@@ -39,6 +40,21 @@ class SpecialPermission(models.Model):
 
     def __str__(self):
         return f'{self.name} | {self.codename}'
+
+
+class Organization(TimestampsModel):
+    title = models.CharField(max_length=255, verbose_name="Qurumun adı")
+    short_name = models.CharField(max_length=64, blank=True, default="", verbose_name="Qısaltma")
+    is_active = models.BooleanField(default=True, verbose_name="Aktivdir")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Qurum"
+        verbose_name_plural = "Qurumlar"
+        ordering = ["title"]
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(unique=True, max_length=12, verbose_name='Telefon nömrəsi', null=True, blank=True)
@@ -60,6 +76,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.ForeignKey("Role", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Vəzifə")
     department = models.ForeignKey("Department", on_delete=models.SET_NULL, null=True, blank=True,
                                    verbose_name="Departament/Şöbə")
+    organization = models.ForeignKey(
+        "authentication.Organization", on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="users", verbose_name="Qurum"
+    )
     special_permissions = models.ManyToManyField(
         SpecialPermission,
         verbose_name="Xüsusi icazələr",
@@ -71,7 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('male', 'Kişi'),
         ('female', 'Qadın'),
     ]
-    
+
     two_fa_secret = models.CharField(max_length=32, null=True, blank=True, verbose_name="2FA sirri")
     two_fa_confirmed = models.BooleanField(default=False, verbose_name="2FA təsdiqlənib")
     is_approved = models.BooleanField(default=False, verbose_name="Admin tərəfindən təsdiqlənib")
@@ -92,8 +112,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def save(self, *args, **kwargs):
-        today = timezone.localdate()
-
         if not self.id:
             self.join_date = timezone.now()
         self.update_date = timezone.now()
@@ -161,6 +179,7 @@ class PasswordReset(models.Model):
 
     def __str__(self):
         return self.email
+
 
 class LoginAttempt(models.Model):
     username = models.CharField(max_length=255)

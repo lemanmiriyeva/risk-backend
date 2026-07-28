@@ -13,9 +13,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from python_ipware import IpWare
 from django.shortcuts import get_object_or_404
 from core.contstants import INVALID_CREDENTIALS, USER_LOCKED
+from core.permissions import user_has_any_module_access
 from .models import User, Department, LoginAttempt
 from .serializers import UserSerializer, DepartmentListSerializer
-from risk.permissions import user_has_any_risk_access
 
 ipw = IpWare()
 
@@ -33,9 +33,6 @@ from rest_framework import status
 
 
 class UsersView(APIView):
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = (JWTAuthentication,)
-
     def get(self, request):
         department_id = request.query_params.get('department', None)
         search = request.query_params.get('search', '').strip()
@@ -81,8 +78,6 @@ class UsersView(APIView):
 
 
 class DepartmentListView(APIView):
-    # permission_classes = [IsAuthenticated]
-
     def get(self, request):
         logger.info("DepartmentListView.get çağırıldı")
         departments = Department.objects.filter(parent__isnull=True)\
@@ -101,7 +96,7 @@ class UserView(APIView):
         user = request.user
 
         if user.two_fa_confirmed:
-            should_be_approved = user_has_any_risk_access(user)
+            should_be_approved = user_has_any_module_access(user)
             if user.is_approved != should_be_approved:
                 user.is_approved = should_be_approved
                 user.save(update_fields=["is_approved"])
@@ -112,9 +107,6 @@ class UserView(APIView):
 
 
 class UserDetailView(APIView):
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = (JWTAuthentication,)
-
     def get(self, request, id):
         logger.info(f"UserDetailView.get - id={id} sorğulandı")
         user = get_object_or_404(User, id=id)
@@ -149,17 +141,13 @@ class GroupMeta:
 class LoginView(TokenObtainPairView):
 
     def _authenticate_and_authorize(self, request, *args, **kwargs):
-        # 1. Serializer-i işlədirik
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.user
 
-        # 2. 2FA yoxlaması - quraşdırma tamamlanıbsa, HƏR giriş cəhdində kod tələb olunur
         if user.two_fa_confirmed:
             code = request.data.get('code')
             if not code:
-                # Şifrə düzgündür, amma hələ 2FA kodu göndərilməyib -
-                # frontend bunu görüb kod input sahəsini göstərəcək
                 return Response(
                     {'detail': 'Autentifikasiya tətbiqindəki 6 rəqəmli kodu daxil edin.', 'two_fa_required': True},
                     status=HTTP_401_UNAUTHORIZED,
@@ -169,15 +157,16 @@ class LoginView(TokenObtainPairView):
                 logger.info(f'{user.username} - 2FA kodu yanlış daxil edildi')
                 raise PermissionDenied('2FA kodu yanlışdır.')
 
-        # 3. İcazə yoxlaması
-        # Yalnız 2FA-nı quraşdırmış VƏ admin tərəfindən təsdiqlənmiş istifadəçilər üçün
-        # modul girişi tələb olunur. Əks halda hələ onboarding mərhələsində olan
-        # (2FA quraşdırılmamış / təsdiq gözləyən) istifadəçilər sistemə heç girə bilməzdi.
-        if user.two_fa_confirmed and user.is_approved and not user_has_any_risk_access(user):
-            logger.info(f'{user.username} - heç bir modula icazəsi olmadığı üçün giriş rədd edildi')
-            raise PermissionDenied(NO_SYSTEM_ACCESS)
+        if user.two_fa_confirmed:
+            should_be_approved = user_has_any_module_access(user)
+            if user.is_approved != should_be_approved:
+                user.is_approved = should_be_approved
+                user.save(update_fields=["is_approved"])
 
-        # 4. MÜHÜM DƏYİŞİKLİK: validated_data-nı sadə dictionary-ə çeviririk
+            if not should_be_approved:
+                logger.info(f'{user.username} - heç bir modula icazəsi olmadığı üçün giriş rədd edildi')
+                raise PermissionDenied(NO_SYSTEM_ACCESS)
+
         data = dict(serializer.validated_data)
 
         logger.info(f'{user.username} uğurla daxil oldu')

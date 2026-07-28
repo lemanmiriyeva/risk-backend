@@ -1,7 +1,19 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+from .views import (
+    ModulesRetrieveView,
+    CheckModuleAccessView,
+    CheckSubModuleAccessView,
+    StatusViewSet,
+)
 
-from core.views import ModuleListView
+app_name = "core"
+
+router = DefaultRouter()
+router.register(r"statuses", StatusViewSet, basename="status")
 
 urlpatterns = [
-    path("modules/", ModuleListView.as_view(), name="module-list"),
-]
+    path("modules/", ModulesRetrieveView.as_view(), name="modules-list"),
+    path("modules/check-access/", CheckModuleAccessView.as_view(), name="module-check-access"),
+    path("modules/check-sub-access/", CheckSubModuleAccessView.as_view(), name="submodule-check-access"),
+] + router.urls

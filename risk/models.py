@@ -43,7 +43,10 @@ class Risk(models.Model):
 
     treatment_option = models.CharField(max_length=20, choices=TREATMENT_CHOICES, verbose_name="Emal variantı (Q)")
     residual_risk = models.TextField(blank=True, default='', verbose_name="Qalıq risk (T)")
-
+    organization = models.ForeignKey(
+        "authentication.Organization", on_delete=models.PROTECT, related_name="risks",
+        verbose_name="Qurum", null=True, blank=True
+    )
     update_frequency = models.CharField(max_length=255, blank=True, default='', verbose_name="Yenilənmə tarixi/tezliyi")
     incident_notification_notes = models.TextField(blank=True, default='', verbose_name="İnsident bildirişi qeydləri")
     standard_references = models.TextField(blank=True, default='', verbose_name="Standartlara istinadlar")
@@ -107,7 +110,10 @@ class RiskLog(models.Model):
     )
     risk_id_ref = models.PositiveIntegerField(verbose_name="Risk ID")
     risk_designation = models.CharField(max_length=255, blank=True, default='', verbose_name="Risk adı (snapshot)")
-
+    organization = models.ForeignKey(
+        "authentication.Organization", on_delete=models.PROTECT, related_name="risk_logs",
+        verbose_name="Qurum", null=True, blank=True
+    )
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="İstifadəçi"
     )

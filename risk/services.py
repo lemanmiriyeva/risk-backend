@@ -34,6 +34,18 @@ def get_client_ip(request):
     return request.META.get('REMOTE_ADDR')
 
 
+def _resolve_organization(user, instance=None):
+    """
+    Loq sətrinə yazılacaq organization-u müəyyən edir.
+    Öncəlik: instance.organization (əgər risk obyektinə bağlıdırsa) -> user.organization
+    """
+    if instance is not None:
+        org = getattr(instance, "organization", None)
+        if org is not None:
+            return org
+    return getattr(user, "organization", None)
+
+
 def log_created(instance, user, request=None):
     RiskLog.objects.create(
         risk=instance,
@@ -41,6 +53,7 @@ def log_created(instance, user, request=None):
         risk_designation=instance.designation,
         user=user,
         user_username_snapshot=user.username if user else '',
+        organization=_resolve_organization(user, instance),
         action_type=RiskLog.ACTION_CREATED,
         ip_address=get_client_ip(request) if request else None,
         user_agent=request.META.get('HTTP_USER_AGENT', '') if request else '',
@@ -64,6 +77,7 @@ def log_updated(old_instance, new_instance, user, request=None):
         risk_designation=new_instance.designation,
         user=user,
         user_username_snapshot=user.username if user else '',
+        organization=_resolve_organization(user, new_instance),
         action_type=RiskLog.ACTION_UPDATED,
         changes=changes,
         ip_address=get_client_ip(request) if request else None,
@@ -79,6 +93,7 @@ def log_deleted(instance, user, request=None):
         risk_designation=instance.designation,
         user=user,
         user_username_snapshot=user.username if user else '',
+        organization=_resolve_organization(user, instance),
         action_type=RiskLog.ACTION_DELETED,
         risk_snapshot=RiskSerializer(instance).data,
         ip_address=get_client_ip(request) if request else None,
@@ -94,6 +109,7 @@ def log_exported(user, export_type, row_count, filters=None, request=None):
         risk_designation=f"Excel ixracı — {label}",
         user=user,
         user_username_snapshot=user.username if user else '',
+        organization=_resolve_organization(user),
         action_type=RiskLog.ACTION_EXPORTED,
         changes={
             'row_count': {'old': None, 'new': row_count},
@@ -112,6 +128,7 @@ def log_viewed_list(user, row_count, filters=None, request=None):
         risk_designation=f"Risk Reyestri siyahısına baxıldı ({row_count} sətir)",
         user=user,
         user_username_snapshot=user.username if user else '',
+        organization=_resolve_organization(user),
         action_type=RiskLog.ACTION_VIEWED,
         changes={'row_count': {'old': None, 'new': row_count}, 'filters': {'old': None, 'new': filters or {}}},
         ip_address=get_client_ip(request) if request else None,
@@ -127,6 +144,7 @@ def log_viewed_detail(instance, user, request=None):
         risk_designation=instance.designation,
         user=user,
         user_username_snapshot=user.username if user else '',
+        organization=_resolve_organization(user, instance),
         action_type=RiskLog.ACTION_VIEWED,
         ip_address=get_client_ip(request) if request else None,
         user_agent=request.META.get('HTTP_USER_AGENT', '') if request else '',

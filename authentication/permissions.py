@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from risk.permissions import user_has_any_risk_access
+from core.permissions import user_has_any_module_access
 
 
 class HasSystemAccess(BasePermission):
@@ -13,4 +13,4 @@ class HasSystemAccess(BasePermission):
             return False
         if not user.is_approved:
             return False
-        return user_has_any_risk_access(user)
+        return user_has_any_module_access(user)
