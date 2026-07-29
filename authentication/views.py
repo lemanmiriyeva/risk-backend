@@ -3,7 +3,7 @@ import pyotp
 from django.contrib.auth.models import Group
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.status import HTTP_403_FORBIDDEN, \
-    HTTP_401_UNAUTHORIZED
+    HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_201_CREATED
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.exceptions import TokenError
@@ -222,3 +222,104 @@ class DepartmentDetailAPIView(RetrieveAPIView):
 
 
 Group.add_to_class('Meta', GroupMeta)
+
+
+
+from core.permissions import IsOrgAdmin, get_managed_organization
+from .models import User
+from .serializers import OrgUserSerializer
+
+NO_ORGANIZATION = "İdarə etdiyiniz qurum təyin edilə bilmədi."
+USER_OUTSIDE_ORG = "Bu istifadəçi sizin qurumunuza aid deyil."
+
+
+class OrgUsersView(APIView):
+    """
+    Qurum admininin ÖZ qurumunun işçilərini idarə etməsi üçün.
+
+    GET  /api/authentication/organization/users/     -> öz qurumunun bütün user-ləri
+    POST /api/authentication/organization/users/     -> öz qurumuna yeni user yaradır
+         (organization avtomatik təyin olunur, admin başqa qurum üçün user yarada bilməz)
+    """
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        organization = get_managed_organization(request)
+        if not organization:
+            return Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+
+        users = organization.users.all().order_by("firstname")
+        return Response(OrgUserSerializer(users, many=True).data, status=HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        organization = get_managed_organization(request)
+        if not organization:
+            return Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+
+        serializer = OrgUserSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+        password = request.data.get("password")
+        user = serializer.save(organization=organization)
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
+        user.save()
+
+        logger.info(f"{request.user.username} - {organization.title} qurumuna yeni user yaratdı: {user.username}")
+        return Response(OrgUserSerializer(user).data, status=HTTP_201_CREATED)
+
+
+class OrgUserDetailView(APIView):
+    """
+    GET/PATCH  /api/authentication/organization/users/<id>/
+
+    Yalnız admin-in idarə etdiyi qurumun user-ini görmək/dəyişmək olar;
+    başqa qurumun user-inə müraciət 403 qaytarır (data izolyasiyası burada da qorunur).
+    """
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def _get_user(self, request, id):
+        organization = get_managed_organization(request)
+        if not organization:
+            return None, Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(id=id).first()
+        if not user:
+            return None, Response({"detail": "İstifadəçi tapılmadı."}, status=HTTP_404_NOT_FOUND)
+
+        if user.organization_id != organization.id:
+            return None, Response({"detail": USER_OUTSIDE_ORG}, status=HTTP_403_FORBIDDEN)
+
+        return user, None
+
+    def get(self, request, id, *args, **kwargs):
+        user, error = self._get_user(request, id)
+        if error:
+            return error
+        return Response(OrgUserSerializer(user).data, status=HTTP_200_OK)
+
+    def patch(self, request, id, *args, **kwargs):
+        user, error = self._get_user(request, id)
+        if error:
+            return error
+
+        # organization sahəsi bu endpoint-dən dəyişdirilə bilməz (qurumlar arası köçürmə qadağandır)
+        data = {k: v for k, v in request.data.items() if k != "organization"}
+        serializer = OrgUserSerializer(user, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        password = request.data.get("password")
+        if password:
+            user.set_password(password)
+            user.save()
+
+        logger.info(f"{request.user.username} - {user.username} istifadəçisini yenilədi")
+        return Response(OrgUserSerializer(user).data, status=HTTP_200_OK)
+

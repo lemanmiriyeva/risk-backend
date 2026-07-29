@@ -71,6 +71,7 @@ class DepartmentListSerializer(DepartmentBaseSerializer):
 class UserSerializer(ModelSerializer):
     main_department = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
+    organization = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -80,6 +81,7 @@ class UserSerializer(ModelSerializer):
           "role", "department", "main_department", "name",
           "special_permissions", 'permissions',
           "two_fa_confirmed", "is_approved",
+          "organization", "is_org_admin",
         )
 
     def get_main_department(self, obj):
@@ -91,9 +93,38 @@ class UserSerializer(ModelSerializer):
     def get_permissions(self, obj):
         return get_module_permissions(obj)
 
+    def get_organization(self, obj):
+        if not obj.organization:
+            return None
+        return {"id": obj.organization.id, "title": obj.organization.title}
+
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         if rep.get("department") and rep.get("main_department"):
             if rep["department"]["id"] == rep["main_department"]["id"]:
                 rep.pop("department")
         return rep
+
+
+class OrgUserSerializer(ModelSerializer):
+    """
+    Qurum admininin öz qurumunun user-lərini idarə etməsi üçün (list/create/update).
+    `organization` bu serializer-də YOXDUR - o, view səviyyəsində (admin-in idarə
+    etdiyi qurum) təyin olunur, user özü qurum seçə bilməz.
+    `password` write-only-dir və view-da ayrıca set_password() ilə emal olunur.
+    """
+    organization = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            "id", "username", "email", "firstname", "lastname", "name",
+            "phone_number", "birth_date", "is_active", "role", "department",
+            "is_org_admin", "organization", "two_fa_confirmed", "is_approved",
+        )
+        read_only_fields = ("two_fa_confirmed", "is_approved")
+
+    def get_organization(self, obj):
+        if not obj.organization:
+            return None
+        return {"id": obj.organization.id, "title": obj.organization.title}

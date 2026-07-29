@@ -80,6 +80,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         "authentication.Organization", on_delete=models.SET_NULL, null=True, blank=True,
         related_name="users", verbose_name="Qurum"
     )
+    is_org_admin = models.BooleanField(
+        default=False, verbose_name="Qurum admini",
+        help_text=(
+            "Bu user öz qurumunun (organization sahəsində göstərilən) daxilində "
+            "istifadəçiləri idarə edə, və qurumuna aid modul/alt-modullara hansı "
+            "işçilərin çıxışı olacağını təyin edə bilər. Başqa qurumun datasına "
+            "və ya user-lərinə çıxışı yoxdur."
+        )
+    )
     special_permissions = models.ManyToManyField(
         SpecialPermission,
         verbose_name="Xüsusi icazələr",

@@ -4,6 +4,7 @@ from .views import UserView, UsersView, LogoutView, LoginView, DepartmentListVie
     UserDetailView
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 from .views_2fa import TwoFASetupView, TwoFAVerifyView
+from .views import OrgUsersView, OrgUserDetailView
 
 urlpatterns = [
     path('token/', LoginView.as_view(), name='token'),
@@ -17,4 +18,6 @@ urlpatterns = [
     path('departments/<int:id>/', DepartmentDetailAPIView.as_view(), name='department-detail'),
     path('2fa/setup/', TwoFASetupView.as_view(), name='2fa-setup'),
     path('2fa/verify/', TwoFAVerifyView.as_view(), name='2fa-verify'),
+    path('organization/users/', OrgUsersView.as_view(), name='org-users-list'),
+    path('organization/users/<int:id>/', OrgUserDetailView.as_view(), name='org-user-detail'),
 ]

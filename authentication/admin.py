@@ -15,7 +15,7 @@ class UserInline(admin.TabularInline):
     model = User
     fk_name = "organization"
     extra = 0
-    fields = ("username", "name_display", "email", "department", "role", "is_active", "is_approved")
+    fields = ("username", "name_display", "email", "department", "role", "is_active", "is_org_admin", "is_approved")
     readonly_fields = ("name_display",)
     show_change_link = True
     can_delete = False
@@ -67,9 +67,9 @@ class UserAdmin(BaseUserAdmin):
     model = User
     list_display = (
         "username", "name", "email", "organization", "department",
-        "role", "is_active", "two_fa_confirmed", "is_approved", "is_staff",
+        "role", "is_active", "is_org_admin", "two_fa_confirmed", "is_approved", "is_staff",
     )
-    list_filter = ("organization", "department", "role", "is_active", "is_approved", "two_fa_confirmed")
+    list_filter = ("organization", "department", "role", "is_active", "is_org_admin", "is_approved", "two_fa_confirmed")
     search_fields = ("username", "email", "firstname", "lastname", "phone_number")
     ordering = ("id",)
     autocomplete_fields = ("organization", "department", "role")
@@ -84,7 +84,7 @@ class UserAdmin(BaseUserAdmin):
             )
         }),
         ("Qurum və vəzifə", {
-            "fields": ("organization", "department", "role"),
+            "fields": ("organization", "department", "role", "is_org_admin"),
         }),
         ("İcazələr", {
             "fields": (

@@ -48,7 +48,16 @@ class RiskViewSet(OrganizationScopedMixin, viewsets.ModelViewSet):
     queryset = Risk.objects.select_related('created_by', 'updated_by', 'organization').all()
     serializer_class = RiskSerializer
     permission_classes = [ModuleAccessPermission]
-    module_name = "Risk"
+    module_code = "risk"
+
+    action_sub_module_codes = {
+        "list": ["risk_register", "risk_view_table"],
+        "retrieve": ["risk_register", "risk_view_table"],
+        "create": ["risk_register"],
+        "update": ["risk_register"],
+        "partial_update": ["risk_register"],
+        "destroy": ["risk_register"],
+    }
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = RiskFilterSet
@@ -159,8 +168,8 @@ class RiskLogViewSet(OrganizationScopedMixin, viewsets.ReadOnlyModelViewSet):
     queryset = RiskLog.objects.select_related('user', 'risk', 'organization').all()
     serializer_class = RiskLogSerializer
     permission_classes = [ModuleAccessPermission]
-    module_name = "Risk"
-    sub_module_name = "Risk Logs"  # əgər ayrıca SubModule yaratmısansa; yoxdursa bu sətri sil
+    module_code = "risk"
+    sub_module_code = "risk_log"
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = RiskLogFilterSet

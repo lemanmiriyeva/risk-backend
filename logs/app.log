@@ -607,3 +607,219 @@ INFO 2026-07-28 11:18:23,634 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-07-28 11:18:23,656 views UserView.get - laman.bashirova öz məlumatını sorğuladı
 INFO 2026-07-28 11:18:23,682 views UserView.get - laman.bashirova öz məlumatını sorğuladı
 INFO 2026-07-28 11:18:23,707 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 11:51:17,530 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 11:51:17,560 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 11:51:27,642 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-28 11:51:27,695 views Login failed for laman.bashirova: No active account found with the given credentials
+INFO 2026-07-28 11:51:27,700 views LoginView.post - laman.bashirova üçün fails sayı: 1
+INFO 2026-07-28 11:51:31,153 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 11:51:42,740 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 11:51:42,788 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 11:51:42,830 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 11:51:51,308 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 11:51:51,338 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:12:16,351 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:12:16,392 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:12:18,856 views laman.bashirova logged out!
+ERROR 2026-07-28 12:12:18,874 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-28 12:12:32,763 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-28 12:12:32,938 views Login failed for laman.bashirova: No active account found with the given credentials
+INFO 2026-07-28 12:12:32,950 views LoginView.post - laman.bashirova üçün fails sayı: 1
+INFO 2026-07-28 12:12:36,772 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 12:12:45,079 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 12:12:45,137 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 12:12:45,168 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:12:49,114 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:12:49,142 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:13:55,883 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 12:13:55,915 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:47:41,186 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 13:47:53,848 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 13:47:53,896 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 13:47:53,921 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:48:01,435 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:48:01,466 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:48:36,545 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:48:36,575 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:54:49,655 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:54:49,676 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:59:09,060 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:59:09,082 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:59:25,439 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:59:25,466 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+ERROR 2026-07-28 13:59:52,722 permissions Module Risk does not exist.
+INFO 2026-07-28 13:59:53,364 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 13:59:53,386 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:06:50,889 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 15:06:50,941 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 15:06:50,982 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:07:13,300 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:07:13,324 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:07:23,990 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:07:33,992 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:07:43,994 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:07:53,983 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:08:03,991 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:08:13,982 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:08:23,980 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:08:46,851 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:08:53,995 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:09:03,983 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:09:13,993 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:09:23,991 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:09:33,997 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:09:43,983 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:10:19,044 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:10:23,295 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:10:43,064 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:10:43,109 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:11:10,477 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:11:10,507 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:16:37,813 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:16:37,842 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:21:41,924 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 15:21:52,175 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 15:21:52,221 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 15:21:52,252 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:22:05,383 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:22:05,409 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:27:58,525 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:27:58,557 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:29:07,685 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:29:07,715 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:35:50,258 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 15:40:03,935 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 15:40:03,979 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 15:40:04,011 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:40:25,883 views RiskViewSet - laman.bashirova yeni risk yaratdı (id=1)
+INFO 2026-07-28 15:40:48,182 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:40:48,201 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:40:50,853 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:40:50,881 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:41:01,308 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:41:01,329 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:41:09,158 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:41:09,175 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:41:25,949 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:41:25,967 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:44:48,867 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:44:48,895 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:45:06,174 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:45:06,200 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:46:13,461 views RiskViewSet.partial_update çağırıldı - method=PATCH, user=laman.bashirova, pk=1, data={'designation': 'jhbh', 'legal_basis': 'njk', 'international_framework': 'bhjjk', 'national_legal_reference': 'jjk', 'asset_value': 1, 'probability': 5, 'impact': 4, 'treatment_option': 'mitigation', 'residual_risk': 'hbju', 'update_frequency': '67', 'incident_notification_notes': 'kk', 'standard_references': 'klk', 'id': 1, 'risk_degree': 16, 'risk_level': 'medium', 'risk_level_display': 'Orta', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-28T15:40:25.868037+04:00', 'updated_at': '2026-07-28T15:40:25.868037+04:00'}
+INFO 2026-07-28 15:46:13,462 views RiskViewSet.update çağırıldı - method=PATCH, user=laman.bashirova, pk=1, data={'designation': 'jhbh', 'legal_basis': 'njk', 'international_framework': 'bhjjk', 'national_legal_reference': 'jjk', 'asset_value': 1, 'probability': 5, 'impact': 4, 'treatment_option': 'mitigation', 'residual_risk': 'hbju', 'update_frequency': '67', 'incident_notification_notes': 'kk', 'standard_references': 'klk', 'id': 1, 'risk_degree': 16, 'risk_level': 'medium', 'risk_level_display': 'Orta', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-28T15:40:25.868037+04:00', 'updated_at': '2026-07-28T15:40:25.868037+04:00'}
+INFO 2026-07-28 15:46:13,478 views RiskViewSet - laman.bashirova riski yenilədi (id=1)
+INFO 2026-07-28 15:46:13,480 views RiskViewSet.update nəticəsi - status=200
+INFO 2026-07-28 15:46:13,480 views RiskViewSet.partial_update nəticəsi - status=200
+INFO 2026-07-28 15:46:19,634 views RiskViewSet - laman.bashirova riski sildi (id=1)
+INFO 2026-07-28 15:46:26,388 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:46:26,404 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:47:34,062 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:47:34,083 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:47:39,940 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:47:40,034 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:47:58,527 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:47:58,562 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:08,953 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:08,980 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:24,637 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:24,656 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:31,951 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:31,969 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:48,923 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:48,953 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:51,240 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:48:51,257 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:49:03,998 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:49:04,019 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:49:08,181 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:49:08,198 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:49:25,471 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:49:25,495 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:00,707 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:00,726 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:19,503 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:19,522 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:23,075 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:23,093 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:38,764 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:38,788 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:42,231 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:50:43,206 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:54:36,692 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:54:36,720 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:54:42,657 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:54:42,675 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:54:46,459 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 15:54:46,478 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:05:46,973 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:05:46,992 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:28:49,036 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:28:49,054 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:28:51,608 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:28:51,683 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:28:55,537 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:28:56,082 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:29:00,674 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:29:00,695 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:29:21,524 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:29:21,543 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:29:56,467 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:29:56,491 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:31:43,113 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 16:38:35,184 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-28 16:38:35,227 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-28 16:38:35,256 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:38:45,854 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-28 16:38:46,004 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:07:32,656 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-29 09:07:40,628 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-29 09:07:40,665 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-29 09:07:40,697 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:07:55,108 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:07:55,130 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:07:59,076 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:07:59,094 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:10:10,854 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:10:10,874 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:10:14,717 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:10:14,749 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:25:31,736 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:25:31,773 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:39:43,200 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:39:43,227 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:40:02,951 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:40:02,989 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:40:05,511 views Excel ixracı - laman.bashirova 'risk_table' cədvəlini ixrac etdi (0 sətir, filtrlər={'search': '', 'risk_level': '', 'treatment_option': ''})
+INFO 2026-07-29 09:40:08,322 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:40:08,346 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:43:42,417 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 09:43:42,443 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:15:05,841 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:15:15,031 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-29 10:15:23,452 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-29 10:15:23,495 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-29 10:15:23,530 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:18:00,474 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:18:00,497 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:18:23,210 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:18:23,235 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:36:26,184 views RiskViewSet - laman.bashirova yeni risk yaratdı (id=2)
+INFO 2026-07-29 10:40:21,127 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 10:40:21,158 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:18:34,142 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:18:41,411 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-29 11:18:51,011 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-29 11:18:51,058 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-29 11:18:51,088 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:19:06,581 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:19:06,609 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:19:08,884 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:19:08,900 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:19:10,036 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:19:10,059 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-29 11:34:09,650 views laman.bashirova logged out!
+ERROR 2026-07-29 11:34:09,666 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-29 11:35:24,273 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-29 11:35:24,317 views Login failed for laman.bashirova: No active account found with the given credentials
+INFO 2026-07-29 11:35:24,323 views LoginView.post - laman.bashirova üçün fails sayı: 1

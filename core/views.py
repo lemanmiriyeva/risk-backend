@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Module, SubModule, Status
 from .serializers import StatusSerializer, ModuleSerializer, SubModuleSerializer
+from .permissions import get_user_modules
 
 logger = logging.getLogger('colored')
 
@@ -16,6 +17,115 @@ MODULE_TITLE_DOESNOT_EXIST = 'Module id tapılmadı.'
 USER_ACCESS_DENIED = 'İstifadəçinin girişi qadağandır.'
 
 
+from .permissions import IsOrgAdmin, get_managed_organization
+
+
+NO_ORGANIZATION = "İdarə etdiyiniz qurum təyin edilə bilmədi."
+NOT_ELIGIBLE_MODULE = "Bu modul/alt-modul sizin qurumunuz üçün nəzərdə tutulmayıb."
+USER_OUTSIDE_ORG = "Bu istifadəçi sizin qurumunuza aid deyil."
+
+
+def _user_payload(user, permitted_ids):
+    return {
+        "id": user.id,
+        "username": user.username,
+        "name": user.name,
+        "has_access": user.id in permitted_ids,
+    }
+
+
+class OrgModuleAccessView(APIView):
+    """
+    Qurum admini üçün: öz qurumuna aid (permitted_organizations-da qurumu olan)
+    modul/alt-modulları və hər birində qurumun HANSI işçilərinin faktiki
+    girişi olduğunu göstərir.
+
+    GET  /api/organization/module-access/               -> siyahı
+    POST /api/organization/module-access/                -> tək bir user üçün aç/bağla
+         body: {"target": "module" | "sub_module", "id": <int>, "user_id": <int>, "grant": true|false}
+    """
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        organization = get_managed_organization(request)
+        if not organization:
+            return Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+
+        org_users = list(organization.users.filter(is_active=True).order_by("firstname"))
+
+        modules_data = []
+        for module in Module.objects.filter(permitted_organizations=organization).order_by("id"):
+            module_permitted_ids = set(module.permitted_users.values_list("id", flat=True))
+
+            sub_modules_data = []
+            for sub in module.sub_modules.filter(permitted_organizations=organization).order_by("id"):
+                sub_permitted_ids = set(sub.permitted_users.values_list("id", flat=True))
+                sub_modules_data.append({
+                    "id": sub.id,
+                    "title": sub.title,
+                    "users": [_user_payload(u, sub_permitted_ids) for u in org_users],
+                })
+
+            modules_data.append({
+                "id": module.id,
+                "title": module.title,
+                "description": module.description,
+                "sub_modules": sub_modules_data,
+                "users": [_user_payload(u, module_permitted_ids) for u in org_users],
+            })
+
+        return Response({
+            "organization": {"id": organization.id, "title": organization.title},
+            "modules": modules_data,
+        }, status=HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        organization = get_managed_organization(request)
+        if not organization:
+            return Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+
+        target = request.data.get("target")
+        obj_id = request.data.get("id")
+        user_id = request.data.get("user_id")
+        grant = bool(request.data.get("grant"))
+
+        if target not in ("module", "sub_module") or not obj_id or not user_id:
+            return Response({"detail": "target, id və user_id sahələri məcburidir."}, status=HTTP_400_BAD_REQUEST)
+
+        model = Module if target == "module" else SubModule
+        try:
+            obj = model.objects.get(id=obj_id)
+        except model.DoesNotExist:
+            return Response({"detail": "Modul/alt-modul tapılmadı."}, status=HTTP_404_NOT_FOUND)
+
+        if not obj.permitted_organizations.filter(id=organization.id).exists():
+            logger.info(f"{request.user} - qurum əhatəsindən kənar modula cəhd: {obj}")
+            return Response({"detail": NOT_ELIGIBLE_MODULE}, status=HTTP_403_FORBIDDEN)
+
+        target_user = organization.users.filter(id=user_id).first()
+        if not target_user:
+            logger.info(f"{request.user} - başqa qurumun user-inə icazə vermə cəhdi: user_id={user_id}")
+            return Response({"detail": USER_OUTSIDE_ORG}, status=HTTP_403_FORBIDDEN)
+
+        if target == "sub_module" and grant and not obj.module.has_permission(target_user):
+            return Response(
+                {"detail": "Əvvəlcə istifadəçiyə əsas modula giriş verilməlidir."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        if grant:
+            obj.permitted_users.add(target_user)
+            logger.info(f"{request.user} - {target_user.username} üçün {obj} girişi AÇDI")
+        else:
+            obj.permitted_users.remove(target_user)
+            logger.info(f"{request.user} - {target_user.username} üçün {obj} girişi BAĞLADI")
+
+        return Response({"access": grant}, status=HTTP_200_OK)
+
+
+
+
 class ModulesRetrieveView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = (JWTAuthentication,)
@@ -23,9 +133,10 @@ class ModulesRetrieveView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        permitted_ids = set(
-            self.queryset.filter(permitted_users=user).values_list('id', flat=True)
-        )
+        # get_user_modules() - modul icazələri üçün YEGANƏ mənbə (core/permissions.py).
+        # Burada ayrıca/təkrar məntiq yazılmır ki, gələcəkdə icazə qaydaları
+        # dəyişəndə iki yerdə eyni işi fərqli edib uyğunsuzluq yaranmasın.
+        permitted_ids = set(get_user_modules(user).values_list('id', flat=True))
 
         result = []
         for module in self.queryset.order_by('id'):
