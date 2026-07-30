@@ -183,3 +183,33 @@ def get_managed_organization(request):
         return user.organization
 
     return None
+
+
+def get_scoped_user(request, id):
+    """
+    Admin panelindən (root və ya qurum admini) konkret bir istifadəçiyə çıxış üçün.
+      - Root (superuser): istənilən istifadəçiyə çıxışı var (hansı qurumda olmasından asılı olmayaraq).
+      - Qurum admini: yalnız ÖZ qurumunun istifadəçilərinə çıxışı var.
+    Qaytarır: (user, error_response). error_response None-dursa əməliyyat davam edə bilər.
+    """
+    from rest_framework.response import Response
+    from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+    from authentication.models import User
+
+    requester = request.user
+    user = User.objects.filter(id=id).first()
+    if not user:
+        return None, Response({"detail": "İstifadəçi tapılmadı."}, status=HTTP_404_NOT_FOUND)
+
+    if requester.is_superuser:
+        return user, None
+
+    if requester.is_org_admin:
+        organization = get_managed_organization(request)
+        if not organization:
+            return None, Response({"detail": "İdarə etdiyiniz qurum təyin edilə bilmədi."}, status=HTTP_400_BAD_REQUEST)
+        if user.organization_id != organization.id:
+            return None, Response({"detail": "Bu istifadəçi sizin qurumunuza aid deyil."}, status=HTTP_403_FORBIDDEN)
+        return user, None
+
+    return None, Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)

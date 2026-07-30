@@ -823,3 +823,47 @@ ERROR 2026-07-29 11:34:09,666 views LogoutView - token xətası (laman.bashirova
 INFO 2026-07-29 11:35:24,273 views LoginView.post - giriş cəhdi: laman.bashirova
 ERROR 2026-07-29 11:35:24,317 views Login failed for laman.bashirova: No active account found with the given credentials
 INFO 2026-07-29 11:35:24,323 views LoginView.post - laman.bashirova üçün fails sayı: 1
+INFO 2026-07-30 10:18:31,511 views LoginView.post - giriş cəhdi: root
+INFO 2026-07-30 10:18:31,846 views root uğurla daxil oldu
+INFO 2026-07-30 10:18:31,886 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:18:49,996 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:18:50,017 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:19:00,736 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:19:01,132 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:20:05,678 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:20:05,712 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:20:17,444 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:20:17,469 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:20:40,081 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:20:40,115 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:21:05,000 views Excel ixracı - root 'risk_logs' cədvəlini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-30 10:21:39,016 views RiskViewSet.partial_update çağırıldı - method=PATCH, user=root, pk=2, data={'designation': 'yfuk', 'legal_basis': 'hju', 'international_framework': 'hjv', 'national_legal_reference': 'h,jrdf', 'asset_value': 1, 'probability': 3, 'impact': 4, 'treatment_option': 'mitigation', 'residual_risk': 'hvj', 'update_frequency': 'hj', 'incident_notification_notes': 'jh', 'standard_references': 'hj', 'id': 2, 'risk_degree': 12, 'risk_level': 'medium', 'risk_level_display': 'Orta', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-29T10:36:26.168542+04:00', 'updated_at': '2026-07-29T10:36:26.168542+04:00'}
+INFO 2026-07-30 10:21:39,016 views RiskViewSet.update çağırıldı - method=PATCH, user=root, pk=2, data={'designation': 'yfuk', 'legal_basis': 'hju', 'international_framework': 'hjv', 'national_legal_reference': 'h,jrdf', 'asset_value': 1, 'probability': 3, 'impact': 4, 'treatment_option': 'mitigation', 'residual_risk': 'hvj', 'update_frequency': 'hj', 'incident_notification_notes': 'jh', 'standard_references': 'hj', 'id': 2, 'risk_degree': 12, 'risk_level': 'medium', 'risk_level_display': 'Orta', 'treatment_option_display': 'Təsirin azaldılması', 'created_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'updated_by': {'id': 2, 'username': 'laman.bashirova', 'name': 'Laman Bashirova', 'email': 'laman.bashirova@mdi.gov.az', 'department_name': None, 'role_name': None}, 'created_at': '2026-07-29T10:36:26.168542+04:00', 'updated_at': '2026-07-29T10:36:26.168542+04:00'}
+INFO 2026-07-30 10:21:39,034 views RiskViewSet - root riski yenilədi (id=2)
+INFO 2026-07-30 10:21:39,035 views RiskViewSet.update nəticəsi - status=200
+INFO 2026-07-30 10:21:39,036 views RiskViewSet.partial_update nəticəsi - status=200
+INFO 2026-07-30 10:21:42,371 views Excel ixracı - root 'risk_logs' cədvəlini ixrac etdi (10 sətir, filtrlər={'search': '', 'action_type': '', 'ordering': '-timestamp'})
+INFO 2026-07-30 10:26:05,198 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:26:05,253 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:26:06,191 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:26:06,228 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:26:33,549 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:26:33,590 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:29:47,979 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:29:48,022 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:35:15,684 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:35:15,724 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:37:31,257 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:37:31,291 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:38:48,376 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-07-30 10:38:48,413 views UserView.get - root öz məlumatını sorğuladı
+ERROR 2026-07-30 10:39:12,064 views ResetOrgUserPasswordView.post - root üçün mail göndərilmədi: please run connect() first
+ERROR 2026-07-30 10:39:21,781 views ResetOrgUserPasswordView.post - root üçün mail göndərilmədi: please run connect() first
+INFO 2026-07-30 10:42:12,341 views root logged out!
+ERROR 2026-07-30 10:42:12,361 views LogoutView - token xətası (root): Token is blacklisted
+INFO 2026-07-30 10:42:24,555 views LoginView.post - giriş cəhdi: root
+ERROR 2026-07-30 10:42:24,775 views Login failed for root: No active account found with the given credentials
+INFO 2026-07-30 10:42:24,781 views LoginView.post - root üçün fails sayı: 1
+INFO 2026-07-30 11:50:43,139 views RequestPasswordResetView.post - şifrə sıfırlama sorğusu: laman.bashirova
+ERROR 2026-07-30 11:50:43,167 views RequestPasswordResetView.post - laman.bashirova üçün kod xətası: please run connect() first
+INFO 2026-07-30 11:51:10,433 views ConfirmPasswordResetView.post - laman.bashirova üçün kod yanlış/vaxtı bitib

@@ -1,10 +1,16 @@
 import logging
 import pyotp
+from datetime import timedelta
+from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.mail import send_mail
+from django.utils import timezone
+from django.utils.crypto import get_random_string
+from rest_framework import serializers
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.status import HTTP_403_FORBIDDEN, \
     HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_201_CREATED
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -14,8 +20,8 @@ from python_ipware import IpWare
 from django.shortcuts import get_object_or_404
 from core.contstants import INVALID_CREDENTIALS, USER_LOCKED
 from core.permissions import user_has_any_module_access
-from .models import User, Department, LoginAttempt
-from .serializers import UserSerializer, DepartmentListSerializer
+from .models import User, Department, LoginAttempt, PasswordReset
+from .serializers import UserSerializer, DepartmentListSerializer, PasswordResetRequestSerializer
 
 ipw = IpWare()
 
@@ -133,9 +139,181 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+GENERIC_RESET_MESSAGE = (
+    "Sorğunuz qəbul olundu. Əgər daxil etdiyiniz istifadəçi adı sistemdə mövcuddursa, "
+    "e-poçt ünvanınıza bir dəfəlik kod göndərildi."
+)
+RESET_CODE_INVALID_MESSAGE = "Kod yanlışdır və ya vaxtı bitib. Zəhmət olmasa yenidən sorğu göndərin."
+RESET_CODE_TTL_MINUTES = 15
+
+# Qarışıq düşə biləcək simvollar (0/O, 1/l/I) çıxarılıb - göndərilən şifrəni yazmaq asan olsun deyə.
+PASSWORD_CHARS = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%"
+RESET_CODE_CHARS = "0123456789"
+NO_EMAIL = "İstifadəçinin email ünvanı olmadığı üçün şifrə göndərilə bilmədi."
+
+
+def _generate_password(length=10):
+    return get_random_string(length, allowed_chars=PASSWORD_CHARS)
+
+
+def _send_new_password_email(user, password, is_new_account):
+    if not user.email:
+        raise ValueError(NO_EMAIL)
+
+    subject = "Hesabınız yaradıldı" if is_new_account else "Şifrəniz yeniləndi"
+    intro = (
+        "Risk idarəetmə sistemində sizin üçün hesab yaradıldı."
+        if is_new_account else
+        "Admin tərəfindən hesabınızın şifrəsi yeniləndi."
+    )
+    body = (
+        f"{intro}\n\n"
+        f"İstifadəçi adı: {user.username}\n"
+        f"Yeni şifrə: {password}\n\n"
+        f"Təhlükəsizlik baxımından, sistemə daxil olduqdan sonra bu şifrəni dəyişdirməyiniz tövsiyə olunur."
+    )
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None) or settings.EMAIL_HOST_USER,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+
+def _send_reset_code_email(user, code):
+    if not user.email:
+        raise ValueError(NO_EMAIL)
+
+    subject = "Şifrə sıfırlama kodu"
+    body = (
+        f"Salam {user.name or user.username},\n\n"
+        f"Şifrənizi sıfırlamaq üçün bir dəfəlik kod:\n\n"
+        f"{code}\n\n"
+        f"Bu kod {RESET_CODE_TTL_MINUTES} dəqiqə ərzində etibarlıdır. Kodu sistemdəki "
+        f"\"Şifrəni təyin et\" səhifəsində daxil edərək özünüz üçün yeni şifrə seçə bilərsiniz.\n\n"
+        f"Əgər bu sorğunu siz göndərməmisinizsə, bu maili nəzərə almayın."
+    )
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None) or settings.EMAIL_HOST_USER,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+
+class RequestPasswordResetView(APIView):
+    """
+    POST /api/authentication/user/request-password-reset/   body: {"username": "..."}
+
+    Login səhifəsindəki "Şifrəmi unutmuşam" axınının 1-ci addımı:
+      1) İstifadəçi öz username-ini yazıb göndərir.
+      2) Sistem HEÇ KİMƏ (admin/root-a) bildiriş GÖNDƏRMİR.
+      3) Sistem 6 rəqəmli, 15 dəqiqə etibarlı BİR DƏFƏLİK KOD yaradır və
+         BİRBAŞA HƏMİN USER-İN öz email ünvanına göndərir (real şifrəni hələ
+         DƏYİŞMİR).
+      4) İstifadəçi bu kodu "Şifrəni təyin et" səhifəsində daxil edib özü üçün
+         yeni şifrə seçir - bax: ConfirmPasswordResetView (2-ci addım).
+
+    Username mövcud olub-olmamasından asılı olmayaraq HƏMİŞƏ eyni ümumi cavab
+    qaytarılır (enumeration hücumlarının qarşısını almaq üçün); email göndərmə
+    xətaları da sorğunu uğursuz etmir, sadəcə loglanır.
+    """
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+        username = serializer.validated_data["username"].strip()
+        logger.info(f"RequestPasswordResetView.post - şifrə sıfırlama sorğusu: {username}")
+
+        user = User.objects.filter(username__iexact=username, is_active=True).first()
+
+        if user:
+            try:
+                self._send_code(user)
+            except Exception as e:
+                logger.error(f"RequestPasswordResetView.post - {username} üçün kod xətası: {str(e)}")
+        else:
+            logger.info(f"RequestPasswordResetView.post - {username} tapılmadı")
+
+        return Response({"detail": GENERIC_RESET_MESSAGE}, status=HTTP_200_OK)
+
+    def _send_code(self, user):
+        if not user.email:
+            logger.error(f"RequestPasswordResetView._send_code - {user.username} üçün email ünvanı yoxdur")
+            return
+
+        code = get_random_string(6, allowed_chars=RESET_CODE_CHARS)
+
+        # Əvvəlki aktiv kodlar deaktiv edilir, yalnız SON kod etibarlı olsun.
+        PasswordReset.objects.filter(email=user.email, active=True).update(active=False)
+        PasswordReset.objects.create(email=user.email, token=code)
+
+        _send_reset_code_email(user, code)
+        logger.info(f"RequestPasswordResetView._send_code - {user.username} üçün kod mail ilə göndərildi")
+
+
+class ConfirmPasswordResetSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=128)
+    code = serializers.CharField(max_length=20)
+    new_password = serializers.CharField(min_length=8, max_length=128)
+
+
+class ConfirmPasswordResetView(APIView):
+    """
+    POST /api/authentication/user/password-reset/
+    body: {"username": "...", "code": "123456", "new_password": "..."}
+
+    Login səhifəsindəki "Şifrəni unutmuşam" axınının 2-ci (son) addımı - "Şifrəni
+    təyin et" səhifəsindən çağırılır: istifadəçi mailinə gələn bir dəfəlik kodu
+    və ÖZ SEÇDİYİ yeni şifrəni göndərir. Kod düzgün, aktiv və vaxtı bitməyibsə
+    (bax: RESET_CODE_TTL_MINUTES) şifrə dəyişdirilir və kod deaktiv edilir.
+    """
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request, *args, **kwargs):
+        serializer = ConfirmPasswordResetSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+        username = serializer.validated_data["username"].strip()
+        code = serializer.validated_data["code"].strip()
+        new_password = serializer.validated_data["new_password"]
+
+        user = User.objects.filter(username__iexact=username, is_active=True).first()
+        if not user:
+            logger.info(f"ConfirmPasswordResetView.post - {username} tapılmadı")
+            return Response({"detail": RESET_CODE_INVALID_MESSAGE}, status=HTTP_400_BAD_REQUEST)
+
+        cutoff = timezone.now() - timedelta(minutes=RESET_CODE_TTL_MINUTES)
+        reset_record = PasswordReset.objects.filter(
+            email=user.email, token=code, active=True, created_at__gte=cutoff,
+        ).order_by("-created_at").first()
+
+        if not reset_record:
+            logger.info(f"ConfirmPasswordResetView.post - {username} üçün kod yanlış/vaxtı bitib")
+            return Response({"detail": RESET_CODE_INVALID_MESSAGE}, status=HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+
+        PasswordReset.objects.filter(email=user.email, active=True).update(active=False)
+
+        logger.info(f"ConfirmPasswordResetView.post - {username} öz şifrəsini uğurla yenilədi")
+        return Response({"detail": "Şifrəniz uğurla yeniləndi. İndi yeni şifrənizlə daxil ola bilərsiniz."}, status=HTTP_200_OK)
+        logger.info(f"RequestPasswordResetView._reset_and_send - {user.username} üçün yeni şifrə mail ilə göndərildi")
+
+
 class GroupMeta:
     verbose_name = 'Vəzifə'
     verbose_name_plural = 'Vəzifələr'
+
 
 
 class LoginView(TokenObtainPairView):
@@ -225,26 +403,56 @@ Group.add_to_class('Meta', GroupMeta)
 
 
 
-from core.permissions import IsOrgAdmin, get_managed_organization
-from .models import User
-from .serializers import OrgUserSerializer
+from core.permissions import IsOrgAdmin, get_managed_organization, get_scoped_user
+from .models import User, Organization
+from .serializers import OrgUserSerializer, OrganizationSerializer
 
 NO_ORGANIZATION = "İdarə etdiyiniz qurum təyin edilə bilmədi."
 USER_OUTSIDE_ORG = "Bu istifadəçi sizin qurumunuza aid deyil."
 
 
+class OrganizationListView(APIView):
+    """
+    GET /api/authentication/organizations/   (yalnız root/superuser)
+
+    Admin panelindəki qurum seçicisi üçün bütün qurumların sadə siyahısı.
+    Qurum admini bu endpoint-ə ehtiyac duymur (öz qurumu artıq sabitdir).
+    """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
+
+        organizations = Organization.objects.all().order_by("title")
+        return Response(OrganizationSerializer(organizations, many=True).data, status=HTTP_200_OK)
+
+
 class OrgUsersView(APIView):
     """
-    Qurum admininin ÖZ qurumunun işçilərini idarə etməsi üçün.
+    Admin panelinin "İstifadəçilər" bölməsi üçün.
 
-    GET  /api/authentication/organization/users/     -> öz qurumunun bütün user-ləri
-    POST /api/authentication/organization/users/     -> öz qurumuna yeni user yaradır
-         (organization avtomatik təyin olunur, admin başqa qurum üçün user yarada bilməz)
+    GET  /api/authentication/organization/users/
+         - Qurum admini  -> öz qurumunun bütün user-ləri.
+         - Root (superuser) -> `?organization=<id>` verilibsə o qurumun user-ləri,
+           verilməyibsə SİSTEMDƏKİ BÜTÜN user-lər (bütün qurumlar daxil).
+    POST /api/authentication/organization/users/
+         - Yeni user yaradır (qurum admini yalnız öz qurumuna, root `?organization=<id>` ilə istənilən quruma).
+         - Şifrə admin tərəfindən YAZILMIR: sistem təsadüfi şifrə yaradıb birbaşa
+           istifadəçinin email ünvanına göndərir.
     """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 
     def get(self, request, *args, **kwargs):
+        requester = request.user
+        org_id = request.query_params.get("organization")
+
+        if requester.is_superuser and not org_id:
+            users = User.objects.all().select_related("organization").order_by("organization__title", "firstname")
+            return Response(OrgUserSerializer(users, many=True).data, status=HTTP_200_OK)
+
         organization = get_managed_organization(request)
         if not organization:
             return Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
@@ -261,65 +469,93 @@ class OrgUsersView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-        password = request.data.get("password")
         user = serializer.save(organization=organization)
-        if password:
-            user.set_password(password)
-        else:
-            user.set_unusable_password()
+        password = _generate_password()
+        user.set_password(password)
         user.save()
 
+        warning = None
+        try:
+            _send_new_password_email(user, password, is_new_account=True)
+        except Exception as e:
+            logger.error(f"OrgUsersView.post - {user.username} üçün mail göndərilmədi: {str(e)}")
+            warning = "İstifadəçi yaradıldı, lakin giriş məlumatları mail ilə göndərilmədi (email ünvanını yoxlayın)."
+
         logger.info(f"{request.user.username} - {organization.title} qurumuna yeni user yaratdı: {user.username}")
-        return Response(OrgUserSerializer(user).data, status=HTTP_201_CREATED)
+        data = OrgUserSerializer(user).data
+        if warning:
+            data["_warning"] = warning
+        return Response(data, status=HTTP_201_CREATED)
 
 
 class OrgUserDetailView(APIView):
     """
     GET/PATCH  /api/authentication/organization/users/<id>/
 
-    Yalnız admin-in idarə etdiyi qurumun user-ini görmək/dəyişmək olar;
-    başqa qurumun user-inə müraciət 403 qaytarır (data izolyasiyası burada da qorunur).
+    - Qurum admini yalnız öz qurumunun user-inə çıxışı var (başqa qurumun user-inə
+      müraciət 403 qaytarır - data izolyasiyası qorunur).
+    - Root (superuser) istənilən qurumun istənilən user-inə çıxışı var.
+
+    Şifrə bu endpoint-dən DƏYİŞDİRİLMİR - bunun üçün ayrıca
+    `POST .../reset-password/` action-ı var (aşağıda).
     """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 
-    def _get_user(self, request, id):
-        organization = get_managed_organization(request)
-        if not organization:
-            return None, Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
-
-        user = User.objects.filter(id=id).first()
-        if not user:
-            return None, Response({"detail": "İstifadəçi tapılmadı."}, status=HTTP_404_NOT_FOUND)
-
-        if user.organization_id != organization.id:
-            return None, Response({"detail": USER_OUTSIDE_ORG}, status=HTTP_403_FORBIDDEN)
-
-        return user, None
-
     def get(self, request, id, *args, **kwargs):
-        user, error = self._get_user(request, id)
+        user, error = get_scoped_user(request, id)
         if error:
             return error
         return Response(OrgUserSerializer(user).data, status=HTTP_200_OK)
 
     def patch(self, request, id, *args, **kwargs):
-        user, error = self._get_user(request, id)
+        user, error = get_scoped_user(request, id)
         if error:
             return error
 
-        # organization sahəsi bu endpoint-dən dəyişdirilə bilməz (qurumlar arası köçürmə qadağandır)
-        data = {k: v for k, v in request.data.items() if k != "organization"}
+        # organization və password bu endpoint-dən dəyişdirilə bilməz
+        # (qurumlar arası köçürmə qadağandır; şifrə üçün reset-password action-ı istifadə olunur)
+        data = {k: v for k, v in request.data.items() if k not in ("organization", "password")}
         serializer = OrgUserSerializer(user, data=data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
         serializer.save()
 
-        password = request.data.get("password")
-        if password:
-            user.set_password(password)
-            user.save()
-
         logger.info(f"{request.user.username} - {user.username} istifadəçisini yenilədi")
         return Response(OrgUserSerializer(user).data, status=HTTP_200_OK)
 
+
+class ResetOrgUserPasswordView(APIView):
+    """
+    POST /api/authentication/organization/users/<id>/reset-password/
+
+    Admin (qurum admini öz qurumunun user-i üçün, root istənilən user üçün) bu
+    action-ı çağırır. Admin şifrəni özü YAZMIR/GÖRMÜR - sistem təsadüfi yeni şifrə
+    yaradır, user-ə set edir və birbaşa onun email ünvanına göndərir.
+    """
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request, id, *args, **kwargs):
+        user, error = get_scoped_user(request, id)
+        if error:
+            return error
+
+        if not user.email:
+            return Response({"detail": NO_EMAIL}, status=HTTP_400_BAD_REQUEST)
+
+        password = _generate_password()
+        user.set_password(password)
+        user.save()
+
+        try:
+            _send_new_password_email(user, password, is_new_account=False)
+        except Exception as e:
+            logger.error(f"ResetOrgUserPasswordView.post - {user.username} üçün mail göndərilmədi: {str(e)}")
+            return Response(
+                {"detail": "Şifrə yeniləndi, lakin mail göndərilə bilmədi. Email ünvanını yoxlayın."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        logger.info(f"{request.user.username} - {user.username} üçün yeni şifrə yaradıb mail ilə göndərdi")
+        return Response({"detail": "Yeni şifrə istifadəçinin email ünvanına göndərildi."}, status=HTTP_200_OK)

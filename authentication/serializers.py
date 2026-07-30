@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from authentication.models import User, Role, Department
+from authentication.models import User, Role, Department, Organization
 from core.permissions import get_module_permissions
 
 
@@ -104,6 +104,21 @@ class UserSerializer(ModelSerializer):
             if rep["department"]["id"] == rep["main_department"]["id"]:
                 rep.pop("department")
         return rep
+
+
+class OrganizationSerializer(ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ("id", "title", "short_name", "is_active")
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """
+    Login səhifəsindəki "Şifrəmi unutmuşam" formundan gələn sorğu üçün.
+    Yalnız username qəbul edir - hansı qurumun admini/root-un məlumatlandırılacağı
+    view tərəfində, user-in `organization` sahəsinə görə təyin olunur.
+    """
+    username = serializers.CharField(max_length=128)
 
 
 class OrgUserSerializer(ModelSerializer):
