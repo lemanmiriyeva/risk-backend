@@ -3,9 +3,15 @@ from authentication.serializers import UserShortSerializer
 from .models import Risk, RiskLog
 
 
+class OrganizationShortSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+
+
 class RiskSerializer(serializers.ModelSerializer):
     created_by = UserShortSerializer(read_only=True)
     updated_by = UserShortSerializer(read_only=True)
+    organization = OrganizationShortSerializer(read_only=True)
     risk_level_display = serializers.CharField(source='get_risk_level_display', read_only=True)
     treatment_option_display = serializers.CharField(source='get_treatment_option_display', read_only=True)
 
@@ -29,13 +35,14 @@ class RiskSerializer(serializers.ModelSerializer):
             "update_frequency",
             "incident_notification_notes",
             "standard_references",
+            "organization",
             "created_by",
             "updated_by",
             "created_at",
             "updated_at",
         )
         read_only_fields = (
-            "risk_degree", "risk_level", "created_by", "updated_by", "created_at", "updated_at",
+            "risk_degree", "risk_level", "organization", "created_by", "updated_by", "created_at", "updated_at",
         )
 
     def _validate_scale(self, value):
@@ -55,6 +62,7 @@ class RiskSerializer(serializers.ModelSerializer):
 
 class RiskLogSerializer(serializers.ModelSerializer):
     user = UserShortSerializer(read_only=True)
+    organization = OrganizationShortSerializer(read_only=True)
     action_type_display = serializers.CharField(source='get_action_type_display', read_only=True)
 
     class Meta:
@@ -65,6 +73,7 @@ class RiskLogSerializer(serializers.ModelSerializer):
             "risk_id_ref",
             "risk_designation",
             "risk_snapshot",
+            "organization",
             "user",
             "user_username_snapshot",
             "action_type",

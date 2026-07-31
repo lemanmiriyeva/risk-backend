@@ -867,3 +867,107 @@ INFO 2026-07-30 10:42:24,781 views LoginView.post - root üçün fails sayı: 1
 INFO 2026-07-30 11:50:43,139 views RequestPasswordResetView.post - şifrə sıfırlama sorğusu: laman.bashirova
 ERROR 2026-07-30 11:50:43,167 views RequestPasswordResetView.post - laman.bashirova üçün kod xətası: please run connect() first
 INFO 2026-07-30 11:51:10,433 views ConfirmPasswordResetView.post - laman.bashirova üçün kod yanlış/vaxtı bitib
+INFO 2026-07-30 12:04:48,054 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-30 12:04:58,003 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-30 12:04:58,059 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-30 12:04:58,390 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 12:05:05,193 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 12:05:05,215 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 12:05:07,496 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 12:05:07,520 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 15:35:54,585 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-30 15:36:06,435 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-30 15:36:06,479 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-30 15:36:06,514 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 15:36:16,442 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 15:36:16,548 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:22:49,369 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:22:49,393 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:22:54,341 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:22:54,360 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:22:56,140 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:22:56,168 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:23:00,648 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:23:00,669 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:23:28,633 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:23:28,673 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:24:04,511 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:24:04,542 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:26:57,134 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:26:57,155 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:26:59,406 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:26:59,449 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-30 16:36:55,927 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 09:40:43,019 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 09:40:54,838 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 09:40:54,879 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-31 09:40:54,923 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 09:41:11,024 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 09:41:11,056 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:07:00,168 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:07:00,216 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:07:28,425 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:07:28,443 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:07:58,483 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:07:58,502 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:11:35,074 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:11:35,092 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:15:13,752 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:15:13,765 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:16:01,118 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:16:01,134 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:19:09,474 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:19:09,493 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:19:33,384 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:19:33,407 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:24:58,383 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:24:58,408 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:52:05,756 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-31 10:52:05,789 views Login failed for laman.bashirova: no such column: authentication_user.fin_kod
+INFO 2026-07-31 10:52:05,795 views LoginView.post - laman.bashirova üçün fails sayı: 1
+INFO 2026-07-31 10:52:07,818 views LoginView.post - giriş cəhdi: laman.bashirova
+ERROR 2026-07-31 10:52:07,850 views Login failed for laman.bashirova: no such column: authentication_user.fin_kod
+INFO 2026-07-31 10:52:07,860 views LoginView.post - laman.bashirova üçün fails sayı: 2
+INFO 2026-07-31 10:52:36,602 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 10:52:46,699 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 10:52:46,739 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-31 10:52:46,780 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:56:01,653 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:56:01,679 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:56:17,243 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 10:56:17,259 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:03:16,075 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:03:16,099 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:07:48,354 views laman.bashirova logged out!
+ERROR 2026-07-31 11:07:48,371 views LogoutView - token xətası (laman.bashirova): Token is blacklisted
+INFO 2026-07-31 11:09:02,058 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 11:09:05,586 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 11:09:12,820 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 11:09:12,860 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-31 11:09:12,901 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:09:42,311 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 11:09:49,634 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 11:09:49,681 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-31 11:09:49,714 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:11:34,449 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:11:34,466 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:24:51,147 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:24:51,147 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:24:51,219 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:24:51,220 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:26:56,804 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:26:57,759 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:26:57,949 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:26:57,964 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 11:27:03,646 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:27:03,646 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:27:03,686 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:27:03,686 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:27:19,358 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:27:19,358 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:27:19,395 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:27:19,399 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:49:16,038 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:49:16,051 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 11:49:16,097 views DepartmentListView.get çağırıldı
+INFO 2026-07-31 11:49:16,099 views DepartmentListView.get - 0 şöbə qaytarıldı

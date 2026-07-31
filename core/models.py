@@ -31,11 +31,10 @@ class Module(TimestampsModel):
         verbose_name="Əlaqəli qurumlar (əhatə dairəsi)",
         help_text=(
             "Bu modulun hansı qurum(lar) üçün nəzərdə tutulduğunu göstərir. "
-            "DİQQƏT: bu sahə tək başına heç bir user-ə giriş vermir — "
-            "qurumun bütün işçilərinə avtomatik açılmır. Real giriş yalnız "
-            "'Fərdi icazəli istifadəçilər' (permitted_users) sahəsi ilə verilir; "
-            "burada seçilən qurum(lar) yalnız o sahəyə hansı user-lərin əlavə "
-            "oluna biləcəyini məhdudlaşdırır (başqa qurumun işçisi əlavə edilə bilməz)."
+            "Bu sahədəki qurumun ADMİNİ (is_org_admin) modula AVTOMATİK giriş əldə edir. "
+            "Qurumun adi işçiləri isə avtomatik giriş almır - onlara giriş yalnız "
+            "'Fərdi icazəli istifadəçilər' (permitted_users) sahəsi ilə (və ya qurum "
+            "admininin admin panelindən) verilir."
         )
     )
     url_endpoint = models.CharField(max_length=120, verbose_name="Url linki")
@@ -61,12 +60,20 @@ class Module(TimestampsModel):
 
     def has_permission(self, user):
         """
-        Giriş YALNIZ fərdi (permitted_users) əsasında verilir.
-        permitted_organizations giriş vermir — sadəcə hansı qurumun user-lərinin
-        permitted_users-ə əlavə oluna biləcəyini müəyyən edir (bax: is_user_eligible).
+        Giriş qaydaları:
+          - Root (superuser): HƏMİŞƏ giriş var - bütün modullar avtomatik açıqdır.
+          - Qurum admini (is_org_admin): qurumu bu modulun `permitted_organizations`
+            sahəsindədirsə, AVTOMATİK giriş var (fərdi permitted_users qeydinə ehtiyac yoxdur).
+          - Adi istifadəçi: YALNIZ fərdi (permitted_users) əsasında giriş var.
         """
         if not user or not user.is_authenticated:
             return False
+        if user.is_superuser:
+            return True
+        if getattr(user, "is_org_admin", False):
+            org_id = getattr(user, "organization_id", None)
+            if org_id and self.permitted_organizations.filter(id=org_id).exists():
+                return True
         return self.permitted_users.filter(id=user.id).exists()
 
     def get_permitted_sub_modules(self, user):
@@ -90,8 +97,10 @@ class SubModule(TimestampsModel):
         "authentication.Organization", related_name="sub_modules", blank=True,
         verbose_name="Əlaqəli qurumlar (əhatə dairəsi)",
         help_text=(
-            "Yalnız hansı qurum(lar)ın işçilərinin 'Fərdi icazəli istifadəçilər' "
-            "sahəsinə əlavə oluna biləcəyini məhdudlaşdırır. Tək başına giriş vermir."
+            "Bu sahədəki qurumun ADMİNİ (is_org_admin) alt-modula AVTOMATİK giriş əldə edir "
+            "(əsas modula da girişi olduğu halda). Qurumun adi işçiləri isə avtomatik giriş "
+            "almır - onlara giriş yalnız 'Fərdi icazəli istifadəçilər' (permitted_users) sahəsi "
+            "ilə (və ya qurum admininin admin panelindən) verilir."
         )
     )
     url_endpoint = models.CharField(max_length=120, verbose_name="Url linki")
@@ -115,14 +124,22 @@ class SubModule(TimestampsModel):
 
     def has_permission(self, user):
         """
-        Alt modula giriş üçün: əsas modula da fərdi icazə olmalıdır (permitted_users
-        vasitəsilə), VƏ bu alt modula da fərdi icazə olmalıdır. Qurum sahəsi
-        (permitted_organizations) yalnız namizədliyi məhdudlaşdırır, giriş vermir.
+        Giriş qaydaları (əsas modula da giriş şərtdir):
+          - Root (superuser): HƏMİŞƏ giriş var.
+          - Qurum admini: qurumu bu alt-modulun `permitted_organizations` sahəsindədirsə,
+            AVTOMATİK giriş var (fərdi permitted_users qeydinə ehtiyac yoxdur).
+          - Adi istifadəçi: YALNIZ fərdi (permitted_users) əsasında giriş var.
         """
         if not user or not user.is_authenticated:
             return False
         if not self.module.has_permission(user):
             return False
+        if user.is_superuser:
+            return True
+        if getattr(user, "is_org_admin", False):
+            org_id = getattr(user, "organization_id", None)
+            if org_id and self.permitted_organizations.filter(id=org_id).exists():
+                return True
         return self.permitted_users.filter(id=user.id).exists()
 
 class Status(TimestampsModel):

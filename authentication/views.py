@@ -20,8 +20,9 @@ from python_ipware import IpWare
 from django.shortcuts import get_object_or_404
 from core.contstants import INVALID_CREDENTIALS, USER_LOCKED
 from core.permissions import user_has_any_module_access
-from .models import User, Department, LoginAttempt, PasswordReset
-from .serializers import UserSerializer, DepartmentListSerializer, PasswordResetRequestSerializer
+from .models import User, Department, LoginAttempt, PasswordReset, Role
+from .serializers import UserSerializer, DepartmentListSerializer, PasswordResetRequestSerializer, \
+    OrganizationDetailSerializer, RoleSerializer
 
 ipw = IpWare()
 
@@ -413,10 +414,11 @@ USER_OUTSIDE_ORG = "Bu istifadəçi sizin qurumunuza aid deyil."
 
 class OrganizationListView(APIView):
     """
-    GET /api/authentication/organizations/   (yalnız root/superuser)
+    GET  /api/authentication/organizations/   (yalnız root/superuser) - bütün qurumların siyahısı.
+    POST /api/authentication/organizations/   (yalnız root/superuser) - yeni qurum yaradır.
 
-    Admin panelindəki qurum seçicisi üçün bütün qurumların sadə siyahısı.
-    Qurum admini bu endpoint-ə ehtiyac duymur (öz qurumu artıq sabitdir).
+    Admin panelindəki qurum seçicisi/idarəetməsi üçün. Qurum admini bu endpoint-ə
+    ehtiyac duymur (öz qurumunu birbaşa OrganizationDetailView ilə görür/redaktə edir).
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = (JWTAuthentication,)
@@ -427,6 +429,71 @@ class OrganizationListView(APIView):
 
         organizations = Organization.objects.all().order_by("title")
         return Response(OrganizationSerializer(organizations, many=True).data, status=HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
+
+        serializer = OrganizationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        organization = serializer.save()
+
+        logger.info(f"{request.user.username} - yeni qurum yaratdı: {organization.title}")
+        return Response(OrganizationSerializer(organization).data, status=HTTP_201_CREATED)
+
+
+class OrganizationDetailView(APIView):
+    """
+    GET/PATCH /api/authentication/organizations/<id>/
+
+    - Root (superuser): istənilən qurumun məlumatlarını görə/redaktə edə bilər
+      (o cümlədən `is_active`).
+    - Qurum admini: YALNIZ öz qurumunun məlumatlarını görə/redaktə edə bilər
+      (`is_active` sahəsini dəyişə bilməz - qurumu yalnız root aktiv/deaktiv edə bilər).
+    """
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def _get_organization(self, request, id):
+        requester = request.user
+        organization = Organization.objects.filter(id=id).first()
+        if not organization:
+            return None, Response({"detail": "Qurum tapılmadı."}, status=HTTP_404_NOT_FOUND)
+
+        if requester.is_superuser:
+            return organization, None
+
+        if requester.is_org_admin:
+            if requester.organization_id != organization.id:
+                return None, Response({"detail": "Bu qurum sizə aid deyil."}, status=HTTP_403_FORBIDDEN)
+            return organization, None
+
+        return None, Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
+
+    def get(self, request, id, *args, **kwargs):
+        organization, error = self._get_organization(request, id)
+        if error:
+            return error
+        return Response(OrganizationDetailSerializer(organization).data, status=HTTP_200_OK)
+
+    def patch(self, request, id, *args, **kwargs):
+        organization, error = self._get_organization(request, id)
+        if error:
+            return error
+
+        data = {k: v for k, v in request.data.items()}
+        if not request.user.is_superuser:
+            # Qurum admini öz qurumunu deaktiv/aktiv edə bilməz - yalnız root.
+            data.pop("is_active", None)
+
+        serializer = OrganizationSerializer(organization, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        logger.info(f"{request.user.username} - {organization.title} qurumunun məlumatlarını yenilədi")
+        return Response(OrganizationSerializer(organization).data, status=HTTP_200_OK)
 
 
 class OrgUsersView(APIView):
@@ -559,3 +626,12 @@ class ResetOrgUserPasswordView(APIView):
 
         logger.info(f"{request.user.username} - {user.username} üçün yeni şifrə yaradıb mail ilə göndərdi")
         return Response({"detail": "Yeni şifrə istifadəçinin email ünvanına göndərildi."}, status=HTTP_200_OK)
+
+
+class RoleListView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request):
+        roles = Role.objects.all().order_by('order')
+        return Response(RoleSerializer(roles, many=True).data, status=HTTP_200_OK)

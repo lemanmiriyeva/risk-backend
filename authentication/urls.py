@@ -1,10 +1,11 @@
 from django.urls import path
 
 from .views import UserView, UsersView, LogoutView, LoginView, DepartmentListView, DepartmentDetailAPIView, \
-    UserDetailView, RequestPasswordResetView, ConfirmPasswordResetView
+    UserDetailView, RequestPasswordResetView, ConfirmPasswordResetView, RoleListView
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 from .views_2fa import TwoFASetupView, TwoFAVerifyView
-from .views import OrgUsersView, OrgUserDetailView, OrganizationListView, ResetOrgUserPasswordView
+from .views import OrgUsersView, OrgUserDetailView, OrganizationListView, OrganizationDetailView, \
+    ResetOrgUserPasswordView
 
 urlpatterns = [
     path('token/', LoginView.as_view(), name='token'),
@@ -21,7 +22,10 @@ urlpatterns = [
     path('2fa/setup/', TwoFASetupView.as_view(), name='2fa-setup'),
     path('2fa/verify/', TwoFAVerifyView.as_view(), name='2fa-verify'),
     path('organizations/', OrganizationListView.as_view(), name='organizations-list'),
+    path('organizations/<int:id>/', OrganizationDetailView.as_view(), name='organization-detail'),
     path('organization/users/', OrgUsersView.as_view(), name='org-users-list'),
     path('organization/users/<int:id>/', OrgUserDetailView.as_view(), name='org-user-detail'),
-    path('organization/users/<int:id>/reset-password/', ResetOrgUserPasswordView.as_view(), name='org-user-reset-password'),
+    path('organization/users/<int:id>/reset-password/', ResetOrgUserPasswordView.as_view(),
+         name='org-user-reset-password'),
+    path('roles/', RoleListView.as_view(), name='role-list'),
 ]

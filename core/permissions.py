@@ -1,38 +1,44 @@
 import logging
+from django.db.models import Q
 from rest_framework.permissions import BasePermission
 
 from .models import Module, SubModule
 
 logger = logging.getLogger('colored')
 
-
-# ---------------------------------------------------------------------------
-# Helper funksiyalar (2FA, serializer, HasSystemAccess tərəfindən istifadə olunur)
-# ---------------------------------------------------------------------------
-
 def get_user_modules(user):
-    """
-    İstifadəçinin icazəli olduğu modullar.
-    Giriş yalnız fərdi (permitted_users) əsasında verilir; permitted_organizations
-    bir modulun hansı qurum(lar) üçün nəzərdə tutulduğunu göstərir (əhatə dairəsi),
-    lakin tək başına o qurumun bütün user-lərinə giriş açmır.
-    """
     if not user or not user.is_authenticated:
         return Module.objects.none()
+
+    if user.is_superuser:
+        return Module.objects.all()
+
+    if getattr(user, "is_org_admin", False) and getattr(user, "organization_id", None):
+        return Module.objects.filter(
+            Q(permitted_users=user) | Q(permitted_organizations=user.organization_id)
+        ).distinct()
 
     return Module.objects.filter(permitted_users=user).distinct()
 
 
 def get_user_sub_modules(user, module=None):
-    """İstifadəçinin icazəli olduğu alt modullar (əsas modula da fərdi icazəsi olmalıdır)."""
     if not user or not user.is_authenticated:
         return SubModule.objects.none()
 
     permitted_module_ids = get_user_modules(user).values_list("id", flat=True)
 
-    qs = SubModule.objects.filter(
-        permitted_users=user, module_id__in=permitted_module_ids
-    ).distinct()
+    if user.is_superuser:
+        qs = SubModule.objects.filter(module_id__in=permitted_module_ids)
+    elif getattr(user, "is_org_admin", False) and getattr(user, "organization_id", None):
+        qs = SubModule.objects.filter(
+            Q(permitted_users=user) | Q(permitted_organizations=user.organization_id),
+            module_id__in=permitted_module_ids,
+        ).distinct()
+    else:
+        qs = SubModule.objects.filter(
+            permitted_users=user, module_id__in=permitted_module_ids
+        ).distinct()
+
     if module is not None:
         qs = qs.filter(module=module)
     return qs
@@ -45,7 +51,6 @@ def user_has_any_module_access(user):
 
 
 def get_module_permissions(user):
-    """Frontend/2FA üçün icazəli modul + alt-modul strukturu."""
     modules = get_user_modules(user)
     sub_modules_by_module = {}
     for sub in get_user_sub_modules(user).select_related("module"):
@@ -66,35 +71,7 @@ def get_module_permissions(user):
     ]
 
 
-# ---------------------------------------------------------------------------
-# DRF Permission class-ları
-# ---------------------------------------------------------------------------
-
-# authentication/permissions.py
 class ModuleAccessPermission(BasePermission):
-    """
-    View-da aşağıdakılardan istənilən kombinasiyanı təyin et:
-
-    1) Sadə tək submodul:
-        module_code = "risk"
-        sub_module_code = "risk_register"
-
-    2) Bir neçə submoduldan HƏR HANSI BİRİ kifayətdir (OR):
-        module_code = "risk"
-        sub_module_codes = ["risk_register", "risk_view_table"]
-
-    3) Əməliyyata (action) görə fərqli submodul tələbi:
-        module_code = "risk"
-        action_sub_module_codes = {
-            "list": ["risk_register", "risk_view_table"],
-            "retrieve": ["risk_register", "risk_view_table"],
-            "create": ["risk_register"],
-            "update": ["risk_register"],
-            "partial_update": ["risk_register"],
-            "destroy": ["risk_register"],
-        }
-        # təyin olunmayan action-lar üçün sub_module_code/sub_module_codes fallback kimi işlənir
-    """
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
@@ -143,17 +120,8 @@ class ModuleAccessPermission(BasePermission):
             return [single]
 
         return []
-# ---------------------------------------------------------------------------
-# Qurum admini (is_org_admin) - öz qurumunu idarəetmə üçün helper-lər
-# ---------------------------------------------------------------------------
 
 class IsOrgAdmin(BasePermission):
-    """
-    request.user ya superuser, ya da is_org_admin=True olmalıdır.
-    Superuser bütün qurumları, org admin isə YALNIZ öz qurumunu idarə edə bilər
-    (view içində get_managed_organization() ilə təyin olunur).
-    """
-
     def has_permission(self, request, view):
         user = request.user
         if not user or not user.is_authenticated:
@@ -162,12 +130,6 @@ class IsOrgAdmin(BasePermission):
 
 
 def get_managed_organization(request):
-    """
-    Sorğunu edən user-in idarə etdiyi qurumu qaytarır:
-      - is_org_admin (superuser deyil) -> öz `organization`-u (başqasını seçə bilməz)
-      - superuser -> ?organization=<id> query param-ı ilə istənilən qurum
-    Qurum tapılmasa/icazə yoxdursa None qaytarır (view 400/403 qaytarmalıdır).
-    """
     user = request.user
     if not user or not user.is_authenticated:
         return None
@@ -186,12 +148,6 @@ def get_managed_organization(request):
 
 
 def get_scoped_user(request, id):
-    """
-    Admin panelindən (root və ya qurum admini) konkret bir istifadəçiyə çıxış üçün.
-      - Root (superuser): istənilən istifadəçiyə çıxışı var (hansı qurumda olmasından asılı olmayaraq).
-      - Qurum admini: yalnız ÖZ qurumunun istifadəçilərinə çıxışı var.
-    Qaytarır: (user, error_response). error_response None-dursa əməliyyat davam edə bilər.
-    """
     from rest_framework.response import Response
     from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
     from authentication.models import User

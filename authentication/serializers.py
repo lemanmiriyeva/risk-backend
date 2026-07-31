@@ -81,7 +81,7 @@ class UserSerializer(ModelSerializer):
           "role", "department", "main_department", "name",
           "special_permissions", 'permissions',
           "two_fa_confirmed", "is_approved",
-          "organization", "is_org_admin",
+          "organization", "is_org_admin", "is_superuser",
         )
 
     def get_main_department(self, obj):
@@ -107,9 +107,31 @@ class UserSerializer(ModelSerializer):
 
 
 class OrganizationSerializer(ModelSerializer):
+    employee_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Organization
-        fields = ("id", "title", "short_name", "is_active")
+        fields = (
+            "id", "title", "short_name", "is_active",
+            "authorized_person_name", "authorized_person_position",
+            "employee_count",
+        )
+        extra_kwargs = {
+            "authorized_person_name": {"required": True, "allow_blank": False},
+        }
+
+    def get_employee_count(self, obj):
+        return obj.users.count()
+
+
+class OrganizationDetailSerializer(OrganizationSerializer):
+    employees = serializers.SerializerMethodField()
+
+    class Meta(OrganizationSerializer.Meta):
+        fields = OrganizationSerializer.Meta.fields + ("employees",)
+
+    def get_employees(self, obj):
+        return UserShortSerializer(obj.users.all(), many=True).data
 
 
 class PasswordResetRequestSerializer(serializers.Serializer):
@@ -122,20 +144,17 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 
 
 class OrgUserSerializer(ModelSerializer):
-    """
-    Qurum admininin öz qurumunun user-lərini idarə etməsi üçün (list/create/update).
-    `organization` bu serializer-də YOXDUR - o, view səviyyəsində (admin-in idarə
-    etdiyi qurum) təyin olunur, user özü qurum seçə bilməz.
-    `password` write-only-dir və view-da ayrıca set_password() ilə emal olunur.
-    """
     organization = serializers.SerializerMethodField()
+    role_name = serializers.SerializerMethodField()
+    department_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = (
             "id", "username", "email", "firstname", "lastname", "name",
-            "phone_number", "birth_date", "is_active", "role", "department",
-            "is_org_admin", "organization", "two_fa_confirmed", "is_approved",
+            "phone_number", "birth_date", "is_active", "role", "role_name",
+            "department", "department_name", "fin_kod", "is_org_admin", "organization",
+            "two_fa_confirmed", "is_approved",
         )
         read_only_fields = ("two_fa_confirmed", "is_approved")
 
@@ -143,3 +162,9 @@ class OrgUserSerializer(ModelSerializer):
         if not obj.organization:
             return None
         return {"id": obj.organization.id, "title": obj.organization.title}
+
+    def get_role_name(self, obj):
+        return obj.role.title if obj.role else None
+
+    def get_department_name(self, obj):
+        return obj.department.title if obj.department else None

@@ -46,6 +46,12 @@ class Organization(TimestampsModel):
     title = models.CharField(max_length=255, verbose_name="Qurumun adı")
     short_name = models.CharField(max_length=64, blank=True, default="", verbose_name="Qısaltma")
     is_active = models.BooleanField(default=True, verbose_name="Aktivdir")
+    authorized_person_name = models.CharField(
+        max_length=255, blank=True, default="", verbose_name="Səlahiyyətli şəxsin adı"
+    )
+    authorized_person_position = models.CharField(
+        max_length=255, blank=True, default="", verbose_name="Səlahiyyətli şəxsin vəzifəsi"
+    )
 
     def __str__(self):
         return self.title
@@ -55,9 +61,16 @@ class Organization(TimestampsModel):
         verbose_name_plural = "Qurumlar"
         ordering = ["title"]
 
+    @property
+    def employee_count(self):
+        return self.users.count()
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(unique=True, max_length=12, verbose_name='Telefon nömrəsi', null=True, blank=True)
+    fin_kod = models.CharField(
+        max_length=7, null=True, blank=True, verbose_name="FIN kod"
+    )
     image = models.ImageField(
         upload_to='user_images/',
         null=True,
