@@ -20,6 +20,7 @@ from python_ipware import IpWare
 from django.shortcuts import get_object_or_404
 from core.contstants import INVALID_CREDENTIALS, USER_LOCKED
 from core.permissions import user_has_any_module_access
+from activity_logs import services as activity_log_services
 from .models import User, Department, LoginAttempt, PasswordReset, Role
 from .serializers import UserSerializer, DepartmentListSerializer, PasswordResetRequestSerializer, \
     OrganizationDetailSerializer, RoleSerializer
@@ -131,6 +132,10 @@ class LogoutView(APIView):
             token = RefreshToken(refresh.get('value'))
             token.blacklist()
             logger.info(f'{request.user.username} logged out!')
+            try:
+                activity_log_services.log_logout(request.user, request=request)
+            except Exception as e:
+                logger.error(f"LogoutView - çıxış loqu yazıla bilmədi ({request.user.username}): {str(e)}")
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except TokenError as e:
             logger.error(f"LogoutView - token xətası ({request.user.username}): {str(e)}")
@@ -349,6 +354,10 @@ class LoginView(TokenObtainPairView):
         data = dict(serializer.validated_data)
 
         logger.info(f'{user.username} uğurla daxil oldu')
+        try:
+            activity_log_services.log_login(user, request=request)
+        except Exception as e:
+            logger.error(f"LoginView - giriş loqu yazıla bilmədi ({user.username}): {str(e)}")
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):

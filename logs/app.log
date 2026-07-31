@@ -971,3 +971,30 @@ INFO 2026-07-31 11:49:16,038 views DepartmentListView.get çağırıldı
 INFO 2026-07-31 11:49:16,051 views DepartmentListView.get - 0 şöbə qaytarıldı
 INFO 2026-07-31 11:49:16,097 views DepartmentListView.get çağırıldı
 INFO 2026-07-31 11:49:16,099 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-07-31 14:12:37,772 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 14:27:18,652 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 15:06:31,686 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 15:06:43,027 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-07-31 15:06:43,065 views laman.bashirova uğurla daxil oldu
+INFO 2026-07-31 15:06:43,081 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-07-31 15:06:43,291 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:06:43,318 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:06:44,844 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:06:44,881 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+ERROR 2026-07-31 15:06:49,213 permissions Module code='activity_logs' does not exist.
+ERROR 2026-07-31 15:06:49,233 permissions Module code='activity_logs' does not exist.
+ERROR 2026-07-31 15:06:49,416 permissions Module code='activity_logs' does not exist.
+INFO 2026-07-31 15:06:49,833 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:06:49,853 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:06:49,880 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:06:49,894 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:06:49,921 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:06:49,947 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+ERROR 2026-07-31 15:07:10,566 permissions Module code='activity_logs' does not exist.
+ERROR 2026-07-31 15:07:10,590 permissions Module code='activity_logs' does not exist.
+INFO 2026-07-31 15:07:11,254 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:07:11,281 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:07:11,305 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:07:11,320 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:07:11,347 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:07:11,365 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/

@@ -1,5 +1,3 @@
-
-
 """
 Django settings for project.
 
@@ -73,6 +71,7 @@ INSTALLED_APPS = [
     'authentication',
     'api',
     'risk',
+    'activity_logs',
 ]
 # settings.py
 
@@ -134,6 +133,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'activity_logs.middleware.ActivityLogMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -308,5 +308,4 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0,
 }
 
-MODULE_APPS = ["risk"]
-
+MODULE_APPS = ["risk", "activity_logs"]
