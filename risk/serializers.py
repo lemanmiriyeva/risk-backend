@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from authentication.serializers import UserShortSerializer
+from inventory.models import Inventory
 from .models import Risk, RiskLog
 
 
@@ -8,12 +9,25 @@ class OrganizationShortSerializer(serializers.Serializer):
     title = serializers.CharField()
 
 
+class InventoryShortSerializer(serializers.ModelSerializer):
+    owner_display = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Inventory
+        fields = ("id", "inventory_number", "product_name", "owner_display")
+
+
 class RiskSerializer(serializers.ModelSerializer):
     created_by = UserShortSerializer(read_only=True)
     updated_by = UserShortSerializer(read_only=True)
     organization = OrganizationShortSerializer(read_only=True)
     risk_level_display = serializers.CharField(source='get_risk_level_display', read_only=True)
     treatment_option_display = serializers.CharField(source='get_treatment_option_display', read_only=True)
+
+    inventory = InventoryShortSerializer(read_only=True)
+    inventory_id = serializers.PrimaryKeyRelatedField(
+        queryset=Inventory.objects.all(), source='inventory', write_only=True
+    )
 
     class Meta:
         model = Risk
@@ -35,6 +49,8 @@ class RiskSerializer(serializers.ModelSerializer):
             "update_frequency",
             "incident_notification_notes",
             "standard_references",
+            "inventory",
+            "inventory_id",
             "organization",
             "created_by",
             "updated_by",

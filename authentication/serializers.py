@@ -135,11 +135,6 @@ class OrganizationDetailSerializer(OrganizationSerializer):
 
 
 class PasswordResetRequestSerializer(serializers.Serializer):
-    """
-    Login səhifəsindəki "Şifrəmi unutmuşam" formundan gələn sorğu üçün.
-    Yalnız username qəbul edir - hansı qurumun admini/root-un məlumatlandırılacağı
-    view tərəfində, user-in `organization` sahəsinə görə təyin olunur.
-    """
     username = serializers.CharField(max_length=128)
 
 

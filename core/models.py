@@ -48,24 +48,12 @@ class Module(TimestampsModel):
         verbose_name_plural = "Modullar"
 
     def is_user_eligible(self, user):
-        """
-        İstifadəçi bu modula fərdi olaraq icazə üçün namizəd ola bilərmi?
-        permitted_organizations boşdursa - məhdudiyyət yoxdur (istənilən user seçilə bilər).
-        Doludursa - yalnız o qurum(lar)ın işçiləri seçilə bilər.
-        """
         if not self.permitted_organizations.exists():
             return True
         org_id = getattr(user, "organization_id", None)
         return bool(org_id) and self.permitted_organizations.filter(id=org_id).exists()
 
     def has_permission(self, user):
-        """
-        Giriş qaydaları:
-          - Root (superuser): HƏMİŞƏ giriş var - bütün modullar avtomatik açıqdır.
-          - Qurum admini (is_org_admin): qurumu bu modulun `permitted_organizations`
-            sahəsindədirsə, AVTOMATİK giriş var (fərdi permitted_users qeydinə ehtiyac yoxdur).
-          - Adi istifadəçi: YALNIZ fərdi (permitted_users) əsasında giriş var.
-        """
         if not user or not user.is_authenticated:
             return False
         if user.is_superuser:
@@ -123,13 +111,6 @@ class SubModule(TimestampsModel):
         return bool(org_id) and self.permitted_organizations.filter(id=org_id).exists()
 
     def has_permission(self, user):
-        """
-        Giriş qaydaları (əsas modula da giriş şərtdir):
-          - Root (superuser): HƏMİŞƏ giriş var.
-          - Qurum admini: qurumu bu alt-modulun `permitted_organizations` sahəsindədirsə,
-            AVTOMATİK giriş var (fərdi permitted_users qeydinə ehtiyac yoxdur).
-          - Adi istifadəçi: YALNIZ fərdi (permitted_users) əsasında giriş var.
-        """
         if not user or not user.is_authenticated:
             return False
         if not self.module.has_permission(user):

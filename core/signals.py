@@ -6,11 +6,7 @@ from .models import Module, SubModule
 
 
 def _reject_ineligible_users(sender, instance, action, pk_set, model, **kwargs):
-    """
-    Module/SubModule.permitted_users-ə user əlavə edilərkən çağırılır.
-    Əgər instance-ın permitted_organizations-ı doludursa, yalnız o qurum(lar)ın
-    işçiləri əlavə oluna bilər - başqa qurumun user-i əlavə edilməyə çalışılarsa xəta verilir.
-    """
+
     if action != "pre_add" or not pk_set:
         return
 

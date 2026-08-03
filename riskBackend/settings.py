@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'api',
     'risk',
     'activity_logs',
+    'inventory'
 ]
 # settings.py
 
@@ -308,4 +309,4 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0,
 }
 
-MODULE_APPS = ["risk", "activity_logs"]
+MODULE_APPS = ["risk", "activity_logs", "inventory"]

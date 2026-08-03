@@ -49,14 +49,13 @@ def extract_object_repr(response, action_type):
     data = getattr(response, 'data', None)
     if not isinstance(data, dict):
         return ''
-    for key in ('designation', 'title', 'name', 'risk_name', 'label'):
+    for key in ('designation', 'product_name', 'title', 'name', 'risk_name', 'label'):
         value = data.get(key)
         if value:
             return str(value)
     if data.get('id'):
         return f"#{data['id']}"
     return ''
-
 
 def build_description(module_title, action_type, path, object_repr, status_code):
     module_label = module_title or 'sistem'

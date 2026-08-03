@@ -4,11 +4,6 @@ from .models import Module, SubModule, Status
 
 
 class _EligibleUsersFormMixin(forms.ModelForm):
-    """
-    permitted_organizations dolu olduqda, permitted_users seçimini (admin formunda)
-    yalnız o qurum(lar)ın işçiləri ilə məhdudlaşdırır və düzgün (anlaşılan) xəta göstərir.
-    Real qorunma core/signals.py-dakı m2m_changed handler-idir; bu, sadəcə admin UX-i yaxşılaşdırır.
-    """
     def clean(self):
         cleaned = super().clean()
         orgs = cleaned.get("permitted_organizations")

@@ -3,14 +3,6 @@ from authentication.models import User
 
 
 class ActivityLog(models.Model):
-    """
-    Bütün saytın ümumi fəaliyyət loqu (giriş/çıxış, hansı modula girildi/çıxıldı,
-    harada nə dəyişiklik edildi, hara baxıldı və s.).
-
-    DİQQƏT: Bu model 'risk' tətbiqindəki RiskLog modelindən TAMAMİLƏ ayrıdır və
-    onu əvəz etmir. RiskLog yalnız Risk Reyestri modulunun öz tarixçəsini saxlayır,
-    bu model isə bütün saytın loqunu saxlayır.
-    """
 
     ACTION_LOGIN = 'login'
     ACTION_LOGOUT = 'logout'

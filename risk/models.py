@@ -114,6 +114,10 @@ class RiskLog(models.Model):
         "authentication.Organization", on_delete=models.PROTECT, related_name="risk_logs",
         verbose_name="Qurum", null=True, blank=True
     )
+    inventory = models.ForeignKey(
+        "inventory.Inventory", on_delete=models.PROTECT, related_name="risks",
+        verbose_name="Əlaqəli inventar", null=False, blank=False
+    )
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="İstifadəçi"
     )

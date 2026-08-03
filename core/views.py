@@ -35,15 +35,6 @@ def _user_payload(user, permitted_ids):
 
 
 class OrgModuleAccessView(APIView):
-    """
-    Qurum admini üçün: öz qurumuna aid (permitted_organizations-da qurumu olan)
-    modul/alt-modulları və hər birində qurumun HANSI işçilərinin faktiki
-    girişi olduğunu göstərir.
-
-    GET  /api/organization/module-access/               -> siyahı
-    POST /api/organization/module-access/                -> tək bir user üçün aç/bağla
-         body: {"target": "module" | "sub_module", "id": <int>, "user_id": <int>, "grant": true|false}
-    """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 

@@ -255,15 +255,6 @@ class ConfirmPasswordResetSerializer(serializers.Serializer):
 
 
 class ConfirmPasswordResetView(APIView):
-    """
-    POST /api/authentication/user/password-reset/
-    body: {"username": "...", "code": "123456", "new_password": "..."}
-
-    Login səhifəsindəki "Şifrəni unutmuşam" axınının 2-ci (son) addımı - "Şifrəni
-    təyin et" səhifəsindən çağırılır: istifadəçi mailinə gələn bir dəfəlik kodu
-    və ÖZ SEÇDİYİ yeni şifrəni göndərir. Kod düzgün, aktiv və vaxtı bitməyibsə
-    (bax: RESET_CODE_TTL_MINUTES) şifrə dəyişdirilir və kod deaktiv edilir.
-    """
     permission_classes = [AllowAny]
     authentication_classes = []
 
@@ -406,13 +397,6 @@ USER_OUTSIDE_ORG = "Bu istifadəçi sizin qurumunuza aid deyil."
 
 
 class OrganizationListView(APIView):
-    """
-    GET  /api/authentication/organizations/   (yalnız root/superuser) - bütün qurumların siyahısı.
-    POST /api/authentication/organizations/   (yalnız root/superuser) - yeni qurum yaradır.
-
-    Admin panelindəki qurum seçicisi/idarəetməsi üçün. Qurum admini bu endpoint-ə
-    ehtiyac duymur (öz qurumunu birbaşa OrganizationDetailView ilə görür/redaktə edir).
-    """
     permission_classes = [IsAuthenticated]
     authentication_classes = (JWTAuthentication,)
 
@@ -437,14 +421,6 @@ class OrganizationListView(APIView):
 
 
 class OrganizationDetailView(APIView):
-    """
-    GET/PATCH /api/authentication/organizations/<id>/
-
-    - Root (superuser): istənilən qurumun məlumatlarını görə/redaktə edə bilər
-      (o cümlədən `is_active`).
-    - Qurum admini: YALNIZ öz qurumunun məlumatlarını görə/redaktə edə bilər
-      (`is_active` sahəsini dəyişə bilməz - qurumu yalnız root aktiv/deaktiv edə bilər).
-    """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 
@@ -490,18 +466,6 @@ class OrganizationDetailView(APIView):
 
 
 class OrgUsersView(APIView):
-    """
-    Admin panelinin "İstifadəçilər" bölməsi üçün.
-
-    GET  /api/authentication/organization/users/
-         - Qurum admini  -> öz qurumunun bütün user-ləri.
-         - Root (superuser) -> `?organization=<id>` verilibsə o qurumun user-ləri,
-           verilməyibsə SİSTEMDƏKİ BÜTÜN user-lər (bütün qurumlar daxil).
-    POST /api/authentication/organization/users/
-         - Yeni user yaradır (qurum admini yalnız öz qurumuna, root `?organization=<id>` ilə istənilən quruma).
-         - Şifrə admin tərəfindən YAZILMIR: sistem təsadüfi şifrə yaradıb birbaşa
-           istifadəçinin email ünvanına göndərir.
-    """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 
@@ -549,16 +513,6 @@ class OrgUsersView(APIView):
 
 
 class OrgUserDetailView(APIView):
-    """
-    GET/PATCH  /api/authentication/organization/users/<id>/
-
-    - Qurum admini yalnız öz qurumunun user-inə çıxışı var (başqa qurumun user-inə
-      müraciət 403 qaytarır - data izolyasiyası qorunur).
-    - Root (superuser) istənilən qurumun istənilən user-inə çıxışı var.
-
-    Şifrə bu endpoint-dən DƏYİŞDİRİLMİR - bunun üçün ayrıca
-    `POST .../reset-password/` action-ı var (aşağıda).
-    """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 
@@ -586,13 +540,6 @@ class OrgUserDetailView(APIView):
 
 
 class ResetOrgUserPasswordView(APIView):
-    """
-    POST /api/authentication/organization/users/<id>/reset-password/
-
-    Admin (qurum admini öz qurumunun user-i üçün, root istənilən user üçün) bu
-    action-ı çağırır. Admin şifrəni özü YAZMIR/GÖRMÜR - sistem təsadüfi yeni şifrə
-    yaradır, user-ə set edir və birbaşa onun email ünvanına göndərir.
-    """
     permission_classes = [IsOrgAdmin]
     authentication_classes = (JWTAuthentication,)
 

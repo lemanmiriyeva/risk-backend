@@ -87,7 +87,6 @@ class CustomLDAPBackend(LDAPBackend):
         return user
 
     def get_user_attributes_from_ldap(self, ldap_attrs):
-        """Extract user attributes from LDAP attributes"""
         attrs = {}
 
         # Map LDAP attributes to Django user model fields

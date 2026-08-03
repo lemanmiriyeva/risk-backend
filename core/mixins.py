@@ -5,21 +5,6 @@ logger = logging.getLogger('colored')
 
 
 class OrganizationScopedMixin:
-    """
-    ViewSet-ə qoşulanda:
-      - get_queryset(): nəticəni request.user.organization-a görə süzür
-      - perform_create(): saxlanılan obyektə avtomatik user-in organization-unu təyin edir
-
-    Tələblər:
-      - Modelin 'organization' adlı FK sahəsi olmalıdır (fərqli addırsa, ViewSet-də
-        organization_field = "başqa_ad" təyin et).
-      - Superuser bütün qurumların datasını görür/yarada bilər.
-
-    İstifadə:
-        class RiskViewSet(OrganizationScopedMixin, viewsets.ModelViewSet):
-            organization_field = "organization"  # default, yazmasan da işləyər
-            ...
-    """
     organization_field = "organization"
 
     def get_queryset(self):

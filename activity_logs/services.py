@@ -4,9 +4,6 @@ from .models import ActivityLog
 
 logger = logging.getLogger('colored')
 
-# Path prefix -> (module_code, module_title) uyğunlaşdırması.
-# Yeni modul əlavə olunanda bura bir sətir əlavə etmək kifayətdir ki,
-# həmin modulun sorğuları da loqda düzgün modul adı ilə görünsün.
 MODULE_PREFIX_MAP = {
     'risk': ('risk', 'Risk Reyestri'),
     'authentication': ('authentication', 'İstifadəçi idarəetməsi'),
@@ -16,6 +13,7 @@ MODULE_PREFIX_MAP = {
     'modules': ('core', 'Modullar'),
     'status': ('core', 'Statuslar'),
     'activity-logs': ('activity_logs', 'Loqlar'),
+    'inventory': ('inventory', 'İnventar Uçotu'),
 }
 
 SENSITIVE_FIELDS = {'password', 'password1', 'password2', 'new_password', 'old_password', 'code', 'refresh', 'access'}
@@ -29,10 +27,6 @@ def get_client_ip(request):
 
 
 def resolve_module(path: str):
-    """
-    '/api/risk/5/' kimi bir path-dan modul kodunu/adını çıxarır.
-    Uyğunluq tapılmasa boş dəyərlər qaytarılır.
-    """
     parts = [p for p in path.split('/') if p]
     # gözlənilən struktur: api/<module-prefix>/...
     if len(parts) >= 2 and parts[0] == 'api':
@@ -43,7 +37,6 @@ def resolve_module(path: str):
 
 
 def sanitize_body(data):
-    """Log-a düşməzdən əvvəl şifrə/token kimi həssas sahələri gizlədir."""
     if not isinstance(data, dict):
         return data
     cleaned = {}
@@ -125,10 +118,6 @@ def log_event(
     request_path='',
     status_code=None,
 ):
-    """
-    Sayt üzrə bir fəaliyyəti həm verilənlər bazasına (ActivityLog),
-    həm də 'colored' logger vasitəsilə logs/app.log-a yazır.
-    """
     username = getattr(user, 'username', '') or ''
 
     entry = ActivityLog.objects.create(

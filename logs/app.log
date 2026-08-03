@@ -1105,3 +1105,82 @@ INFO 2026-08-03 11:39:46,160 views laman.bashirova uğurla daxil oldu
 INFO 2026-08-03 11:39:46,165 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
 INFO 2026-08-03 11:39:46,523 views UserView.get - laman.bashirova öz məlumatını sorğuladı
 INFO 2026-08-03 11:39:46,531 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 14:18:48,989 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:18:49,071 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 14:18:56,301 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 14:19:04,150 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 14:19:04,209 views laman.bashirova uğurla daxil oldu
+INFO 2026-08-03 14:19:04,220 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-08-03 14:19:04,251 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:19:04,265 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+ERROR 2026-08-03 14:19:14,106 permissions Module code='inventory' does not exist.
+INFO 2026-08-03 14:19:14,115 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-08-03 14:20:34,680 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-08-03 14:22:25,602 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:22:25,622 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 14:22:25,663 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:22:28,770 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:22:28,808 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:22:30,903 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:22:30,929 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 14:22:33,155 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 15:06:01,367 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:01,382 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:06:01,408 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:01,808 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:01,826 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:12,839 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:12,853 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:06:13,216 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:06:13,219 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:30,349 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:30,378 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:06:30,396 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:06:30,587 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:30,605 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:32,814 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:33,651 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:06:40,762 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:06:51,332 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:17:17,846 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:17:29,914 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#1" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-03 15:17:29,953 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:17:46,363 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:17:56,924 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#2" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-03 15:17:56,976 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:18:06,914 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#3" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-03 15:21:02,633 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:22:44,972 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:22:50,732 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#4" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-03 15:23:03,241 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:37:46,078 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+ERROR 2026-08-03 15:37:46,093 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+INFO 2026-08-03 15:37:46,108 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+ERROR 2026-08-03 15:37:46,128 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+ERROR 2026-08-03 15:37:46,147 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+INFO 2026-08-03 15:39:19,570 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:39:55,471 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:39:55,487 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:39:55,514 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 15:40:07,817 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+ERROR 2026-08-03 15:40:07,827 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+INFO 2026-08-03 15:40:07,838 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+ERROR 2026-08-03 15:40:07,863 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+ERROR 2026-08-03 15:40:07,886 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+ERROR 2026-08-03 15:43:38,231 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+INFO 2026-08-03 15:43:38,269 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-08-03 15:43:39,123 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+ERROR 2026-08-03 15:44:28,631 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+INFO 2026-08-03 15:44:28,645 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+ERROR 2026-08-03 15:44:54,473 views RiskViewSet.list - baxış loqu yazıla bilmədi: NOT NULL constraint failed: risk_risklog.inventory_id
+INFO 2026-08-03 15:44:54,489 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-08-03 16:00:23,309 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 16:00:23,332 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-03 16:00:23,352 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 16:00:32,312 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-08-03 16:01:46,099 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-03 16:01:49,741 views DepartmentListView.get çağırıldı
+INFO 2026-08-03 16:01:49,741 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-08-03 16:01:49,779 views DepartmentListView.get çağırıldı
+INFO 2026-08-03 16:01:49,781 views DepartmentListView.get - 0 şöbə qaytarıldı
+INFO 2026-08-03 16:03:22,122 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1

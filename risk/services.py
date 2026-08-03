@@ -19,6 +19,7 @@ FIELD_LABELS = {
     'update_frequency': 'Yenilənmə tarixi/tezliyi',
     'incident_notification_notes': 'İnsident bildirişi qeydləri',
     'standard_references': 'Standartlara istinadlar',
+    'inventory': 'Əlaqəli inventar',
 }
 
 EXPORT_TYPE_LABELS = {
@@ -35,15 +36,18 @@ def get_client_ip(request):
 
 
 def _resolve_organization(user, instance=None):
-    """
-    Loq sətrinə yazılacaq organization-u müəyyən edir.
-    Öncəlik: instance.organization (əgər risk obyektinə bağlıdırsa) -> user.organization
-    """
     if instance is not None:
         org = getattr(instance, "organization", None)
         if org is not None:
             return org
     return getattr(user, "organization", None)
+
+
+def _inventory_repr(instance):
+    inv = getattr(instance, "inventory", None)
+    if not inv:
+        return None
+    return f"{inv.inventory_number} — {inv.product_name}"
 
 
 def log_created(instance, user, request=None):
@@ -55,6 +59,7 @@ def log_created(instance, user, request=None):
         user_username_snapshot=user.username if user else '',
         organization=_resolve_organization(user, instance),
         action_type=RiskLog.ACTION_CREATED,
+        changes={'inventory': {'old': None, 'new': _inventory_repr(instance)}},
         ip_address=get_client_ip(request) if request else None,
         user_agent=request.META.get('HTTP_USER_AGENT', '') if request else '',
     )
@@ -67,6 +72,15 @@ def log_updated(old_instance, new_instance, user, request=None):
         new_val = getattr(new_instance, field)
         if old_val != new_val:
             changes[field] = {"old": old_val, "new": new_val}
+
+    # inventory FK-dır, TRACKED_FIELDS-dən ayrıca yoxlanılır
+    old_inventory_id = getattr(old_instance, 'inventory_id', None)
+    new_inventory_id = getattr(new_instance, 'inventory_id', None)
+    if old_inventory_id != new_inventory_id:
+        changes['inventory'] = {
+            'old': _inventory_repr(old_instance),
+            'new': _inventory_repr(new_instance),
+        }
 
     if not changes:
         return  # heç nə dəyişməyibsə, loq yazma
@@ -88,7 +102,7 @@ def log_updated(old_instance, new_instance, user, request=None):
 def log_deleted(instance, user, request=None):
     from .serializers import RiskSerializer
     RiskLog.objects.create(
-        risk=None,  # obyekt silinəcək, FK saxlamaq mənasız
+        risk=None,
         risk_id_ref=instance.id,
         risk_designation=instance.designation,
         user=user,
@@ -104,7 +118,7 @@ def log_deleted(instance, user, request=None):
 def log_exported(user, export_type, row_count, filters=None, request=None):
     label = EXPORT_TYPE_LABELS.get(export_type, export_type)
     RiskLog.objects.create(
-        risk=None,               # export konkret bir riskə bağlı deyil
+        risk=None,
         risk_id_ref=0,
         risk_designation=f"Excel ixracı — {label}",
         user=user,
@@ -121,7 +135,6 @@ def log_exported(user, export_type, row_count, filters=None, request=None):
 
 
 def log_viewed_list(user, row_count, filters=None, request=None):
-    """İstifadəçi Risk Reyestri siyahısına baxanda çağırılır."""
     RiskLog.objects.create(
         risk=None,
         risk_id_ref=0,
@@ -137,7 +150,6 @@ def log_viewed_list(user, row_count, filters=None, request=None):
 
 
 def log_viewed_detail(instance, user, request=None):
-    """İstifadəçi tək bir riskin detalına baxanda çağırılır."""
     RiskLog.objects.create(
         risk=instance,
         risk_id_ref=instance.id,

@@ -11,11 +11,6 @@ RISK_RELATED_PERMISSIONS = [
 
 
 def user_has_any_risk_access(user):
-    """
-    İstifadəçinin Risk Reyestri ilə (risklər VƏ YA loqlar) bağlı
-    heç olmasa bir icazəsi varmı? superuser həmişə True qaytarır.
-    Login zamanı çağırılmaq üçün nəzərdə tutulub.
-    """
     if not user or not getattr(user, 'is_authenticated', False):
         return False
     if user.is_superuser:
@@ -24,17 +19,6 @@ def user_has_any_risk_access(user):
 
 
 class RiskPermission(BasePermission):
-    """
-    HTTP metodlarını Risk modelinin standart Django icazələrinə uyğunlaşdırır:
-      GET/HEAD/OPTIONS  -> risks.view_risk
-      POST              -> risks.add_risk
-      PUT/PATCH         -> risks.change_risk
-      DELETE            -> risks.delete_risk
-
-    İstifadəçinin bu icazələri Group (vəzifə) və ya birbaşa user_permissions
-    üzərindən alması kifayətdir - admin panelindən idarə olunur.
-    """
-
     def has_permission(self, request, view):
         user = request.user
         if not user or not user.is_authenticated:

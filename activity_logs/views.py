@@ -11,14 +11,6 @@ logger = logging.getLogger('colored')
 
 
 class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    Saytın bütün fəaliyyət loqlarına baxış üçün READ-ONLY endpoint.
-
-    Giriş qaydası:
-      - Superuser (root): bütün sistemin loqlarını görür.
-      - Qurum admini (is_org_admin): yalnız öz qurumunun işçilərinin loqlarını görür.
-      - Adi istifadəçi: yalnız özünə aid loqları görür (bu modula giriş verilibsə).
-    """
     queryset = ActivityLog.objects.select_related('user', 'user__organization').all()
     serializer_class = ActivityLogSerializer
     permission_classes = [ModuleAccessPermission]
