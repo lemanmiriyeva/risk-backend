@@ -277,12 +277,12 @@ else:
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 465))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == 'True'
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL") == 'True'
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-
-# ADMIN_EMAIL = 'laman.bashirova@mdm.gov.az'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 AUTH_LDAP_SERVER_URI = os.getenv('LDAP_SERVER_URI')

@@ -998,3 +998,110 @@ INFO 2026-07-31 15:07:11,305 middleware [LOQ] laman.bashirova - Baxdı - modul=M
 INFO 2026-07-31 15:07:11,320 views UserView.get - laman.bashirova öz məlumatını sorğuladı
 INFO 2026-07-31 15:07:11,347 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
 INFO 2026-07-31 15:07:11,365 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+ERROR 2026-07-31 15:19:09,858 permissions Module code='activity_logs' does not exist.
+ERROR 2026-07-31 15:19:09,905 permissions Module code='activity_logs' does not exist.
+ERROR 2026-07-31 15:19:11,529 permissions Module code='activity_logs' does not exist.
+INFO 2026-07-31 15:19:12,967 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:19:12,980 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:19:12,988 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:19:13,003 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:19:13,021 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:19:13,034 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:19:20,248 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:19:20,256 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:19:20,279 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:19:20,297 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:19:20,305 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:19:20,320 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+ERROR 2026-07-31 15:19:21,616 permissions Module code='activity_logs' does not exist.
+ERROR 2026-07-31 15:19:21,635 permissions Module code='activity_logs' does not exist.
+INFO 2026-07-31 15:19:22,313 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:19:22,332 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:19:22,347 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-07-31 15:19:22,368 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-07-31 15:19:22,410 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-07-31 15:19:22,429 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-08-03 09:24:27,325 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 09:24:37,763 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 09:24:37,809 views laman.bashirova uğurla daxil oldu
+INFO 2026-08-03 09:24:37,816 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-08-03 09:24:38,144 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 09:24:38,157 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - GET /api/authentication/user/
+INFO 2026-08-03 09:24:39,615 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-08-03 09:24:39,644 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - GET /api/modules/
+INFO 2026-08-03 10:00:03,426 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:00:03,446 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:00:03,471 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:00:03,490 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:06:57,255 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:06:57,270 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:06:57,298 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:06:57,312 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:10,905 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:10,931 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:13,413 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:13,437 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:17,888 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:17,903 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:17,931 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:17,962 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:17,984 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:20,354 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:20,381 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:24,910 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:24,945 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:24,960 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:24,986 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:25,023 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:46,315 views RiskViewSet - laman.bashirova yeni risk yaratdı (id=3)
+INFO 2026-08-03 10:07:46,325 middleware [LOQ] laman.bashirova - Yaratdı - modul=Risk Reyestri - Risk Reyestri modulunda "#3" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-08-03 10:07:46,404 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:49,059 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:49,083 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:50,617 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:50,645 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:50,660 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:50,693 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:50,920 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:57,833 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:07:57,859 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:08:04,309 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:08:04,335 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:28:06,742 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:28:06,759 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:28:08,946 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 10:28:23,510 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 10:28:23,553 views laman.bashirova uğurla daxil oldu
+INFO 2026-08-03 10:28:23,562 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-08-03 10:28:23,593 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:28:23,605 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:28:24,117 middleware [LOQ] laman.bashirova - Baxdı - modul=Modullar - Modullar moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:32:21,493 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:32:21,519 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:32:21,540 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:33:27,296 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:33:27,315 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:33:27,333 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 10:33:41,949 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:33:41,977 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:36:12,461 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:36:12,509 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:36:24,122 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:36:24,169 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:39:28,445 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:39:28,470 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:41:52,785 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:42:35,874 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:42:35,929 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 10:42:48,537 views RiskViewSet - laman.bashirova yeni risk yaratdı (id=4)
+INFO 2026-08-03 10:42:48,545 middleware [LOQ] laman.bashirova - Yaratdı - modul=Risk Reyestri - Risk Reyestri modulunda "ty" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-08-03 10:42:48,632 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-08-03 11:38:06,236 views RequestPasswordResetView.post - şifrə sıfırlama sorğusu: laman.bashirova
+INFO 2026-08-03 11:38:06,508 views RequestPasswordResetView._send_code - laman.bashirova üçün kod mail ilə göndərildi
+INFO 2026-08-03 11:39:18,536 views ConfirmPasswordResetView.post - laman.bashirova öz şifrəsini uğurla yenilədi
+INFO 2026-08-03 11:39:22,004 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 11:39:46,109 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-03 11:39:46,160 views laman.bashirova uğurla daxil oldu
+INFO 2026-08-03 11:39:46,165 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-08-03 11:39:46,523 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-03 11:39:46,531 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1

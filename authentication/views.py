@@ -210,22 +210,7 @@ def _send_reset_code_email(user, code):
 
 
 class RequestPasswordResetView(APIView):
-    """
-    POST /api/authentication/user/request-password-reset/   body: {"username": "..."}
 
-    Login səhifəsindəki "Şifrəmi unutmuşam" axınının 1-ci addımı:
-      1) İstifadəçi öz username-ini yazıb göndərir.
-      2) Sistem HEÇ KİMƏ (admin/root-a) bildiriş GÖNDƏRMİR.
-      3) Sistem 6 rəqəmli, 15 dəqiqə etibarlı BİR DƏFƏLİK KOD yaradır və
-         BİRBAŞA HƏMİN USER-İN öz email ünvanına göndərir (real şifrəni hələ
-         DƏYİŞMİR).
-      4) İstifadəçi bu kodu "Şifrəni təyin et" səhifəsində daxil edib özü üçün
-         yeni şifrə seçir - bax: ConfirmPasswordResetView (2-ci addım).
-
-    Username mövcud olub-olmamasından asılı olmayaraq HƏMİŞƏ eyni ümumi cavab
-    qaytarılır (enumeration hücumlarının qarşısını almaq üçün); email göndərmə
-    xətaları da sorğunu uğursuz etmir, sadəcə loglanır.
-    """
     permission_classes = [AllowAny]
     authentication_classes = []
 
@@ -256,7 +241,6 @@ class RequestPasswordResetView(APIView):
 
         code = get_random_string(6, allowed_chars=RESET_CODE_CHARS)
 
-        # Əvvəlki aktiv kodlar deaktiv edilir, yalnız SON kod etibarlı olsun.
         PasswordReset.objects.filter(email=user.email, active=True).update(active=False)
         PasswordReset.objects.create(email=user.email, token=code)
 

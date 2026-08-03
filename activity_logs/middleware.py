@@ -2,8 +2,11 @@ import json
 import logging
 
 from .models import ActivityLog
-from .services import get_client_ip, resolve_module, sanitize_body
+from .services import get_client_ip, resolve_module, sanitize_body, humanize_changes
+from datetime import timedelta
+from django.utils import timezone
 
+DEDUPE_WINDOW_SECONDS = 10
 logger = logging.getLogger('colored')
 
 METHOD_ACTION_MAP = {
@@ -14,41 +17,71 @@ METHOD_ACTION_MAP = {
     'DELETE': ActivityLog.ACTION_DELETED,
 }
 
-# Bu path-lar avtomatik loglanmır (özü loq baxışı, statik fayllar, admin, doc-lar və s.)
+ACTION_VERBS = {
+    ActivityLog.ACTION_VIEWED: 'baxdı',
+    ActivityLog.ACTION_CREATED: 'yaratdı',
+    ActivityLog.ACTION_UPDATED: 'redaktə etdi',
+    ActivityLog.ACTION_DELETED: 'sildi',
+}
+
 IGNORED_PREFIXES = (
     '/api/activity-logs',
     '/api/authentication/token',
     '/api/authentication/user/logout',
     '/api/schema',
     '/api/docs',
+    '/api/modules',
     '/static/',
     '/media/',
     '/admin/',
 )
 
 
-class ActivityLogMiddleware:
-    """
-    Saytın bütün API sorğularını avtomatik izləyir:
-      - hansı istifadəçi
-      - hansı modula girdi/hansı əməliyyatı etdi (GET=baxış, POST=yaratma,
-        PUT/PATCH=dəyişiklik, DELETE=silmə)
-      - harada (URL) və nə vaxt
+def is_module_root(path: str) -> bool:
+    trimmed = path.rstrip('/')
+    last_part = trimmed.split('/')[-1] if trimmed else ''
+    return not last_part.isdigit()
 
-    Login/logout kimi xüsusi hallar authentication/views.py-dan
-    activity_logs.services.log_login / log_logout ilə ayrıca loglanır
-    (çünki login anında request.user hələ təyin olunmayıb).
-    """
+
+def extract_object_repr(response, action_type):
+    if action_type not in (ActivityLog.ACTION_CREATED, ActivityLog.ACTION_UPDATED):
+        return ''
+    data = getattr(response, 'data', None)
+    if not isinstance(data, dict):
+        return ''
+    for key in ('designation', 'title', 'name', 'risk_name', 'label'):
+        value = data.get(key)
+        if value:
+            return str(value)
+    if data.get('id'):
+        return f"#{data['id']}"
+    return ''
+
+
+def build_description(module_title, action_type, path, object_repr, status_code):
+    module_label = module_title or 'sistem'
+    verb = ACTION_VERBS.get(action_type, 'əməliyyat etdi')
+
+    if action_type == ActivityLog.ACTION_VIEWED and is_module_root(path):
+        description = f"{module_label} moduluna daxil oldu"
+    elif object_repr:
+        description = f"{module_label} modulunda \"{object_repr}\" adlı qeydi {verb}"
+    else:
+        description = f"{module_label} modulunda {verb}"
+
+    if status_code and status_code >= 400:
+        description += f" (uğursuz oldu)"
+
+    return description
+
+
+class ActivityLogMiddleware:
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         if request.method in ('POST', 'PUT', 'PATCH'):
-            # request.body-ni əvvəlcədən oxuyub keşləyirik ki, DRF parser stream-i
-            # oxuduqdan sonra da (view işini bitirdikdən sonra) bu body-ə giriş
-            # mümkün olsun. Əks halda 'you cannot access body after reading
-            # from request's data stream' xətası yaranır.
             try:
                 _ = request.body
             except Exception:
@@ -73,11 +106,21 @@ class ActivityLogMiddleware:
         if not user or not getattr(user, 'is_authenticated', False):
             return
 
-        # Uğursuz sorğuları da qeyd edirik, amma statusu ilə birgə ki, fərqləndirilə bilsin
         status_code = getattr(response, 'status_code', None)
 
         module_code, module_title = resolve_module(path)
         action_type = METHOD_ACTION_MAP.get(request.method, ActivityLog.ACTION_OTHER)
+
+        if action_type == ActivityLog.ACTION_VIEWED and is_module_root(path):
+            recent_cutoff = timezone.now() - timedelta(seconds=DEDUPE_WINDOW_SECONDS)
+            already_logged = ActivityLog.objects.filter(
+                user=user,
+                module_code=module_code,
+                action_type=ActivityLog.ACTION_VIEWED,
+                timestamp__gte=recent_cutoff,
+            ).exists()
+            if already_logged:
+                return
 
         changes = None
         if request.method in ('POST', 'PUT', 'PATCH'):
@@ -94,10 +137,11 @@ class ActivityLogMiddleware:
                         changes = sanitize_body(json.loads(raw.decode('utf-8')))
                 except Exception:
                     changes = None
+            if changes:
+                changes = humanize_changes(changes)
 
-        description = f"{request.method} {path}"
-        if status_code and status_code >= 400:
-            description += f" (uğursuz, status={status_code})"
+        object_repr = extract_object_repr(response, action_type)
+        description = build_description(module_title, action_type, path, object_repr, status_code)
 
         username = getattr(user, 'username', '')
 
@@ -108,6 +152,7 @@ class ActivityLogMiddleware:
             module_code=module_code,
             module_title=module_title,
             description=description,
+            object_repr=object_repr,
             changes=changes,
             request_method=request.method,
             request_path=path,
@@ -118,5 +163,5 @@ class ActivityLogMiddleware:
 
         logger.info(
             f"[LOQ] {username or 'anonim'} - {dict(ActivityLog.ACTION_CHOICES).get(action_type, action_type)} "
-            f"- modul={module_title or module_code or '-'} - {description}"
+            f"- modul={module_title or module_code or '-'} - {description} - ip={get_client_ip(request)}"
         )

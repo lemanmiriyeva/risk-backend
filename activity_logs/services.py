@@ -55,6 +55,62 @@ def sanitize_body(data):
     return cleaned
 
 
+FIELD_LABELS = {
+    'designation': 'Təyinat',
+    'legal_basis': 'Hüquqi əsas',
+    'international_framework': 'Beynəlxalq çərçivə',
+    'national_legal_reference': 'Milli hüquqi istinad',
+    'asset_value': 'Aktivin dəyəri',
+    'probability': 'Ehtimal',
+    'impact': 'Təsir',
+    'treatment_option': 'Emal variantı',
+    'residual_risk': 'Qalıq risk',
+    'organization': 'Qurum',
+    'organization_id': 'Qurum',
+    'update_frequency': 'Yenilənmə tezliyi',
+    'incident_notification_notes': 'İnsident bildirişi qeydləri',
+    'standard_references': 'Standartlara istinadlar',
+
+    'title': 'Başlıq',
+    'name': 'Ad',
+    'description': 'Təsvir',
+    'status': 'Status',
+    'status_id': 'Status',
+    'department': 'Departament',
+    'department_id': 'Departament',
+    'user': 'İstifadəçi',
+    'user_id': 'İstifadəçi',
+    'phone_number': 'Telefon',
+    'email': 'E-poçt',
+    'is_active': 'Aktivdir',
+    'start_date': 'Başlama tarixi',
+    'end_date': 'Bitmə tarixi',
+}
+
+
+VALUE_LABELS = {
+    'prevention': 'Qarşısının alınması',
+    'mitigation': 'Təsirin azaldılması',
+    'transfer': 'Ötürülmə',
+    'acceptance': 'Qəbul',
+    'critical': 'Kritik',
+    'high': 'Yüksək',
+    'medium': 'Orta',
+    'low': 'Aşağı',
+}
+
+
+def humanize_changes(data):
+    if not isinstance(data, dict):
+        return data
+    result = {}
+    for key, value in data.items():
+        label = FIELD_LABELS.get(key, key)
+        if isinstance(value, str) and value in VALUE_LABELS:
+            value = VALUE_LABELS[value]
+        result[label] = value
+    return result
+
 def log_event(
     user,
     action_type,
