@@ -254,26 +254,30 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'backup'}
 
-if DEBUG and SQLITE == True:
+from decouple import config
+
+DJANGO_ENV = config('DJANGO_ENV', default='development')
+
+if DJANGO_ENV == 'production':
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'mssql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT'),
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            },
         }
     }
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'mssql',
-            'NAME': os.getenv("DB_NAME"),
-            'USER': os.getenv("DB_USER"),
-            'PASSWORD': os.getenv("DB_PASS"),
-            'HOST': os.getenv("DB_HOST"),
-            'PORT': os.getenv("DB_PORT"),
-            'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
-            },
-        },
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
