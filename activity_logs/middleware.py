@@ -26,6 +26,7 @@ ACTION_VERBS = {
 
 IGNORED_PREFIXES = (
     '/api/activity-logs',
+    '/api/notifications',
     '/api/authentication/token',
     '/api/authentication/user/logout',
     '/api/schema',

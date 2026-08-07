@@ -124,7 +124,7 @@ class UserView(APIView):
                 user.save(update_fields=["is_approved"])
 
         logger.info(f"UserView.get - {user.username} öz məlumatını sorğuladı")
-        serializer = UserSerializer(user)
+        serializer = UserSerializer(user, context={"request": request})
         return Response(serializer.data)
 
     def patch(self, request):
@@ -135,12 +135,14 @@ class UserView(APIView):
         siyahısı ilə məhdudlaşdırılıb).
         """
         user = request.user
-        serializer = UserProfileUpdateSerializer(user, data=request.data, partial=True)
+        serializer = UserProfileUpdateSerializer(
+            user, data=request.data, partial=True, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         logger.info(f"UserView.patch - {user.username} öz profilini yenilədi")
-        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+        return Response(UserSerializer(user, context={"request": request}).data, status=status.HTTP_200_OK)
 
 
 class UserDetailView(APIView):
@@ -478,7 +480,7 @@ class LoginView(TokenObtainPairView):
 
 
 class DepartmentDetailAPIView(RetrieveAPIView):
-    queryset = Department.objects.prefetch_related("children", "children__manager", "manager", "curator")
+    queryset = Department.objects.prefetch_related("children", "children__manager", "manager")
     serializer_class = DepartmentListSerializer
     lookup_field = "id"
 

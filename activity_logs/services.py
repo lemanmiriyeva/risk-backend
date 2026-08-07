@@ -43,6 +43,9 @@ def sanitize_body(data):
     for key, value in data.items():
         if key.lower() in SENSITIVE_FIELDS:
             cleaned[key] = '***'
+        elif hasattr(value, 'read') and hasattr(value, 'name'):
+            # UploadedFile / InMemoryUploadedFile - JSON-a yazıla bilmədiyi üçün adını saxlayırıq
+            cleaned[key] = f"[fayl: {value.name}]"
         else:
             cleaned[key] = value
     return cleaned

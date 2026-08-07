@@ -11,8 +11,11 @@ from rest_framework.status import (
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from notifications.models import Notification
+from notifications.services import notify
+
 from .models import AttendancePermission
-from .permissions import is_apparatus_head, can_review, get_visible_queryset
+from .permissions import is_apparatus_head, can_review, get_visible_queryset, get_department_manager, get_apparatus_head
 from .serializers import (
     AttendancePermissionSerializer,
     AttendancePermissionCreateSerializer,
@@ -60,6 +63,18 @@ class AttendancePermissionListCreateView(APIView):
         )
 
         logger.info(f"AttendancePermissionListCreateView.post - {user.username} yeni icazə sorğusu yaratdı (id={instance.id})")
+
+        department_manager = get_department_manager(instance.department)
+        notify(
+            department_manager,
+            title="Yeni icazə sorğusu",
+            body=f"{user.name} {instance.date} tarixi üçün icazə sorğusu göndərdi.",
+            notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_NEW,
+            link=f"/icazeler",
+            related_app="attendance_permissions",
+            related_object_id=instance.id,
+        )
+
         out = AttendancePermissionSerializer(instance, context={"request": request})
         return Response(out.data, status=HTTP_201_CREATED)
 
@@ -81,19 +96,13 @@ class AttendancePermissionDetailView(APIView):
 
 
 class AttendancePermissionReviewView(APIView):
-    """Şöbə müdiri / Aparat rəhbəri tərəfindən təsdiq və ya rədd."""
+    """Şöbə müdiri (1-ci mərhələ) / Aparat rəhbəri (2-ci, son mərhələ) tərəfindən təsdiq və ya rədd."""
     permission_classes = [IsAuthenticated]
     authentication_classes = (JWTAuthentication,)
 
     def patch(self, request, id):
         user = request.user
         instance = get_object_or_404(AttendancePermission, id=id)
-
-        if instance.status != AttendancePermission.STATUS_PENDING:
-            return Response(
-                {"detail": "Bu sorğuya artıq baxılıb, statusu dəyişdirilə bilməz."},
-                status=HTTP_400_BAD_REQUEST,
-            )
 
         allowed, error_message = can_review(user, instance)
         if not allowed:
@@ -102,16 +111,73 @@ class AttendancePermissionReviewView(APIView):
 
         serializer = AttendancePermissionReviewSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         action = serializer.validated_data["action"]
-        instance.status = (
-            AttendancePermission.STATUS_APPROVED if action == "approve"
-            else AttendancePermission.STATUS_REJECTED
-        )
-        instance.reviewed_by = user
-        instance.reviewed_at = timezone.now()
-        instance.review_comment = serializer.validated_data.get("comment", "")
-        instance.save(update_fields=["status", "reviewed_by", "reviewed_at", "review_comment"])
+        comment = serializer.validated_data.get("comment", "")
+        now = timezone.now()
+
+        if instance.status == AttendancePermission.STATUS_PENDING:
+            # Mərhələ 1: şöbə müdiri
+            instance.department_reviewed_by = user
+            instance.department_reviewed_at = now
+            instance.department_review_comment = comment
+
+            if action == "approve":
+                instance.status = AttendancePermission.STATUS_AWAITING_APPARATUS
+                instance.save(update_fields=[
+                    "status", "department_reviewed_by", "department_reviewed_at", "department_review_comment",
+                ])
+                apparatus_head = get_apparatus_head(instance.organization)
+                notify(
+                    apparatus_head,
+                    title="Təsdiq üçün icazə sorğusu",
+                    body=f"{instance.user.name} - {instance.date} tarixli icazə sorğusu şöbə müdiri tərəfindən təsdiqləndi, sizin təsdiqinizi gözləyir.",
+                    notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED,
+                    link=f"/icazeler",
+                    related_app="attendance_permissions",
+                    related_object_id=instance.id,
+                )
+            else:
+                # Şöbə müdiri rədd edibsə, proses burada bitir - son qərar sahələri də dolur
+                instance.status = AttendancePermission.STATUS_REJECTED
+                instance.reviewed_by = user
+                instance.reviewed_at = now
+                instance.review_comment = comment
+                instance.save(update_fields=[
+                    "status", "department_reviewed_by", "department_reviewed_at", "department_review_comment",
+                    "reviewed_by", "reviewed_at", "review_comment",
+                ])
+                notify(
+                    instance.user,
+                    title="İcazə sorğunuz rədd edildi",
+                    body=f"{instance.date} tarixli sorğunuz şöbə müdiri tərəfindən rədd edildi." + (f" Səbəb: {comment}" if comment else ""),
+                    notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_REJECTED,
+                    link=f"/icazeler",
+                    related_app="attendance_permissions",
+                    related_object_id=instance.id,
+                )
+        else:
+            # Mərhələ 2 (son): Aparat rəhbəri
+            instance.status = (
+                AttendancePermission.STATUS_APPROVED if action == "approve"
+                else AttendancePermission.STATUS_REJECTED
+            )
+            instance.reviewed_by = user
+            instance.reviewed_at = now
+            instance.review_comment = comment
+            instance.save(update_fields=["status", "reviewed_by", "reviewed_at", "review_comment"])
+
+            notify(
+                instance.user,
+                title="İcazə sorğunuz təsdiqləndi" if action == "approve" else "İcazə sorğunuz rədd edildi",
+                body=f"{instance.date} tarixli sorğunuz Aparat rəhbəri tərəfindən {'təsdiqləndi' if action == 'approve' else 'rədd edildi'}." + (f" Səbəb: {comment}" if comment else ""),
+                notification_type=(
+                    Notification.TYPE_ATTENDANCE_PERMISSION_APPROVED if action == "approve"
+                    else Notification.TYPE_ATTENDANCE_PERMISSION_REJECTED
+                ),
+                link=f"/icazeler",
+                related_app="attendance_permissions",
+                related_object_id=instance.id,
+            )
 
         logger.info(
             f"AttendancePermissionReviewView.patch - {user.username} icazəni {instance.status} etdi (id={instance.id})"

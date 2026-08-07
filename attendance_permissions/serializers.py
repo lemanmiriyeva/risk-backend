@@ -8,6 +8,7 @@ class AttendancePermissionSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField()
     department_name = serializers.SerializerMethodField()
     organization_name = serializers.SerializerMethodField()
+    department_reviewed_by_name = serializers.SerializerMethodField()
     reviewed_by_name = serializers.SerializerMethodField()
     status_display = serializers.CharField(source="get_status_display", read_only=True)
     can_review = serializers.SerializerMethodField()
@@ -19,6 +20,8 @@ class AttendancePermissionSerializer(serializers.ModelSerializer):
             "department", "department_name", "organization", "organization_name",
             "date", "start_time", "end_time", "location", "reason",
             "status", "status_display",
+            "department_reviewed_by", "department_reviewed_by_name",
+            "department_reviewed_at", "department_review_comment",
             "reviewed_by", "reviewed_by_name", "reviewed_at", "review_comment",
             "can_review",
             "created_at", "updated_at",
@@ -34,6 +37,9 @@ class AttendancePermissionSerializer(serializers.ModelSerializer):
     def get_organization_name(self, obj):
         return obj.organization.title if obj.organization else None
 
+    def get_department_reviewed_by_name(self, obj):
+        return obj.department_reviewed_by.name if obj.department_reviewed_by else None
+
     def get_reviewed_by_name(self, obj):
         return obj.reviewed_by.name if obj.reviewed_by else None
 
@@ -44,7 +50,7 @@ class AttendancePermissionSerializer(serializers.ModelSerializer):
             return False
         from .permissions import can_review
         allowed, _ = can_review(request.user, obj)
-        return allowed and obj.status == AttendancePermission.STATUS_PENDING
+        return allowed
 
 
 class AttendancePermissionCreateSerializer(serializers.ModelSerializer):

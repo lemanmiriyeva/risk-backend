@@ -73,7 +73,8 @@ INSTALLED_APPS = [
     'risk',
     'activity_logs',
     'inventory',
-    'attendance_permissions'
+    'attendance_permissions',
+    'notifications',
 ]
 # settings.py
 

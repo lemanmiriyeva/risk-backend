@@ -34,7 +34,6 @@ class DepartmentBaseSerializer(ModelSerializer):
 
 
 class MainDepartmentSerializer(DepartmentBaseSerializer):
-    curator = UserShortSerializer(read_only=True)
 
     class Meta(DepartmentBaseSerializer.Meta):
         fields = DepartmentBaseSerializer.Meta.fields + ("shortname",)
@@ -80,7 +79,7 @@ class UserSerializer(ModelSerializer):
           "fin_kod", "gender",
           "role", "department", "main_department", "name",
           "special_permissions", 'permissions',
-          "two_fa_confirmed", "is_approved",
+          "two_fa_confirmed", "is_approved","is_apparatus_head",
           "organization", "is_org_admin", "is_superuser",
         )
 
@@ -116,13 +115,14 @@ class UserProfileUpdateSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("firstname", "lastname", "phone_number", "birth_date", "gender")
+        fields = ("firstname", "lastname", "phone_number", "birth_date", "gender", "image")
         extra_kwargs = {
             "firstname": {"required": False, "allow_blank": True},
             "lastname": {"required": False, "allow_blank": True},
             "phone_number": {"required": False, "allow_null": True},
             "birth_date": {"required": False, "allow_null": True},
             "gender": {"required": False, "allow_null": True},
+            "image": {"required": False, "allow_null": True},
         }
 
 

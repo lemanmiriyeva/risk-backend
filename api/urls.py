@@ -7,5 +7,6 @@ urlpatterns = [
     path('activity-logs/', include('activity_logs.urls')),
     path('inventory/', include('inventory.urls')),
     path('attendance-permissions/', include('attendance_permissions.urls')),
+    path('notifications/', include('notifications.urls')),
 
 ]
