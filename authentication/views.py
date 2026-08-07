@@ -23,7 +23,7 @@ from core.permissions import user_has_any_module_access
 from activity_logs import services as activity_log_services
 from .models import User, Department, LoginAttempt, PasswordReset, Role
 from .serializers import UserSerializer, DepartmentListSerializer, PasswordResetRequestSerializer, \
-    OrganizationDetailSerializer, RoleSerializer
+    OrganizationDetailSerializer, RoleSerializer, TwoFAResetRequestSerializer, UserProfileUpdateSerializer
 
 ipw = IpWare()
 
@@ -38,6 +38,20 @@ from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
+
+def _find_active_user(identifier):
+    """
+    identifier - istifadəçi adı VƏ YA email ola bilər (login, şifrə sıfırlama və
+    2FA sıfırlama sorğularının hamısında istifadəçi bu iki üsuldan biri ilə
+    özünü təqdim edə bilir).
+    """
+    identifier = (identifier or "").strip()
+    if not identifier:
+        return None
+    return User.objects.filter(
+        Q(username__iexact=identifier) | Q(email__iexact=identifier), is_active=True
+    ).first()
 
 
 class UsersView(APIView):
@@ -112,6 +126,21 @@ class UserView(APIView):
         logger.info(f"UserView.get - {user.username} öz məlumatını sorğuladı")
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+    def patch(self, request):
+        """
+        Şəxsi kabinet - istifadəçi öz məlumatlarını (ad, soyad, telefon, doğum tarixi,
+        cinsiyyət) özü yeniləyə bilər. username, email, fin_kod və qurumla bağlı heç bir
+        sahə bu endpoint-dən dəyişdirilə bilməz (UserProfileUpdateSerializer-in fields
+        siyahısı ilə məhdudlaşdırılıb).
+        """
+        user = request.user
+        serializer = UserProfileUpdateSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        logger.info(f"UserView.patch - {user.username} öz profilini yenilədi")
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
 
 class UserDetailView(APIView):
@@ -222,7 +251,7 @@ class RequestPasswordResetView(APIView):
         username = serializer.validated_data["username"].strip()
         logger.info(f"RequestPasswordResetView.post - şifrə sıfırlama sorğusu: {username}")
 
-        user = User.objects.filter(username__iexact=username, is_active=True).first()
+        user = _find_active_user(username)
 
         if user:
             try:
@@ -267,7 +296,7 @@ class ConfirmPasswordResetView(APIView):
         code = serializer.validated_data["code"].strip()
         new_password = serializer.validated_data["new_password"]
 
-        user = User.objects.filter(username__iexact=username, is_active=True).first()
+        user = _find_active_user(username)
         if not user:
             logger.info(f"ConfirmPasswordResetView.post - {username} tapılmadı")
             return Response({"detail": RESET_CODE_INVALID_MESSAGE}, status=HTTP_400_BAD_REQUEST)
@@ -289,6 +318,80 @@ class ConfirmPasswordResetView(APIView):
         logger.info(f"ConfirmPasswordResetView.post - {username} öz şifrəsini uğurla yenilədi")
         return Response({"detail": "Şifrəniz uğurla yeniləndi. İndi yeni şifrənizlə daxil ola bilərsiniz."}, status=HTTP_200_OK)
         logger.info(f"RequestPasswordResetView._reset_and_send - {user.username} üçün yeni şifrə mail ilə göndərildi")
+
+
+TWO_FA_RESET_MESSAGE = (
+    "Sorğunuz qəbul olundu. Məlumatlarınız doğrudursa, 2FA sıfırlanıb və e-poçt ünvanınıza "
+    "bildiriş göndərildi. Növbəti daxilolma zamanı sistem sizə yeni QR kod göstərəcək."
+)
+
+
+def _send_2fa_reset_email(user):
+    if not user.email:
+        raise ValueError(NO_EMAIL)
+
+    subject = "İki mərhələli autentifikasiya (2FA) sıfırlandı"
+    body = (
+        f"Salam {user.name or user.username},\n\n"
+        f"Hesabınız üzrə iki mərhələli autentifikasiya (2FA) sıfırlanıb, çünki autentifikasiya "
+        f"tətbiqinə girişinizin olmadığı bildirilib.\n\n"
+        f"Növbəti dəfə sistemə daxil olarkən sizə yeni QR kod təqdim ediləcək - onu "
+        f"autentifikasiya tətbiqinizlə (Google Authenticator, Microsoft Authenticator və s.) "
+        f"yenidən skan etməlisiniz.\n\n"
+        f"Əgər bu sorğunu siz göndərməmisinizsə, dərhal sistem administratoru ilə əlaqə saxlayın."
+    )
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None) or settings.EMAIL_HOST_USER,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+
+class RequestTwoFAResetView(APIView):
+    """
+    Login səhifəsindəki 2FA addımında istifadəçi "Administrator ilə əlaqə" düyməsini
+    basdıqda çağırılır (authenticator tətbiqi silinib / telefon dəyişilib itirilib halları
+    üçün). Təhlükəsizlik baxımından yalnız username YOX, həm də şifrə təkrar yoxlanılır ki,
+    sorğunu yalnız hesabın həqiqi sahibi göndərə bilsin - əks halda bu endpoint 2FA-nı
+    bypass etmək üçün istismar oluna bilərdi.
+
+    Uğurlu olduqda: two_fa_secret və two_fa_confirmed sıfırlanır (belə ki, növbəti girişdə
+    TwoFASetupView yeni sirr/QR yaradır) və istifadəçiyə məlumatlandırıcı mail göndərilir.
+    """
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request, *args, **kwargs):
+        serializer = TwoFAResetRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+        username = serializer.validated_data["username"].strip()
+        password = serializer.validated_data["password"]
+
+        logger.info(f"RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: {username}")
+
+        user = _find_active_user(username)
+
+        if user and user.check_password(password):
+            try:
+                self._reset_and_notify(user)
+            except Exception as e:
+                logger.error(f"RequestTwoFAResetView.post - {username} üçün xəta: {str(e)}")
+        else:
+            logger.info(f"RequestTwoFAResetView.post - {username} üçün yanlış istifadəçi adı/şifrə")
+
+        # İstifadəçi/şifrə mövcudluğunu ifşa etməmək üçün həmişə eyni cavab qaytarılır
+        return Response({"detail": TWO_FA_RESET_MESSAGE}, status=HTTP_200_OK)
+
+    def _reset_and_notify(self, user):
+        user.two_fa_secret = None
+        user.two_fa_confirmed = False
+        user.save(update_fields=["two_fa_secret", "two_fa_confirmed"])
+        _send_2fa_reset_email(user)
+        logger.info(f"RequestTwoFAResetView._reset_and_notify - {user.username} üçün 2FA sıfırlandı")
 
 
 class GroupMeta:

@@ -4,11 +4,10 @@ from core.permissions import get_module_permissions
 
 
 class RoleSerializer(ModelSerializer):
-
     class Meta:
         model = Role
         depth = 2
-        fields = ("id", "title", "order")
+        fields = ("id", "title", "order", "is_manager_role")
 
 
 class UserShortSerializer(ModelSerializer):
@@ -78,6 +77,7 @@ class UserSerializer(ModelSerializer):
         depth = 2
         fields = (
           "id", "username", "email", "firstname", "lastname", "is_active", "phone_number", "birth_date", "image",
+          "fin_kod", "gender",
           "role", "department", "main_department", "name",
           "special_permissions", 'permissions',
           "two_fa_confirmed", "is_approved",
@@ -104,6 +104,26 @@ class UserSerializer(ModelSerializer):
             if rep["department"]["id"] == rep["main_department"]["id"]:
                 rep.pop("department")
         return rep
+
+
+class UserProfileUpdateSerializer(ModelSerializer):
+    """
+    "Şəxsi kabinet" səhifəsində istifadəçinin ÖZÜ öz məlumatlarını yeniləməsi üçün.
+    Qəsdən çox məhdud sahə siyahısı: username, email, fin_kod və qurumla bağlı heç bir
+    sahə (organization, department, role, is_org_admin və s.) BURAYA DAXIL EDİLMİR - onlar
+    yalnız admin panelindən dəyişdirilə bilər. Yalnız şəxsi/əlaqə məlumatları redaktə olunur.
+    """
+
+    class Meta:
+        model = User
+        fields = ("firstname", "lastname", "phone_number", "birth_date", "gender")
+        extra_kwargs = {
+            "firstname": {"required": False, "allow_blank": True},
+            "lastname": {"required": False, "allow_blank": True},
+            "phone_number": {"required": False, "allow_null": True},
+            "birth_date": {"required": False, "allow_null": True},
+            "gender": {"required": False, "allow_null": True},
+        }
 
 
 class OrganizationSerializer(ModelSerializer):
@@ -136,6 +156,11 @@ class OrganizationDetailSerializer(OrganizationSerializer):
 
 class PasswordResetRequestSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=128)
+
+
+class TwoFAResetRequestSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=128)
+    password = serializers.CharField(max_length=128)
 
 
 class OrgUserSerializer(ModelSerializer):

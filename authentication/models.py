@@ -102,6 +102,16 @@ class User(AbstractBaseUser, PermissionsMixin):
             "və ya user-lərinə çıxışı yoxdur."
         )
     )
+    is_apparatus_head = models.BooleanField(
+        default=False,
+        verbose_name="Aparat rəhbəri",
+        help_text=(
+            "Bu user öz qurumunun (organization) BÜTÜN əməkdaşlarının icazə sorğularını "
+            "görə və HƏR KƏSİN (şöbə müdirləri daxil) sorğusunu təsdiq/rədd edə bilər. "
+            "Özü icazə sorğusu yarada bilməz. Konkret vəzifə adından asılı deyil "
+            "(Direktor, Aparat rəhbəri və s. ola bilər) - buna görə ayrıca sahədir."
+        ),
+    )
     special_permissions = models.ManyToManyField(
         SpecialPermission,
         verbose_name="Xüsusi icazələr",
@@ -177,8 +187,15 @@ class Department(TimestampsModel):
 
 class Role(TimestampsModel):
     title = models.CharField(max_length=255, blank=True, verbose_name="Vəzifə")
+    is_manager_role = models.BooleanField(
+        default=False,
+        verbose_name="Şöbə rəhbəri səlahiyyəti",
+        help_text=(
+            "Bu vəzifədə olan istifadəçilər öz departamentlərindəki əməkdaşların "
+            "icazə sorğularını görə və təsdiq/rədd edə bilər."
+        ),
+    )
     parent = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True, blank=True, related_name='children',)
-    gpa_order = models.PositiveIntegerField(default=99, verbose_name="GPA-dakı Sıralama")
     order = models.PositiveIntegerField(default=99, verbose_name="Sıralama")
 
     def __str__(self):

@@ -51,7 +51,7 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ("title", "parent", "order", "gpa_order")
+    list_display = ("title", "parent", "order")
     search_fields = ("title",)
     list_filter = ("parent",)
 

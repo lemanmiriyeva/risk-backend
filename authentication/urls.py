@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import UserView, UsersView, LogoutView, LoginView, DepartmentListView, DepartmentDetailAPIView, \
-    UserDetailView, RequestPasswordResetView, ConfirmPasswordResetView, RoleListView
+    UserDetailView, RequestPasswordResetView, ConfirmPasswordResetView, RoleListView, RequestTwoFAResetView
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 from .views_2fa import TwoFASetupView, TwoFAVerifyView
 from .views import OrgUsersView, OrgUserDetailView, OrganizationListView, OrganizationDetailView, \
@@ -21,6 +21,7 @@ urlpatterns = [
     path('departments/<int:id>/', DepartmentDetailAPIView.as_view(), name='department-detail'),
     path('2fa/setup/', TwoFASetupView.as_view(), name='2fa-setup'),
     path('2fa/verify/', TwoFAVerifyView.as_view(), name='2fa-verify'),
+    path('2fa/request-reset/', RequestTwoFAResetView.as_view(), name='2fa-request-reset'),
     path('organizations/', OrganizationListView.as_view(), name='organizations-list'),
     path('organizations/<int:id>/', OrganizationDetailView.as_view(), name='organization-detail'),
     path('organization/users/', OrgUsersView.as_view(), name='org-users-list'),

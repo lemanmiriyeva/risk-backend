@@ -72,7 +72,8 @@ INSTALLED_APPS = [
     'api',
     'risk',
     'activity_logs',
-    'inventory'
+    'inventory',
+    'attendance_permissions'
 ]
 # settings.py
 
@@ -139,7 +140,7 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     'django_auth_ldap.backend.LDAPBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'authentication.backends.EmailOrUsernameBackend',
 ]
 
 TEMPLATES = [

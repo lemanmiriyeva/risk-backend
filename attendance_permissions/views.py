@@ -1,0 +1,120 @@
+import logging
+
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.status import (
+    HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST,
+    HTTP_403_FORBIDDEN,
+)
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from .models import AttendancePermission
+from .permissions import is_apparatus_head, can_review, get_visible_queryset
+from .serializers import (
+    AttendancePermissionSerializer,
+    AttendancePermissionCreateSerializer,
+    AttendancePermissionReviewSerializer,
+)
+
+logger = logging.getLogger("colored")
+
+
+class AttendancePermissionListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request):
+        user = request.user
+        queryset = AttendancePermission.objects.select_related(
+            "user", "department", "organization", "reviewed_by"
+        ).all()
+
+        status_filter = request.query_params.get("status")
+        queryset = get_visible_queryset(user, queryset)
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        logger.info(f"AttendancePermissionListCreateView.get - {user.username} icazə siyahısını sorğuladı")
+        serializer = AttendancePermissionSerializer(queryset, many=True, context={"request": request})
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def post(self, request):
+        user = request.user
+
+        if is_apparatus_head(user) and not user.is_superuser:
+            return Response(
+                {"detail": "Aparat rəhbəri icazə sorğusu yarada bilməz - yalnız təsdiq/rədd edə bilər."},
+                status=HTTP_403_FORBIDDEN,
+            )
+
+        serializer = AttendancePermissionCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save(
+            user=user,
+            department=user.department,
+            organization=user.organization,
+            status=AttendancePermission.STATUS_PENDING,
+        )
+
+        logger.info(f"AttendancePermissionListCreateView.post - {user.username} yeni icazə sorğusu yaratdı (id={instance.id})")
+        out = AttendancePermissionSerializer(instance, context={"request": request})
+        return Response(out.data, status=HTTP_201_CREATED)
+
+
+class AttendancePermissionDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, id):
+        user = request.user
+        instance = get_object_or_404(AttendancePermission, id=id)
+
+        visible = get_visible_queryset(user, AttendancePermission.objects.filter(id=id)).exists()
+        if not visible:
+            return Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
+
+        serializer = AttendancePermissionSerializer(instance, context={"request": request})
+        return Response(serializer.data, status=HTTP_200_OK)
+
+
+class AttendancePermissionReviewView(APIView):
+    """Şöbə müdiri / Aparat rəhbəri tərəfindən təsdiq və ya rədd."""
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+
+    def patch(self, request, id):
+        user = request.user
+        instance = get_object_or_404(AttendancePermission, id=id)
+
+        if instance.status != AttendancePermission.STATUS_PENDING:
+            return Response(
+                {"detail": "Bu sorğuya artıq baxılıb, statusu dəyişdirilə bilməz."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        allowed, error_message = can_review(user, instance)
+        if not allowed:
+            logger.info(f"AttendancePermissionReviewView.patch - {user.username} rədd edildi: {error_message}")
+            return Response({"detail": error_message}, status=HTTP_403_FORBIDDEN)
+
+        serializer = AttendancePermissionReviewSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        action = serializer.validated_data["action"]
+        instance.status = (
+            AttendancePermission.STATUS_APPROVED if action == "approve"
+            else AttendancePermission.STATUS_REJECTED
+        )
+        instance.reviewed_by = user
+        instance.reviewed_at = timezone.now()
+        instance.review_comment = serializer.validated_data.get("comment", "")
+        instance.save(update_fields=["status", "reviewed_by", "reviewed_at", "review_comment"])
+
+        logger.info(
+            f"AttendancePermissionReviewView.patch - {user.username} icazəni {instance.status} etdi (id={instance.id})"
+        )
+        out = AttendancePermissionSerializer(instance, context={"request": request})
+        return Response(out.data, status=HTTP_200_OK)

@@ -1,5 +1,4 @@
-import random
-from django.db import models
+from django.db import models, transaction
 from authentication.models import User
 
 
@@ -25,6 +24,17 @@ class InventoryOwnerDepartment(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class InventoryNumberSequence(models.Model):
+    last_number = models.PositiveIntegerField(default=0, verbose_name="Son verilmiş nömrə")
+
+    class Meta:
+        verbose_name = "İnventar nömrə sayğacı"
+        verbose_name_plural = "İnventar nömrə sayğacları"
+
+    def __str__(self):
+        return f"Son nömrə: {self.last_number}"
 
 
 class Inventory(models.Model):
@@ -82,12 +92,15 @@ class Inventory(models.Model):
             return "Aparat (hamı üçün)"
         return "—"
 
+    INVENTORY_NUMBER_PREFIX = "IS"
+
     @staticmethod
     def generate_inventory_number():
-        while True:
-            candidate = f"IS{random.randint(0, 9999):04d}"
-            if not Inventory.objects.filter(inventory_number=candidate).exists():
-                return candidate
+        with transaction.atomic():
+            seq, _ = InventoryNumberSequence.objects.select_for_update().get_or_create(pk=1)
+            seq.last_number += 1
+            seq.save(update_fields=["last_number"])
+            return f"{Inventory.INVENTORY_NUMBER_PREFIX}{seq.last_number:04d}"
 
     def save(self, *args, **kwargs):
         if not self.inventory_number:

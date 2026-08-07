@@ -6,7 +6,7 @@ from .views import (
     CheckSubModuleAccessView,
     StatusViewSet,
 )
-from .views import OrgModuleAccessView
+from .views import OrgModuleAccessView, ModuleOrganizationAccessView
 
 app_name = "core"
 
@@ -18,4 +18,5 @@ urlpatterns = [
     path("modules/check-access/", CheckModuleAccessView.as_view(), name="module-check-access"),
     path("modules/check-sub-access/", CheckSubModuleAccessView.as_view(), name="submodule-check-access"),
     path("organization/module-access/", OrgModuleAccessView.as_view(), name="organization-module-access"),
+    path("modules/organization-access/", ModuleOrganizationAccessView.as_view(), name="module-organization-access"),
 ] + router.urls

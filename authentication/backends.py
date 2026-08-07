@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
+from django.db.models import Q
 from django_auth_ldap.backend import LDAPBackend
 import logging
 import ldap
@@ -100,6 +101,41 @@ class CustomLDAPBackend(LDAPBackend):
             attrs['lastname'] = ldap_attrs['sn'][0].decode('utf-8') if ldap_attrs['sn'] else ''
 
         return attrs
+
+
+class EmailOrUsernameBackend(BaseBackend):
+    """
+    İstifadəçi login səhifəsində "username" sahəsinə həm istifadəçi adını, həm də
+    email ünvanını daxil edə bilsin deyə əlavə olunub. simplejwt login serializer-i
+    daxili olaraq authenticate(username=..., password=...) çağırdığı üçün, bura
+    gələn "username" dəyəri əslində istifadəçi adı VƏ YA email ola bilər - hər ikisi
+    yoxlanılır.
+    """
+
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        if not username or not password:
+            return None
+
+        usermodel = get_user_model()
+        user = usermodel.objects.filter(
+            Q(username__iexact=username) | Q(email__iexact=username)
+        ).first()
+        if not user:
+            return None
+
+        if not user.is_active:
+            raise AuthenticationFailed(INACTIVE_ACCOUNT)
+
+        if user.check_password(password):
+            return user
+        return None
+
+    def get_user(self, user_id):
+        usermodel = get_user_model()
+        try:
+            return usermodel.objects.get(pk=user_id)
+        except usermodel.DoesNotExist:
+            return None
 
 
 class PhoneBackend(BaseBackend):
