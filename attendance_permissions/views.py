@@ -15,7 +15,10 @@ from notifications.models import Notification
 from notifications.services import notify
 
 from .models import AttendancePermission
-from .permissions import is_apparatus_head, can_review, get_visible_queryset, get_department_manager, get_apparatus_head
+from .permissions import (
+    is_apparatus_head, can_review, get_visible_queryset, get_department_manager, get_apparatus_head,
+    get_approval_flow, FLOW_AUTO, FLOW_APPARATUS_ONLY, FLOW_FULL,
+)
 from .serializers import (
     AttendancePermissionSerializer,
     AttendancePermissionCreateSerializer,
@@ -55,25 +58,65 @@ class AttendancePermissionListCreateView(APIView):
 
         serializer = AttendancePermissionCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        # Sorğunu yaradanın öz vəzifə sırasına (Role.order) görə axın seçilir -
+        # şöbə müdiri/departament rəhbəri səviyyəsində olanlar öz sorğusunu özü
+        # təsdiqləyə bilməz, ona görə uyğun mərhələ(lər) keçilir.
+        flow = get_approval_flow(user)
+        if flow == FLOW_AUTO:
+            initial_status = AttendancePermission.STATUS_APPROVED
+        elif flow == FLOW_APPARATUS_ONLY:
+            initial_status = AttendancePermission.STATUS_AWAITING_APPARATUS
+        else:
+            initial_status = AttendancePermission.STATUS_PENDING
+
         instance = serializer.save(
             user=user,
             department=user.department,
             organization=user.organization,
-            status=AttendancePermission.STATUS_PENDING,
+            status=initial_status,
         )
 
-        logger.info(f"AttendancePermissionListCreateView.post - {user.username} yeni icazə sorğusu yaratdı (id={instance.id})")
-
-        department_manager = get_department_manager(instance.department)
-        notify(
-            department_manager,
-            title="Yeni icazə sorğusu",
-            body=f"{user.name} {instance.date} tarixi üçün icazə sorğusu göndərdi.",
-            notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_NEW,
-            link=f"/icazeler",
-            related_app="attendance_permissions",
-            related_object_id=instance.id,
+        logger.info(
+            f"AttendancePermissionListCreateView.post - {user.username} yeni icazə sorğusu yaratdı "
+            f"(id={instance.id}, axın={flow})"
         )
+
+        if flow == FLOW_AUTO:
+            instance.reviewed_at = timezone.now()
+            instance.review_comment = "Vəzifə sırasına görə avtomatik təsdiqləndi"
+            instance.save(update_fields=["reviewed_at", "review_comment"])
+            notify(
+                user,
+                title="İcazəniz avtomatik təsdiqləndi",
+                body=f"{instance.date} tarixli icazə sorğunuz vəzifənizə görə avtomatik təsdiqləndi.",
+                notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_APPROVED,
+                link=f"/icazeler",
+                related_app="attendance_permissions",
+                related_object_id=instance.id,
+            )
+        elif flow == FLOW_APPARATUS_ONLY:
+            apparatus_head = get_apparatus_head(instance.organization)
+            notify(
+                apparatus_head,
+                title="Təsdiq üçün icazə sorğusu",
+                body=f"{user.name} - {instance.date} tarixli icazə sorğusu birbaşa sizin təsdiqinizi gözləyir.",
+                notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED,
+                link=f"/icazeler",
+                related_app="attendance_permissions",
+                related_object_id=instance.id,
+            )
+        else:
+            department_manager = get_department_manager(instance.department)
+            notify(
+                department_manager,
+                title="Yeni icazə sorğusu",
+                body=f"{user.name} {instance.date} tarixi üçün icazə sorğusu göndərdi.",
+                notification_type=Notification.TYPE_ATTENDANCE_PERMISSION_NEW,
+                link=f"/icazeler",
+                related_app="attendance_permissions",
+                related_object_id=instance.id,
+            )
 
         out = AttendancePermissionSerializer(instance, context={"request": request})
         return Response(out.data, status=HTTP_201_CREATED)

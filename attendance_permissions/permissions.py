@@ -14,6 +14,41 @@ Aparat rəhbəri təyini İKİ yolla ola bilər (hər hansı biri kifayətdir):
 
 APPARATUS_HEAD_ROLE_ORDER = 2
 
+# Sorğunu YARADAN şəxsin öz vəzifə sırasına (Role.order) görə hansı təsdiq
+# axınından keçəcəyini müəyyən edir. Səbəb: şöbə müdiri/departament rəhbəri
+# səviyyəsində olan şəxslər öz sorğusunu özü təsdiqləyə bilməz (can_review bunu
+# artıq qadağan edir), ona görə həmin mərhələ ümumiyyətlə keçilməlidir.
+#
+#   order == 1         -> avtomatik təsdiqlənir, heç bir mərhələ yoxdur
+#   order 2, 3 və ya 4  -> yalnız Aparat rəhbəri təsdiqləyir (şöbə müdiri mərhələsi keçilir)
+#   order > 4 / rol yox -> normal 2 mərhələli axın (şöbə müdiri -> Aparat rəhbəri)
+AUTO_APPROVE_ROLE_ORDER = 1
+SKIP_DEPARTMENT_MAX_ROLE_ORDER = 4
+
+FLOW_AUTO = "auto"
+FLOW_APPARATUS_ONLY = "apparatus_only"
+FLOW_FULL = "full"
+
+
+def get_role_order(user):
+    if not user or not getattr(user, "role_id", None):
+        return None
+    return getattr(user.role, "order", None)
+
+
+def get_approval_flow(user):
+    """
+    Yeni icazə sorğusu yaradılanda hansı təsdiq axınının istifadə olunacağını
+    sorğunu yaradan user-in vəzifə sırasına (Role.order) əsasən qaytarır.
+    Qaytarır: FLOW_AUTO | FLOW_APPARATUS_ONLY | FLOW_FULL
+    """
+    order = get_role_order(user)
+    if order == AUTO_APPROVE_ROLE_ORDER:
+        return FLOW_AUTO
+    if order is not None and 2 <= order <= SKIP_DEPARTMENT_MAX_ROLE_ORDER:
+        return FLOW_APPARATUS_ONLY
+    return FLOW_FULL
+
 
 def is_department_manager(user):
     """

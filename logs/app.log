@@ -1873,3 +1873,97 @@ INFO 2026-08-10 14:27:48,620 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-08-10 14:27:48,655 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
 INFO 2026-08-10 14:27:48,674 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
 INFO 2026-08-10 14:27:48,694 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:33:46,676 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:33:46,724 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:33:46,746 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:33:46,768 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:33:55,530 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:33:55,563 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:34:06,866 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-08-11 17:37:00-17:38:00 | test
+INFO 2026-08-10 14:34:06,867 views AttendancePermissionListCreateView.post - laman.bashirova yeni icazə sorğusu yaratdı (id=5)
+INFO 2026-08-10 14:34:06,874 services [BİLDİRİŞ] laman.bashirova <- Yeni icazə sorğusu
+INFO 2026-08-10 14:34:06,883 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#5" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-10 14:34:06,933 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:34:06,946 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:34:26,581 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:34:26,603 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:34:26,622 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:42:39,163 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:42:48,930 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:42:48,990 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:42:49,016 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:43:04,607 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:43:04,624 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:43:04,647 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:43:08,172 views NotificationMarkAllReadView.patch - laman.bashirova 1 bildirişi oxundu etdi
+INFO 2026-08-10 14:43:26,000 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-08-15 14:46:00-14:50:00 | testr
+INFO 2026-08-10 14:43:26,000 views AttendancePermissionListCreateView.post - laman.bashirova yeni icazə sorğusu yaratdı (id=6, axın=full)
+INFO 2026-08-10 14:43:26,009 services [BİLDİRİŞ] laman.bashirova <- Yeni icazə sorğusu
+INFO 2026-08-10 14:43:26,018 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#6" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-10 14:43:26,067 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:43:26,081 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:43:47,548 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:43:47,555 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:43:47,584 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:43:47,610 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:43:47,619 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:43:47,646 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:01,396 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=::1
+INFO 2026-08-10 14:44:01,798 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:01,846 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:44:01,871 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:04,802 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:44:07,852 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:07,913 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:16,112 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:44:16,125 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:44:16,150 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:44:37,425 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=::1
+INFO 2026-08-10 14:44:37,792 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:37,831 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:44:37,859 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:44:42,721 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:44:49,273 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:44:49,314 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:45:02,679 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=::1
+INFO 2026-08-10 14:45:03,848 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:45:03,952 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:45:04,072 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 14:50:33,435 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:50:33,458 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:50:33,496 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:50:43,821 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-08-13 14:54:00-14:56:00 | mj
+INFO 2026-08-10 14:50:43,822 views AttendancePermissionListCreateView.post - laman.bashirova yeni icazə sorğusu yaratdı (id=7, axın=apparatus_only)
+INFO 2026-08-10 14:50:43,830 services [BİLDİRİŞ] superuser <- Təsdiq üçün icazə sorğusu
+INFO 2026-08-10 14:50:43,840 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "#7" adlı qeydi yaratdı - ip=::1
+INFO 2026-08-10 14:50:43,906 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:50:43,928 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 14:50:51,803 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:50:54,219 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 14:50:54,238 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:24:21,854 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 15:24:21,861 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 15:24:21,890 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:24:21,928 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:24:21,935 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 15:24:21,962 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 15:26:49,905 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:49:41,031 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 15:49:41,058 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:49:41,083 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 15:50:13,419 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 15:50:13,444 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 15:50:13,473 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:50:13,496 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:50:13,504 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 15:50:13,533 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 15:58:51,794 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:59:25,924 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 15:59:53,402 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 16:01:49,158 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 16:01:54,146 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 16:01:54,186 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-10 16:01:54,207 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-10 16:14:11,659 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-08-10 16:14:11,682 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-10 16:14:11,713 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı

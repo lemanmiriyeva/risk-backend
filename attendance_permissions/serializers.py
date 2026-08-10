@@ -1,3 +1,6 @@
+from datetime import time
+
+from django.utils import timezone
 from rest_framework import serializers
 
 from .models import AttendancePermission
@@ -56,15 +59,35 @@ class AttendancePermissionSerializer(serializers.ModelSerializer):
 class AttendancePermissionCreateSerializer(serializers.ModelSerializer):
     """Yaratmaq üçün - user/department/organization/status view tərəfindən təyin olunur."""
 
+    WORK_START = time(9, 0)
+    WORK_END = time(18, 0)
+
     class Meta:
         model = AttendancePermission
         fields = ("date", "start_time", "end_time", "location", "reason")
         extra_kwargs = {
             "reason": {"required": False, "allow_blank": True},
+            "location": {"required": False, "allow_blank": True},
         }
 
+    def validate_date(self, value):
+        if value < timezone.localdate():
+            raise serializers.ValidationError("Keçmiş tarix üçün icazə sorğusu yaradıla bilməz.")
+        return value
+
     def validate(self, attrs):
-        if attrs["start_time"] >= attrs["end_time"]:
+        start_time = attrs.get("start_time")
+        end_time = attrs.get("end_time")
+
+        if start_time and (start_time < self.WORK_START or start_time > self.WORK_END):
+            raise serializers.ValidationError(
+                {"start_time": "Başlanğıc saatı 09:00 - 18:00 aralığında olmalıdır."}
+            )
+        if end_time and (end_time < self.WORK_START or end_time > self.WORK_END):
+            raise serializers.ValidationError(
+                {"end_time": "Bitmə saatı 09:00 - 18:00 aralığında olmalıdır."}
+            )
+        if start_time and end_time and start_time >= end_time:
             raise serializers.ValidationError(
                 {"end_time": "Bitmə saatı başlanğıc saatından sonra olmalıdır."}
             )

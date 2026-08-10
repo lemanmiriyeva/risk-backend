@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from attendance_permissions.models import AttendancePermission
+from attendance_permissions.permissions import get_approval_flow, FLOW_AUTO, FLOW_APPARATUS_ONLY
 from risk.models import Risk
 
 from .models import Operation, OperationApprovalStep
@@ -62,15 +63,24 @@ def _get_or_create_permission_operation(instance):
 @receiver(post_save, sender=AttendancePermission)
 def on_attendance_permission_saved(sender, instance, created, **kwargs):
     if created:
+        # Mərhələ sayı sorğunu yaradanın vəzifə sırasından (Role.order) asılıdır:
+        # auto -> 0 mərhələ, apparatus_only -> 1 mərhələ, full -> 2 mərhələ.
+        flow = get_approval_flow(instance.user)
+        if flow == FLOW_AUTO:
+            steps = []
+        elif flow == FLOW_APPARATUS_ONLY:
+            steps = [{'role_label': 'Aparat rəhbəri'}]
+        else:
+            steps = [
+                {'role_label': 'Şöbə müdiri'},
+                {'role_label': 'Aparat rəhbəri'},
+            ]
         start_approval_operation(
             user=instance.user,
             instance=instance,
             category_code='attendance_permissions',
             category_title='İcazələr',
-            steps=[
-                {'role_label': 'Şöbə müdiri'},
-                {'role_label': 'Aparat rəhbəri'},
-            ],
+            steps=steps,
             object_repr=str(instance),
             description=f"{instance.user.name} - {instance.date} tarixi üçün icazə sorğusu göndərdi",
             organization=instance.organization,
@@ -90,34 +100,37 @@ def on_attendance_permission_saved(sender, instance, created, **kwargs):
     if not new_status or new_status == operation.status:
         return
 
-    # 1-ci mərhələ (şöbə müdiri) nəticələnib
-    step_1 = operation.approval_steps.filter(step_number=1).first()
-    if step_1 and step_1.status == OperationApprovalStep.STATUS_PENDING and instance.department_reviewed_by:
-        step_1.status = (
-            OperationApprovalStep.STATUS_APPROVED
-            if instance.status != AttendancePermission.STATUS_REJECTED
-            else OperationApprovalStep.STATUS_REJECTED
-        )
-        step_1.reviewed_by = instance.department_reviewed_by
-        step_1.comment = instance.department_review_comment
-        step_1.reviewed_at = instance.department_reviewed_at or timezone.now()
-        step_1.save(update_fields=['status', 'reviewed_by', 'comment', 'reviewed_at'])
+    total_steps = operation.total_steps or 0
 
-    # 2-ci (son) mərhələ - Aparat rəhbəri
+    # 1-ci mərhələ (şöbə müdiri) nəticələnib - bu mərhələ yalnız tam (2 addımlı) axında mövcuddur
+    if total_steps == 2:
+        step_1 = operation.approval_steps.filter(step_number=1).first()
+        if step_1 and step_1.status == OperationApprovalStep.STATUS_PENDING and instance.department_reviewed_by:
+            step_1.status = (
+                OperationApprovalStep.STATUS_APPROVED
+                if instance.status != AttendancePermission.STATUS_REJECTED
+                else OperationApprovalStep.STATUS_REJECTED
+            )
+            step_1.reviewed_by = instance.department_reviewed_by
+            step_1.comment = instance.department_review_comment
+            step_1.reviewed_at = instance.department_reviewed_at or timezone.now()
+            step_1.save(update_fields=['status', 'reviewed_by', 'comment', 'reviewed_at'])
+
+    # Son mərhələ - Aparat rəhbəri (tam axında 2-ci, birbaşa aparat axınında 1-ci addımdır)
     if instance.status in (AttendancePermission.STATUS_APPROVED, AttendancePermission.STATUS_REJECTED) and instance.reviewed_by:
-        step_2 = operation.approval_steps.filter(step_number=2).first()
-        if step_2 and step_2.status == OperationApprovalStep.STATUS_PENDING:
-            step_2.status = (
+        final_step = operation.approval_steps.filter(step_number=total_steps).first()
+        if final_step and final_step.status == OperationApprovalStep.STATUS_PENDING:
+            final_step.status = (
                 OperationApprovalStep.STATUS_APPROVED
                 if instance.status == AttendancePermission.STATUS_APPROVED
                 else OperationApprovalStep.STATUS_REJECTED
             )
-            step_2.reviewed_by = instance.reviewed_by
-            step_2.comment = instance.review_comment
-            step_2.reviewed_at = instance.reviewed_at or timezone.now()
-            step_2.save(update_fields=['status', 'reviewed_by', 'comment', 'reviewed_at'])
+            final_step.reviewed_by = instance.reviewed_by
+            final_step.comment = instance.review_comment
+            final_step.reviewed_at = instance.reviewed_at or timezone.now()
+            final_step.save(update_fields=['status', 'reviewed_by', 'comment', 'reviewed_at'])
 
     operation.status = new_status
     operation.action = Operation.ACTION_REVIEWED
-    operation.current_step = 2 if instance.status == AttendancePermission.STATUS_AWAITING_APPARATUS else operation.current_step
+    operation.current_step = total_steps if instance.status == AttendancePermission.STATUS_AWAITING_APPARATUS else operation.current_step
     operation.save(update_fields=['status', 'action', 'current_step'])

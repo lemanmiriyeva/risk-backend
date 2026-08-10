@@ -23,7 +23,7 @@ class AttendancePermission(TimestampsModel):
     date = models.DateField(verbose_name="Tarix")
     start_time = models.TimeField(verbose_name="Başlanğıc saatı")
     end_time = models.TimeField(verbose_name="Bitmə saatı")
-    location = models.CharField(max_length=255, verbose_name="Yer")
+    location = models.CharField(max_length=255, blank=True, default="", verbose_name="Yer")
     reason = models.TextField(blank=True, default="", verbose_name="Səbəb / qeyd")
 
     # Yaradılan an istifadəçidən avtomatik köçürülür - sonradan user öz departamentini/
