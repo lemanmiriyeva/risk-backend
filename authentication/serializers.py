@@ -70,6 +70,7 @@ class UserSerializer(ModelSerializer):
     main_department = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
     organization = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -79,9 +80,26 @@ class UserSerializer(ModelSerializer):
           "fin_kod", "gender",
           "role", "department", "main_department", "name",
           "special_permissions", 'permissions',
-          "two_fa_confirmed", "is_approved","is_apparatus_head",
+          "two_fa_confirmed", "is_approved",
           "organization", "is_org_admin", "is_superuser",
         )
+
+    def get_image(self, obj):
+        """
+        request.build_absolute_uri() Apache/proxy Host başlığını düzgün ötürmədiyi hallarda
+        server-in daxili ünvanını (məs. 127.0.0.1:8000) qaytara bilir. Ona görə mümkün olsa
+        settings.BACKEND_BASE_URL (env-dən) istifadə edirik - bu, proxy konfiqurasiyasından asılı olmayan
+        sabit/etibarlı mənbədir. Təyin olunmayıbsa, əvvəlki davranışa (request host) geri qayıdırıq.
+        """
+        if not obj.image:
+            return None
+        from django.conf import settings
+        if getattr(settings, "BACKEND_BASE_URL", ""):
+            return f"{settings.BACKEND_BASE_URL}{obj.image.url}"
+        request = self.context.get("request")
+        if request:
+            return request.build_absolute_uri(obj.image.url)
+        return obj.image.url
 
     def get_main_department(self, obj):
         if not obj.department:

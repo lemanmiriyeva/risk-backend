@@ -46,6 +46,11 @@ ALLOWED_HOSTS = [
     '*'
 ]
 
+# Media/şəkil kimi sahələrin absolute URL-i üçün istifadə olunur (məs. profil şəkli).
+# Bunu .env-də təyin edin, əks halda sistem request-in Host başlığına etibar edəcək
+# (Apache/proxy Host-u düzgün ötürməzsə, 127.0.0.1 kimi yanlış ünvan qayıda bilər).
+# Nümunə: BACKEND_BASE_URL=http://10.3.15.165:8000
+BACKEND_BASE_URL = os.getenv('BACKEND_BASE_URL', '').rstrip('/')
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -75,6 +80,7 @@ INSTALLED_APPS = [
     'inventory',
     'attendance_permissions',
     'notifications',
+    'operations',
 ]
 # settings.py
 
@@ -316,4 +322,4 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0,
 }
 
-MODULE_APPS = ["risk", "activity_logs", "inventory"]
+MODULE_APPS = ["risk", "activity_logs", "inventory","notifications","attendance_permissions"]

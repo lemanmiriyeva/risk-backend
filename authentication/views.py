@@ -11,11 +11,12 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.status import HTTP_403_FORBIDDEN, \
     HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_201_CREATED
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, AuthenticationFailed
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from python_ipware import IpWare
 from django.shortcuts import get_object_or_404
 from core.contstants import INVALID_CREDENTIALS, USER_LOCKED
@@ -401,8 +402,19 @@ class GroupMeta:
     verbose_name_plural = 'Vəzifələr'
 
 
+class AzTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    SimpleJWT-nin default 'No active account found with the given credentials' mesajını
+    (username/şifrə heç bir backend-də uyğun gəlmədikdə, authenticate() None qaytardıqda atılır)
+    Azərbaycan dilinə çevirir.
+    """
+    default_error_messages = {
+        "no_active_account": INVALID_CREDENTIALS,
+    }
+
 
 class LoginView(TokenObtainPairView):
+    serializer_class = AzTokenObtainPairSerializer
 
     def _authenticate_and_authorize(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -440,6 +452,21 @@ class LoginView(TokenObtainPairView):
             logger.error(f"LoginView - giriş loqu yazıla bilmədi ({user.username}): {str(e)}")
         return Response(data, status=status.HTTP_200_OK)
 
+    @staticmethod
+    def _extract_auth_failed_message(e: AuthenticationFailed) -> str:
+        """AuthenticationFailed.detail həm sadə string, həm də (simplejwt-də) dict ola bilər - hər ikisini idarə edir."""
+        detail = e.detail
+        if isinstance(detail, dict):
+            return str(detail.get("detail", INVALID_CREDENTIALS))
+        return str(detail)
+
+    @staticmethod
+    def _is_ldap_lock(e: AuthenticationFailed) -> bool:
+        """LDAP-da bloklanma/deaktivlik səbəbiylə atılan xətanı digər AuthenticationFailed-lərdən ayırır."""
+        detail = e.detail
+        code = getattr(detail, "code", None) if not isinstance(detail, dict) else detail.get("code")
+        return code == "ldap_lock"
+
     def post(self, request, *args, **kwargs):
         username = request.data.get("username")
         logger.info(f"LoginView.post - giriş cəhdi: {username}")
@@ -458,6 +485,19 @@ class LoginView(TokenObtainPairView):
                 except PermissionDenied as e:
                     logger.info(f"LoginView.post - {username} üçün icazə rədd edildi: {str(e)}")
                     return Response({'detail': str(e)}, status=HTTP_403_FORBIDDEN)
+                except AuthenticationFailed as e:
+                    message = self._extract_auth_failed_message(e)
+                    if self._is_ldap_lock(e):
+                        # LDAP-da bloklanıbsa, bunu lokal sistemdə də əks etdiririk ki, hər giriş
+                        # cəhdində yenidən LDAP-a sorğu göndərməyə ehtiyac qalmasın.
+                        attempt.locked = True
+                        attempt.save()
+                        logger.warning(f"LoginView.post - {username} LDAP-da bloklandığı üçün sistemdə də kilidləndi")
+                        return Response({'detail': message}, status=HTTP_403_FORBIDDEN)
+                    attempt.fails += 1
+                    attempt.save()
+                    logger.info(f"LoginView.post - {username} üçün autentifikasiya xətası: {message}")
+                    return Response({'detail': message}, status=HTTP_401_UNAUTHORIZED)
                 except Exception as e:
                     logger.error(f"Login failed for {username}: {str(e)}")
                     attempt.fails += 1
@@ -473,6 +513,15 @@ class LoginView(TokenObtainPairView):
             except PermissionDenied as e:
                 logger.info(f"LoginView.post - {username} üçün icazə rədd edildi: {str(e)}")
                 return Response({'detail': str(e)}, status=HTTP_403_FORBIDDEN)
+            except AuthenticationFailed as e:
+                message = self._extract_auth_failed_message(e)
+                if self._is_ldap_lock(e):
+                    LoginAttempt.objects.create(username=username, locked=True)
+                    logger.warning(f"LoginView.post - {username} LDAP-da bloklandığı üçün sistemdə də kilidləndi")
+                    return Response({'detail': message}, status=HTTP_403_FORBIDDEN)
+                LoginAttempt.objects.create(username=username, fails=1)
+                logger.info(f"LoginView.post - {username} üçün autentifikasiya xətası: {message}")
+                return Response({'detail': message}, status=HTTP_401_UNAUTHORIZED)
             except Exception as e:
                 logger.error(f"Login failed for new user {username}: {str(e)}")
                 LoginAttempt.objects.create(username=username, fails=1)
@@ -480,7 +529,7 @@ class LoginView(TokenObtainPairView):
 
 
 class DepartmentDetailAPIView(RetrieveAPIView):
-    queryset = Department.objects.prefetch_related("children", "children__manager", "manager")
+    queryset = Department.objects.prefetch_related("children", "children__manager", "manager", "curator")
     serializer_class = DepartmentListSerializer
     lookup_field = "id"
 

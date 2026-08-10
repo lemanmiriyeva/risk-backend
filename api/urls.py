@@ -9,4 +9,6 @@ urlpatterns = [
     path('attendance-permissions/', include('attendance_permissions.urls')),
     path('notifications/', include('notifications.urls')),
 
+    path('operations/', include('operations.urls')),
+
 ]
