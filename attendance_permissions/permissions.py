@@ -76,6 +76,18 @@ def is_apparatus_head(user):
     return bool(user.role_id and getattr(user.role, "order", None) == APPARATUS_HEAD_ROLE_ORDER)
 
 
+def get_department_descendant_ids(department):
+    """
+    Verilən departamentin öz id-si + bütün alt-şöbələrinin (children, nəvə-şöbələr də daxil)
+    id-lərini qaytarır. Departament rəhbəri/direktoru yalnız öz department_id-sinə DEQIQ bərabər
+    olan sorğuları deyil, öz iyerarxiyasındakı bütün alt-şöbələrin sorğularını da görməlidir.
+    """
+    ids = [department.id]
+    for child in department.children.all():
+        ids += get_department_descendant_ids(child)
+    return ids
+
+
 def get_visible_queryset(user, queryset):
     """
     GET (list) üçün: user-in roluna görə görə biləcəyi sorğuları filtrləyir.
@@ -91,8 +103,9 @@ def get_visible_queryset(user, queryset):
     if is_department_manager(user):
         if not user.department_id:
             return queryset.filter(user=user)
+        department_ids = get_department_descendant_ids(user.department)
         return queryset.filter(
-            department_id=user.department_id,
+            department_id__in=department_ids,
             organization_id=user.organization_id,
         )
 
@@ -168,7 +181,8 @@ def can_review(user, permission_obj):
             return False, "Bu mərhələdə sorğuya yalnız şöbə müdiri baxa bilər."
         if permission_obj.user_id == user.id:
             return False, "Öz icazənizi özünüz təsdiqləyə/rədd edə bilməzsiniz - bu, Aparat rəhbərinin səlahiyyətindədir."
-        if permission_obj.department_id != user.department_id or permission_obj.organization_id != user.organization_id:
+        department_ids = get_department_descendant_ids(user.department) if user.department_id else []
+        if permission_obj.department_id not in department_ids or permission_obj.organization_id != user.organization_id:
             return False, "Bu icazə sizin departamentinizə aid deyil."
         return True, None
 
