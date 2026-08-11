@@ -113,13 +113,23 @@ def get_visible_queryset(user, queryset):
 
 
 def get_department_manager(department):
-    """Bildiriş göndərmək üçün: departamentin rəhbərini tapır (Department.manager, olmasa rolu manager olan işçi)."""
-    if not department:
-        return None
-    if department.manager_id:
-        return department.manager
+    """
+    Bildiriş göndərmək üçün: departamentin rəhbərini tapır.
+    Əvvəlcə departamentin özündə axtarır (Department.manager, olmasa rolu manager olan işçi);
+    tapılmasa YUXARI (parent) departamentlərə qalxaraq davam edir - çünki alt-şöbənin öz
+    rəhbəri təyin olunmaya bilər, bu halda əsl rəhbər üst departamentin direktorudur.
+    """
     from authentication.models import User
-    return User.objects.filter(department=department, role__is_manager_role=True, is_active=True).first()
+
+    current = department
+    while current:
+        if current.manager_id:
+            return current.manager
+        manager = User.objects.filter(department=current, role__is_manager_role=True, is_active=True).first()
+        if manager:
+            return manager
+        current = current.parent
+    return None
 
 
 def get_apparatus_head(organization):
