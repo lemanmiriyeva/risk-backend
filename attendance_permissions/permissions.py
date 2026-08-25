@@ -167,19 +167,11 @@ def get_apparatus_head_fallback_recipients(organization):
 
 
 def can_review(user, permission_obj):
-    """
-    Təsdiq/rədd üçün: (icazə var mı, xəta_mesajı) formatında qaytarır.
-    xəta_mesajı None-dursa icazə var deməkdir.
-
-    İki mərhələli axın:
-      - status=PENDING            -> yalnız şöbə müdiri (və ya superuser) baxa bilər
-      - status=AWAITING_APPARATUS -> yalnız Aparat rəhbəri (və ya superuser) baxa bilər
-      - digər statuslar (approved/rejected) -> artıq bağlanıb, heç kim baxa bilməz
-    """
     from .models import AttendancePermission
 
     if permission_obj.status not in (
-        AttendancePermission.STATUS_PENDING, AttendancePermission.STATUS_AWAITING_APPARATUS,
+        AttendancePermission.STATUS_PENDING,
+        AttendancePermission.STATUS_AWAITING_APPARATUS,
     ):
         return False, "Bu sorğuya artıq baxılıb, statusu dəyişdirilə bilməz."
 
@@ -187,18 +179,142 @@ def can_review(user, permission_obj):
         return True, None
 
     if permission_obj.status == AttendancePermission.STATUS_PENDING:
-        if not is_department_manager(user):
-            return False, "Bu mərhələdə sorğuya yalnız şöbə müdiri baxa bilər."
-        if permission_obj.user_id == user.id:
-            return False, "Öz icazənizi özünüz təsdiqləyə/rədd edə bilməzsiniz - bu, Aparat rəhbərinin səlahiyyətindədir."
-        department_ids = get_department_descendant_ids(user.department) if user.department_id else []
-        if permission_obj.department_id not in department_ids or permission_obj.organization_id != user.organization_id:
-            return False, "Bu icazə sizin departamentinizə aid deyil."
+
+        reviewer = get_configured_department_reviewer(
+            permission_obj.department
+        )
+
+        if not reviewer:
+            return False, (
+                "Bu departament üçün icazə təsdiqləyicisi təyin edilməyib."
+            )
+
+        if reviewer.id != user.id:
+            return False, (
+                "Bu mərhələdə icazəyə yalnız təyin olunmuş "
+                "şöbə müdiri və ya əvəzləyici baxa bilər."
+            )
+
+        if permission_obj.organization_id != user.organization_id:
+            return False, "Bu icazə sizin qurumunuza aid deyil."
+
         return True, None
 
-    # status == AWAITING_APPARATUS
-    if not is_apparatus_head(user):
-        return False, "Bu mərhələdə sorğuya yalnız Aparat rəhbəri baxa bilər."
+    # AWAITING_APPARATUS
+
+    if not is_apparatus_head_enabled(permission_obj.organization):
+        return False, (
+            "Bu qurum üçün Aparat rəhbəri təsdiqi deaktiv edilib."
+        )
+
+    apparatus_head = get_configured_apparatus_head(
+        permission_obj.organization
+    )
+
+    if not apparatus_head:
+        return False, (
+            "Bu qurum üçün Aparat rəhbəri təyin edilməyib."
+        )
+
+    if apparatus_head.id != user.id:
+        return False, (
+            "Bu mərhələdə sorğuya yalnız Aparat rəhbəri baxa bilər."
+        )
+
     if permission_obj.organization_id != user.organization_id:
         return False, "Bu icazə sizin qurumunuza aid deyil."
+
     return True, None
+
+def can_manage_attendance_permission_config(user):
+    """
+    İcazə konfiqurasiyasını yalnız:
+      - superuser
+      - öz qurumunun admini
+    dəyişə bilər.
+    """
+
+    if not user or not getattr(user, "is_authenticated", False):
+        return False
+
+    if user.is_superuser:
+        return True
+
+    return bool(
+        getattr(user, "is_org_admin", False)
+        and getattr(user, "organization_id", None)
+    )
+
+
+def get_attendance_organization_config(organization):
+    from .models import AttendancePermissionOrganizationConfig
+
+    if not organization:
+        return None
+
+    config, _ = AttendancePermissionOrganizationConfig.objects.get_or_create(
+        organization=organization,
+        defaults={
+            "apparatus_head_enabled": True,
+        },
+    )
+
+    return config
+
+
+def is_apparatus_head_enabled(organization):
+    config = get_attendance_organization_config(organization)
+
+    if not config:
+        return True
+
+    return config.apparatus_head_enabled
+
+
+def get_configured_apparatus_head(organization):
+    """
+    Config-də seçilmiş Aparat rəhbərini qaytarır.
+    Config yoxdursa mövcud köhnə mexanizmə fallback edir.
+    """
+
+    if not organization:
+        return None
+
+    config = get_attendance_organization_config(organization)
+
+    if config and not config.apparatus_head_enabled:
+        return None
+
+    if config and config.apparatus_head_id:
+        return config.apparatus_head
+
+    return get_apparatus_head(organization)
+
+
+def get_configured_department_reviewer(department):
+    """
+    Departament üçün workflow-da birinci mərhələdə baxacaq şəxsi qaytarır.
+
+    manager_enabled=True:
+        Department.manager
+
+    manager_enabled=False:
+        replacement_user
+    """
+
+    if not department:
+        return None
+
+    config = getattr(
+        department,
+        "attendance_permission_config",
+        None,
+    )
+
+    if not config:
+        return get_department_manager(department)
+
+    if config.manager_enabled:
+        return get_department_manager(department)
+
+    return config.replacement_user

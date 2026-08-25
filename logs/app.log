@@ -2028,3 +2028,63 @@ INFO 2026-08-11 09:40:17,781 middleware [LOQ] laman.bashirova - Baxdı - modul=-
 INFO 2026-08-11 09:40:17,804 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
 INFO 2026-08-11 09:40:17,811 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
 INFO 2026-08-11 09:40:17,822 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-08-25 12:26:42,774 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-25 12:26:43,009 views LoginView.post - root üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-08-25 12:26:46,992 views RequestPasswordResetView.post - şifrə sıfırlama sorğusu: root
+INFO 2026-08-25 12:26:47,301 views RequestPasswordResetView._send_code - root üçün kod mail ilə göndərildi
+INFO 2026-08-25 12:27:13,361 views ConfirmPasswordResetView.post - root öz şifrəsini uğurla yenilədi
+INFO 2026-08-25 12:27:18,134 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-25 12:27:22,096 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: root
+INFO 2026-08-25 12:27:22,599 views RequestTwoFAResetView._reset_and_notify - root üçün 2FA sıfırlandı
+INFO 2026-08-25 12:27:38,653 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-25 12:27:38,887 views root uğurla daxil oldu
+INFO 2026-08-25 12:27:38,894 services [LOQ] root - Daxil oldu - modul=- - root sistemə daxil oldu
+INFO 2026-08-25 12:27:39,097 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 12:27:39,121 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 12:28:03,735 middleware [LOQ] root - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=::1
+INFO 2026-08-25 12:28:09,986 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 12:28:10,002 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 12:28:10,019 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 12:32:20,986 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 12:32:21,015 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 12:32:21,040 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 12:32:24,135 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 12:32:24,148 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 12:32:24,166 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 12:32:30,781 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 12:32:31,679 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 12:32:31,702 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 13:55:43,570 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 13:55:43,584 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 13:55:43,602 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 13:55:50,673 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 13:55:50,706 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 13:58:29,782 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 13:58:29,827 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 13:58:29,861 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:02:16,361 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:02:16,391 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:02:16,419 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:02:18,931 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:02:18,945 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:02:18,972 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:04:54,597 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:04:54,631 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:04:55,595 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:04:58,899 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:04:58,912 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:04:58,962 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:09:02,403 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:09:02,438 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:09:02,467 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:09:08,556 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:09:08,569 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:09:08,600 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:19:34,734 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:19:34,738 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:19:34,775 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:19:34,801 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-25 14:19:34,804 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:19:34,828 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-25 14:19:37,683 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-25 14:19:37,717 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı

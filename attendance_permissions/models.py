@@ -73,3 +73,88 @@ class AttendancePermission(TimestampsModel):
             if not self.organization_id:
                 self.organization = self.user.organization
         super().save(*args, **kwargs)
+
+class AttendancePermissionOrganizationConfig(TimestampsModel):
+    """
+    Qurum üzrə icazə workflow konfiqurasiyası.
+
+    Aparat rəhbərinin icazə workflow-da aktiv olub-olmamasını
+    və konkret Aparat rəhbərini təyin edir.
+    """
+
+    organization = models.OneToOneField(
+        "authentication.Organization",
+        on_delete=models.CASCADE,
+        related_name="attendance_permission_config",
+        verbose_name="Qurum",
+    )
+
+    apparatus_head_enabled = models.BooleanField(
+        default=True,
+        verbose_name="Aparat rəhbəri aktivdir",
+    )
+
+    apparatus_head = models.ForeignKey(
+        "authentication.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="attendance_apparatus_head_configs",
+        verbose_name="Aparat rəhbəri",
+    )
+
+    class Meta:
+        verbose_name = "İcazə konfiqurasiyası"
+        verbose_name_plural = "İcazə konfiqurasiyaları"
+
+    def __str__(self):
+        return f"{self.organization.title} - İcazə konfiqurasiyası"
+
+
+class AttendancePermissionDepartmentConfig(TimestampsModel):
+    """
+    Hər departament üçün ayrıca icazə workflow konfiqurasiyası.
+
+    manager_enabled=False olduqda replacement_user seçilməlidir.
+    """
+
+    organization = models.ForeignKey(
+        "authentication.Organization",
+        on_delete=models.CASCADE,
+        related_name="attendance_permission_department_configs",
+        verbose_name="Qurum",
+    )
+
+    department = models.OneToOneField(
+        "authentication.Department",
+        on_delete=models.CASCADE,
+        related_name="attendance_permission_config",
+        verbose_name="Departament",
+    )
+
+    manager_enabled = models.BooleanField(
+        default=True,
+        verbose_name="Şöbə müdiri aktivdir",
+    )
+
+    replacement_user = models.ForeignKey(
+        "authentication.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="attendance_permission_replacement_configs",
+        verbose_name="Əvəzləyici şəxs",
+    )
+
+    class Meta:
+        verbose_name = "Departament icazə konfiqurasiyası"
+        verbose_name_plural = "Departament icazə konfiqurasiyaları"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization", "department"],
+                name="unique_attendance_permission_department_config",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.organization.title} / {self.department.title}"

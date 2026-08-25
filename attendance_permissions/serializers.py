@@ -5,6 +5,12 @@ from rest_framework import serializers
 
 from .models import AttendancePermission
 
+from authentication.models import User, Department
+
+from .models import (
+    AttendancePermissionOrganizationConfig,
+    AttendancePermissionDepartmentConfig,
+)
 
 class AttendancePermissionSerializer(serializers.ModelSerializer):
     """Oxumaq üçün - siyahı və detay."""
@@ -97,3 +103,165 @@ class AttendancePermissionCreateSerializer(serializers.ModelSerializer):
 class AttendancePermissionReviewSerializer(serializers.Serializer):
     action = serializers.ChoiceField(choices=["approve", "reject"])
     comment = serializers.CharField(required=False, allow_blank=True, default="")
+
+class AttendancePermissionUserShortSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(read_only=True)
+    department_name = serializers.SerializerMethodField()
+    role_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "name",
+            "firstname",
+            "lastname",
+            "department",
+            "department_name",
+            "role_name",
+            "is_active",
+        )
+
+    def get_department_name(self, obj):
+        return obj.department.title if obj.department else None
+
+    def get_role_name(self, obj):
+        return obj.role.title if obj.role else None
+
+
+class AttendancePermissionOrganizationConfigSerializer(serializers.ModelSerializer):
+    apparatus_head_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AttendancePermissionOrganizationConfig
+        fields = (
+            "id",
+            "organization",
+            "apparatus_head_enabled",
+            "apparatus_head",
+            "apparatus_head_name",
+        )
+        read_only_fields = (
+            "id",
+            "organization",
+            "apparatus_head_name",
+        )
+
+    def get_apparatus_head_name(self, obj):
+        return obj.apparatus_head.name if obj.apparatus_head else None
+
+    def validate_apparatus_head(self, value):
+        request = self.context.get("request")
+
+        if not value:
+            return value
+
+        if request and value.organization_id != request.user.organization_id:
+            raise serializers.ValidationError(
+                "Aparat rəhbəri sizin qurumunuza aid olmalıdır."
+            )
+
+        if not value.is_active:
+            raise serializers.ValidationError(
+                "Seçilən Aparat rəhbəri aktiv istifadəçi deyil."
+            )
+
+        return value
+
+    def validate(self, attrs):
+        enabled = attrs.get(
+            "apparatus_head_enabled",
+            getattr(self.instance, "apparatus_head_enabled", True),
+        )
+
+        apparatus_head = attrs.get(
+            "apparatus_head",
+            getattr(self.instance, "apparatus_head", None),
+        )
+
+        if enabled and not apparatus_head:
+            raise serializers.ValidationError({
+                "apparatus_head": "Aparat rəhbəri aktivdirsə, şəxs seçilməlidir."
+            })
+
+        return attrs
+
+
+class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer):
+    department_name = serializers.CharField(
+        source="department.title",
+        read_only=True,
+    )
+
+    manager_name = serializers.SerializerMethodField()
+    replacement_user_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AttendancePermissionDepartmentConfig
+        fields = (
+            "id",
+            "organization",
+            "department",
+            "department_name",
+            "manager_enabled",
+            "manager_name",
+            "replacement_user",
+            "replacement_user_name",
+        )
+        read_only_fields = (
+            "id",
+            "organization",
+            "department_name",
+            "manager_name",
+            "replacement_user_name",
+        )
+
+    def get_manager_name(self, obj):
+        return obj.department.manager.name if obj.department.manager else None
+
+    def get_replacement_user_name(self, obj):
+        return (
+            obj.replacement_user.name
+            if obj.replacement_user
+            else None
+        )
+
+    def validate_replacement_user(self, value):
+        if not value:
+            return value
+
+        request = self.context.get("request")
+
+        if request:
+            if value.organization_id != request.user.organization_id:
+                raise serializers.ValidationError(
+                    "Əvəzləyici şəxs sizin qurumunuza aid olmalıdır."
+                )
+
+        if not value.is_active:
+            raise serializers.ValidationError(
+                "Əvəzləyici şəxs aktiv istifadəçi deyil."
+            )
+
+        return value
+
+    def validate(self, attrs):
+        manager_enabled = attrs.get(
+            "manager_enabled",
+            getattr(self.instance, "manager_enabled", True),
+        )
+
+        replacement_user = attrs.get(
+            "replacement_user",
+            getattr(self.instance, "replacement_user", None),
+        )
+
+        if not manager_enabled and not replacement_user:
+            raise serializers.ValidationError({
+                "replacement_user": (
+                    "Şöbə müdiri deaktivdirsə, əvəzləyici şəxs seçilməlidir."
+                )
+            })
+
+        return attrs
