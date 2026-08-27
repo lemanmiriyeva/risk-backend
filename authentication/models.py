@@ -67,7 +67,7 @@ class Organization(TimestampsModel):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    phone_number = models.CharField(unique=True, max_length=12, verbose_name='Telefon nömrəsi', null=True, blank=True)
+    phone_number = models.CharField(unique=True, max_length=13, verbose_name='Telefon nömrəsi', null=True, blank=True)
     fin_kod = models.CharField(
         max_length=7, null=True, blank=True, verbose_name="FIN kod"
     )
@@ -169,6 +169,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Department(TimestampsModel):
     title = models.CharField(max_length=255, verbose_name="Departamentin adı")
     shortname = models.CharField(max_length=255, default="", verbose_name="Adın qısaltması")
+    organization = models.ForeignKey(
+        "authentication.Organization", on_delete=models.CASCADE, null=True, blank=True,
+        related_name="departments", verbose_name="Qurum",
+        help_text=(
+            "Bu departamentin aid olduğu qurum. Alt (child) departamentlər üçün bu sahə "
+            "avtomatik olaraq valideyn departamentin qurumu ilə eyniləşdirilir."
+        ),
+    )
     parent = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True, related_name='children',)
     manager = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True,
                                 related_name='managed_departments')
@@ -184,9 +192,20 @@ class Department(TimestampsModel):
         verbose_name = "Departament"
         verbose_name_plural = "Departamentlər"
 
+    def save(self, *args, **kwargs):
+        # Child departament həmişə valideyninin qurumuna aid olur (data uyğunsuzluğunun qarşısını almaq üçün).
+        if self.parent_id and self.parent.organization_id:
+            self.organization_id = self.parent.organization_id
+        super().save(*args, **kwargs)
+
 
 class Role(TimestampsModel):
     title = models.CharField(max_length=255, blank=True, verbose_name="Vəzifə")
+    department = models.ForeignKey(
+        'Department', on_delete=models.CASCADE, null=True, blank=True, related_name='roles',
+        verbose_name="Departament",
+        help_text="Bu vəzifənin aid olduğu departament (və dolayısı ilə qurum).",
+    )
     is_manager_role = models.BooleanField(
         default=False,
         verbose_name="Şöbə rəhbəri səlahiyyəti",
@@ -204,6 +223,10 @@ class Role(TimestampsModel):
     class Meta:
         verbose_name = 'Vəzifə'
         verbose_name_plural = 'Vəzifələr'
+
+    @property
+    def organization_id(self):
+        return self.department.organization_id if self.department_id else None
 
 
 class PasswordReset(models.Model):

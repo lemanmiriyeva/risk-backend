@@ -5,7 +5,7 @@ from .views import UserView, UsersView, LogoutView, LoginView, DepartmentListVie
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 from .views_2fa import TwoFASetupView, TwoFAVerifyView
 from .views import OrgUsersView, OrgUserDetailView, OrganizationListView, OrganizationDetailView, \
-    ResetOrgUserPasswordView
+    ResetOrgUserPasswordView, OrgDepartmentsView, OrgDepartmentDetailView, OrgRolesView, OrgRoleDetailView
 
 urlpatterns = [
     path('token/', LoginView.as_view(), name='token'),
@@ -29,4 +29,9 @@ urlpatterns = [
     path('organization/users/<int:id>/reset-password/', ResetOrgUserPasswordView.as_view(),
          name='org-user-reset-password'),
     path('roles/', RoleListView.as_view(), name='role-list'),
+    # İnzibatçı paneli - quruma bağlı Departament/Vəzifə idarəetməsi
+    path('organization/departments/', OrgDepartmentsView.as_view(), name='org-departments-list'),
+    path('organization/departments/<int:id>/', OrgDepartmentDetailView.as_view(), name='org-department-detail'),
+    path('organization/roles/', OrgRolesView.as_view(), name='org-roles-list'),
+    path('organization/roles/<int:id>/', OrgRoleDetailView.as_view(), name='org-role-detail'),
 ]

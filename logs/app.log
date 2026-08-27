@@ -2088,3 +2088,54 @@ INFO 2026-08-25 14:19:34,804 views AttendancePermissionListCreateView.get - root
 INFO 2026-08-25 14:19:34,828 views UserView.get - root öz məlumatını sorğuladı
 INFO 2026-08-25 14:19:37,683 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
 INFO 2026-08-25 14:19:37,717 views AttendancePermissionListCreateView.get - root icazə siyahısını sorğuladı
+INFO 2026-08-26 15:34:00,053 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-26 15:34:00,321 views LoginView.post - root üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-08-26 15:34:31,199 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-26 15:34:50,197 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-26 15:34:50,253 views laman.bashirova - 2FA kodu yanlış daxil edildi
+INFO 2026-08-26 15:34:50,253 views LoginView.post - laman.bashirova üçün icazə rədd edildi: 2FA kodu yanlışdır.
+INFO 2026-08-26 15:34:52,637 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-08-26 15:34:52,867 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-08-26 15:35:10,948 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-26 15:35:33,299 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-26 15:35:33,544 views LoginView.post - root üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-08-26 15:35:41,701 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-26 15:35:42,111 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-08-27 09:18:01,708 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-27 09:18:18,398 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-27 09:18:18,446 views laman.bashirova - 2FA kodu yanlış daxil edildi
+INFO 2026-08-27 09:18:18,446 views LoginView.post - laman.bashirova üçün icazə rədd edildi: 2FA kodu yanlışdır.
+INFO 2026-08-27 09:18:28,320 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-08-27 09:18:28,546 views laman.bashirova - 2FA kodu yanlış daxil edildi
+INFO 2026-08-27 09:18:28,559 views LoginView.post - laman.bashirova üçün icazə rədd edildi: 2FA kodu yanlışdır.
+INFO 2026-08-27 09:18:32,375 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-08-27 09:18:32,612 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-08-27 09:18:43,923 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-27 09:18:44,245 views LoginView.post - root üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-08-27 09:34:10,540 views LoginView.post - giriş cəhdi: root
+INFO 2026-08-27 09:34:10,809 views root uğurla daxil oldu
+INFO 2026-08-27 09:34:10,822 services [LOQ] root - Daxil oldu - modul=- - root sistemə daxil oldu
+INFO 2026-08-27 09:34:10,861 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:34:10,875 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:34:37,201 middleware [LOQ] root - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=::1
+INFO 2026-08-27 09:34:52,641 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:35:03,670 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:35:14,844 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:35:38,810 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:40:05,862 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:43:35,518 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:43:35,550 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:43:35,586 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:43:44,498 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:43:44,555 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:43:45,205 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:43:45,218 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=::1
+INFO 2026-08-27 09:43:57,238 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:43:57,256 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:43:57,303 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:43:57,373 middleware [LOQ] root - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=::1
+INFO 2026-08-27 09:44:06,818 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:44:06,841 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:49:35,510 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-08-27 09:49:35,526 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-08-27 09:49:35,552 views UserView.get - root öz məlumatını sorğuladı

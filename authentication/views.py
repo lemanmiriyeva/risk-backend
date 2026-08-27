@@ -24,7 +24,8 @@ from core.permissions import user_has_any_module_access
 from activity_logs import services as activity_log_services
 from .models import User, Department, LoginAttempt, PasswordReset, Role
 from .serializers import UserSerializer, DepartmentListSerializer, PasswordResetRequestSerializer, \
-    OrganizationDetailSerializer, RoleSerializer, TwoFAResetRequestSerializer, UserProfileUpdateSerializer
+    OrganizationDetailSerializer, RoleSerializer, TwoFAResetRequestSerializer, UserProfileUpdateSerializer, \
+    DepartmentAdminSerializer, DepartmentWriteSerializer, RoleAdminSerializer, RoleWriteSerializer
 
 ipw = IpWare()
 
@@ -529,7 +530,7 @@ class LoginView(TokenObtainPairView):
 
 
 class DepartmentDetailAPIView(RetrieveAPIView):
-    queryset = Department.objects.prefetch_related("children", "children__manager", "manager", "curator")
+    queryset = Department.objects.prefetch_related("children", "children__manager", "manager")
     serializer_class = DepartmentListSerializer
     lookup_field = "id"
 
@@ -729,3 +730,249 @@ class RoleListView(APIView):
     def get(self, request):
         roles = Role.objects.all().order_by('order')
         return Response(RoleSerializer(roles, many=True).data, status=HTTP_200_OK)
+
+
+# ---------------------------------------------------------------------------
+# İnzibatçı paneli: Departamentlər (quruma bağlı, valideyn/child hierarxiyası)
+# ---------------------------------------------------------------------------
+
+NO_DEPARTMENT_ORGANIZATION = "İdarə etdiyiniz qurum təyin edilə bilmədi."
+
+
+class OrgDepartmentsView(APIView):
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def _base_queryset(self):
+        return Department.objects.select_related("organization", "parent", "manager") \
+            .prefetch_related("children", "children__manager", "roles", "roles__department")
+
+    def get(self, request, *args, **kwargs):
+        requester = request.user
+        org_id = request.query_params.get("organization")
+
+        if requester.is_superuser:
+            qs = self._base_queryset()
+            if org_id:
+                qs = qs.filter(organization_id=org_id)
+            qs = qs.filter(parent__isnull=True)
+        else:
+            organization = get_managed_organization(request) or requester.organization
+            if not organization:
+                return Response({"detail": NO_DEPARTMENT_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+            qs = self._base_queryset().filter(organization=organization, parent__isnull=True)
+
+        qs = qs.order_by("order", "title")
+        return Response(DepartmentAdminSerializer(qs, many=True).data, status=HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        requester = request.user
+        data = {k: v for k, v in request.data.items()}
+
+        if not requester.is_superuser:
+            organization = get_managed_organization(request) or requester.organization
+            if not organization:
+                return Response({"detail": NO_DEPARTMENT_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+            data["organization"] = organization.id
+
+        serializer = DepartmentWriteSerializer(data=data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        department = serializer.save()
+
+        logger.info(f"{requester.username} - yeni departament yaratdı: {department.title}")
+        return Response(DepartmentAdminSerializer(department).data, status=HTTP_201_CREATED)
+
+
+def _get_scoped_department(request, id):
+    requester = request.user
+    department = Department.objects.select_related("organization", "parent", "manager") \
+        .prefetch_related("children", "roles").filter(id=id).first()
+    if not department:
+        return None, Response({"detail": "Departament tapılmadı."}, status=HTTP_404_NOT_FOUND)
+
+    if requester.is_superuser:
+        return department, None
+
+    if requester.is_org_admin:
+        if not requester.organization_id or department.organization_id != requester.organization_id:
+            return None, Response({"detail": "Bu departament sizin qurumunuza aid deyil."}, status=HTTP_403_FORBIDDEN)
+        return department, None
+
+    return None, Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
+
+
+class OrgDepartmentDetailView(APIView):
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, id, *args, **kwargs):
+        department, error = _get_scoped_department(request, id)
+        if error:
+            return error
+        return Response(DepartmentAdminSerializer(department).data, status=HTTP_200_OK)
+
+    def patch(self, request, id, *args, **kwargs):
+        department, error = _get_scoped_department(request, id)
+        if error:
+            return error
+
+        data = {k: v for k, v in request.data.items()}
+        if not request.user.is_superuser:
+            # Qurum admini departamenti başqa quruma köçürə bilməz.
+            data.pop("organization", None)
+
+        serializer = DepartmentWriteSerializer(department, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        logger.info(f"{request.user.username} - {department.title} departamentini yenilədi")
+        return Response(DepartmentAdminSerializer(department).data, status=HTTP_200_OK)
+
+    def delete(self, request, id, *args, **kwargs):
+        department, error = _get_scoped_department(request, id)
+        if error:
+            return error
+
+        if department.children.exists():
+            return Response(
+                {"detail": "Alt departamentləri olan departament silinə bilməz. Əvvəlcə onları silin."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+        if department.roles.exists():
+            return Response(
+                {"detail": "Vəzifələri olan departament silinə bilməz. Əvvəlcə vəzifələri silin."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+        if department.user_set.exists():
+            return Response(
+                {"detail": "Bu departamentə bağlı işçilər var. Əvvəlcə onları başqa departamentə köçürün."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        title = department.title
+        department.delete()
+        logger.info(f"{request.user.username} - {title} departamentini sildi")
+        return Response({"detail": "Departament silindi."}, status=HTTP_200_OK)
+
+
+# ---------------------------------------------------------------------------
+# İnzibatçı paneli: Vəzifələr (Role) - departamentə (və dolayısı ilə quruma) bağlı
+# ---------------------------------------------------------------------------
+
+class OrgRolesView(APIView):
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        requester = request.user
+        department_id = request.query_params.get("department")
+        org_id = request.query_params.get("organization")
+
+        qs = Role.objects.select_related("department", "department__organization").order_by("order", "title")
+
+        if requester.is_superuser:
+            if department_id:
+                qs = qs.filter(department_id=department_id)
+            elif org_id:
+                qs = qs.filter(department__organization_id=org_id)
+        else:
+            organization = get_managed_organization(request) or requester.organization
+            if not organization:
+                return Response({"detail": NO_DEPARTMENT_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
+            qs = qs.filter(department__organization=organization)
+            if department_id:
+                qs = qs.filter(department_id=department_id)
+
+        return Response(RoleAdminSerializer(qs, many=True).data, status=HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        requester = request.user
+        data = {k: v for k, v in request.data.items()}
+
+        department_id = data.get("department")
+        if not department_id:
+            return Response({"detail": "Departament seçilməlidir."}, status=HTTP_400_BAD_REQUEST)
+        department, error = _get_scoped_department(request, department_id)
+        if error:
+            return error
+
+        serializer = RoleWriteSerializer(data=data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        role = serializer.save()
+
+        logger.info(f"{requester.username} - yeni vəzifə yaratdı: {role.title} ({department.title})")
+        return Response(RoleAdminSerializer(role).data, status=HTTP_201_CREATED)
+
+
+def _get_scoped_role(request, id):
+    requester = request.user
+    role = Role.objects.select_related("department", "department__organization").filter(id=id).first()
+    if not role:
+        return None, Response({"detail": "Vəzifə tapılmadı."}, status=HTTP_404_NOT_FOUND)
+
+    if requester.is_superuser:
+        return role, None
+
+    if requester.is_org_admin:
+        org_id = role.department.organization_id if role.department else None
+        if not requester.organization_id or org_id != requester.organization_id:
+            return None, Response({"detail": "Bu vəzifə sizin qurumunuza aid deyil."}, status=HTTP_403_FORBIDDEN)
+        return role, None
+
+    return None, Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
+
+
+class OrgRoleDetailView(APIView):
+    permission_classes = [IsOrgAdmin]
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, id, *args, **kwargs):
+        role, error = _get_scoped_role(request, id)
+        if error:
+            return error
+        return Response(RoleAdminSerializer(role).data, status=HTTP_200_OK)
+
+    def patch(self, request, id, *args, **kwargs):
+        role, error = _get_scoped_role(request, id)
+        if error:
+            return error
+
+        data = {k: v for k, v in request.data.items()}
+        new_department_id = data.get("department")
+        if new_department_id and not request.user.is_superuser:
+            # Qurum admini vəzifəni başqa quruma aid departamentə köçürə bilməz.
+            _, dep_error = _get_scoped_department(request, new_department_id)
+            if dep_error:
+                return dep_error
+
+        serializer = RoleWriteSerializer(role, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        logger.info(f"{request.user.username} - {role.title} vəzifəsini yenilədi")
+        return Response(RoleAdminSerializer(role).data, status=HTTP_200_OK)
+
+    def delete(self, request, id, *args, **kwargs):
+        role, error = _get_scoped_role(request, id)
+        if error:
+            return error
+
+        if User.objects.filter(role=role).exists():
+            return Response(
+                {"detail": "Bu vəzifədə istifadəçilər var. Əvvəlcə onların vəzifəsini dəyişin."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+        if role.children.exists():
+            return Response(
+                {"detail": "Alt vəzifələri olan vəzifə silinə bilməz. Əvvəlcə onları silin."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        title = role.title
+        role.delete()
+        logger.info(f"{request.user.username} - {title} vəzifəsini sildi")
+        return Response({"detail": "Vəzifə silindi."}, status=HTTP_200_OK)
