@@ -196,6 +196,9 @@ class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer
 
     manager_name = serializers.SerializerMethodField()
     replacement_user_name = serializers.SerializerMethodField()
+    no_manager_fallback_display = serializers.CharField(
+        source="get_no_manager_fallback_display", read_only=True,
+    )
 
     class Meta:
         model = AttendancePermissionDepartmentConfig
@@ -208,6 +211,8 @@ class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer
             "manager_name",
             "replacement_user",
             "replacement_user_name",
+            "no_manager_fallback",
+            "no_manager_fallback_display",
         )
         read_only_fields = (
             "id",
@@ -215,6 +220,7 @@ class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer
             "department_name",
             "manager_name",
             "replacement_user_name",
+            "no_manager_fallback_display",
         )
 
     def get_manager_name(self, obj):
@@ -257,10 +263,27 @@ class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer
             getattr(self.instance, "replacement_user", None),
         )
 
-        if not manager_enabled and not replacement_user:
+        no_manager_fallback = attrs.get(
+            "no_manager_fallback",
+            getattr(
+                self.instance,
+                "no_manager_fallback",
+                AttendancePermissionDepartmentConfig.FALLBACK_REPLACEMENT,
+            ),
+        )
+
+        # Yalnız "əvəzləyici" seçildiyi halda replacement_user məcburidir.
+        # "Birbaşa Aparat rəhbəri" seçilibsə, 1-ci mərhələ tamamilə keçildiyi
+        # üçün əvəzləyici şəxs təyin etməyə ehtiyac yoxdur.
+        if (
+            not manager_enabled
+            and no_manager_fallback == AttendancePermissionDepartmentConfig.FALLBACK_REPLACEMENT
+            and not replacement_user
+        ):
             raise serializers.ValidationError({
                 "replacement_user": (
-                    "Şöbə müdiri deaktivdirsə, əvəzləyici şəxs seçilməlidir."
+                    "Şöbə müdiri deaktivdirsə və seçim 'Əvəzləyici şəxs'dirsə, "
+                    "əvəzləyici şəxs seçilməlidir."
                 )
             })
 

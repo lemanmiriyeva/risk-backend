@@ -43,9 +43,9 @@ class SubModuleInline(admin.TabularInline):
 class ModuleAdmin(admin.ModelAdmin):
     form = ModuleAdminForm
     list_display = ("title", "url_endpoint", "permitted_organizations_display")
-    list_filter = ("permitted_organizations", "permitted_users")
+    list_filter = ("permitted_organizations", "permitted_users", "admin_users")
     search_fields = ("title",)
-    filter_horizontal = ("permitted_organizations", "permitted_users")
+    filter_horizontal = ("permitted_organizations", "permitted_users", "admin_users")
     inlines = (SubModuleInline,)
 
     @admin.display(description="Əlaqəli qurumlar")

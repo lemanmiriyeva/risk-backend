@@ -146,6 +146,31 @@ class AttendancePermissionDepartmentConfig(TimestampsModel):
         verbose_name="Əvəzləyici şəxs",
     )
 
+    # manager_enabled=False olduqda (yəni şöbə müdiri yoxdursa/təyin edilməyibsə)
+    # sorğu 1-ci mərhələdə kimə göndərilsin:
+    #   FALLBACK_REPLACEMENT - aşağıdakı `replacement_user`-ə (əvəzləyici, adi 1-ci
+    #       mərhələ kimi baxır, sonra normal axınla Aparat rəhbərinə keçir)
+    #   FALLBACK_APPARATUS   - 1-ci mərhələ tamamilə keçilir, sorğu birbaşa
+    #       Aparat rəhbərinə (2-ci/son mərhələ) göndərilir
+    FALLBACK_REPLACEMENT = "replacement"
+    FALLBACK_APPARATUS = "apparatus"
+    NO_MANAGER_FALLBACK_CHOICES = [
+        (FALLBACK_REPLACEMENT, "Əvəzləyici şəxs (1-ci mərhələdə baxır)"),
+        (FALLBACK_APPARATUS, "Birbaşa Aparat rəhbəri (2-ci/son mərhələ)"),
+    ]
+
+    no_manager_fallback = models.CharField(
+        max_length=16,
+        choices=NO_MANAGER_FALLBACK_CHOICES,
+        default=FALLBACK_REPLACEMENT,
+        verbose_name="Şöbə müdiri yoxdursa",
+        help_text=(
+            "Şöbə müdiri aktiv deyilsə (manager_enabled=False), sorğu kimə "
+            "göndərilsin: əvəzləyici şəxsə, yoxsa birbaşa Aparat rəhbərinə "
+            "(1-ci mərhələ tamamilə keçilərək)."
+        ),
+    )
+
     class Meta:
         verbose_name = "Departament icazə konfiqurasiyası"
         verbose_name_plural = "Departament icazə konfiqurasiyaları"

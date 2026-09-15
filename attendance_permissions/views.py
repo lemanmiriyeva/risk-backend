@@ -103,6 +103,24 @@ class AttendancePermissionListCreateView(APIView):
         flow = get_approval_flow(user)
 
         # ---------------------------------------------------------
+        # DEPARTAMENT KONFİQURASİYASI: şöbə müdiri deaktivdirsə (yoxdursa)
+        # və admin "Birbaşa Aparat rəhbəri" seçibsə, normal FULL axının
+        # 1-ci mərhələsi (şöbə müdiri/əvəzləyici) tamamilə keçilir və
+        # sorğu mövcud APARAT RƏHBƏRİ YALNIZ axını ilə emal olunur.
+        # ---------------------------------------------------------
+
+        if flow == FLOW_FULL and user.department_id:
+            dept_config = AttendancePermissionDepartmentConfig.objects.filter(
+                department_id=user.department_id
+            ).first()
+            if (
+                dept_config
+                and not dept_config.manager_enabled
+                and dept_config.no_manager_fallback == AttendancePermissionDepartmentConfig.FALLBACK_APPARATUS
+            ):
+                flow = FLOW_APPARATUS_ONLY
+
+        # ---------------------------------------------------------
         # İLK STATUSU MÜƏYYƏN EDİRİK
         # ---------------------------------------------------------
 

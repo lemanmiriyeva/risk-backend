@@ -2139,3 +2139,47 @@ INFO 2026-08-27 09:44:06,841 views UserView.get - root öz məlumatını sorğul
 INFO 2026-08-27 09:49:35,510 views UserView.get - root öz məlumatını sorğuladı
 INFO 2026-08-27 09:49:35,526 middleware [LOQ] root - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
 INFO 2026-08-27 09:49:35,552 views UserView.get - root öz məlumatını sorğuladı
+INFO 2026-09-15 10:40:55,812 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-15 10:40:55,869 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-09-15 10:41:06,451 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-15 10:41:06,782 views laman.bashirova uğurla daxil oldu
+INFO 2026-09-15 10:41:06,794 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-09-15 10:41:06,868 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:41:06,889 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:41:24,463 middleware [LOQ] laman.bashirova - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=::1
+INFO 2026-09-15 10:41:25,782 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:41:25,796 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:41:25,847 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:41:36,023 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:41:36,034 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:41:46,012 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:41:56,026 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:41:56,037 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:42:06,014 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:42:16,011 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:42:16,023 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:42:26,076 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:42:26,098 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:42:41,033 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:42:41,053 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:42:46,032 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:42:56,046 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:42:56,071 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:43:13,423 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:13,437 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:43:13,472 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:23,185 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:43:23,203 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:43:41,682 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:41,701 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:43:41,733 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:41,773 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:43:43,390 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:43,424 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:48,299 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:43:48,340 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:44:16,687 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:44:16,704 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:44:16,723 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 10:44:16,785 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-15 10:44:16,803 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1

@@ -26,12 +26,22 @@ NOT_ELIGIBLE_MODULE = "Bu modul/alt-modul sizin qurumunuz üçün nəzərdə tut
 USER_OUTSIDE_ORG = "Bu istifadəçi sizin qurumunuza aid deyil."
 
 
-def _user_payload(user, permitted_ids):
+def _user_payload(user, permitted_ids, admin_ids=None):
+    # Bu funksiya yalnız artıq `organization`-a (permitted_organizations) girişi
+    # açılmış modul/alt-modullar üçün çağırılır (bax: OrgModuleAccessView.get).
+    # Ona görə həmin qurumun admini (is_org_admin) və superuser bu modula
+    # Module.has_permission()-də olduğu kimi AVTOMATİK giriş əldə edir - explicit
+    # `permitted_users` sahəsində olmasalar belə. Bunu nəzərə almasaq, panel
+    # onların checkbox/switch-ini səhvən "off" göstərir, halbuki əslində girişləri var.
+    implicit_access = bool(user.is_superuser) or bool(getattr(user, "is_org_admin", False))
+    is_module_admin = bool(admin_ids) and user.id in admin_ids
     return {
         "id": user.id,
         "username": user.username,
         "name": user.name,
-        "has_access": user.id in permitted_ids,
+        "has_access": implicit_access or is_module_admin or (user.id in permitted_ids),
+        "implicit_access": implicit_access,
+        "is_module_admin": is_module_admin,
     }
 
 
@@ -130,14 +140,16 @@ class OrgModuleAccessView(APIView):
         modules_data = []
         for module in Module.objects.filter(permitted_organizations=organization).order_by("id"):
             module_permitted_ids = set(module.permitted_users.values_list("id", flat=True))
+            module_admin_ids = set(module.admin_users.values_list("id", flat=True))
 
             sub_modules_data = []
             for sub in module.sub_modules.filter(permitted_organizations=organization).order_by("id"):
                 sub_permitted_ids = set(sub.permitted_users.values_list("id", flat=True))
+                # Modul admini əsas modulun bütün alt-modullarına da girişə malikdir.
                 sub_modules_data.append({
                     "id": sub.id,
                     "title": sub.title,
-                    "users": [_user_payload(u, sub_permitted_ids) for u in org_users],
+                    "users": [_user_payload(u, sub_permitted_ids, module_admin_ids) for u in org_users],
                 })
 
             modules_data.append({
@@ -145,7 +157,7 @@ class OrgModuleAccessView(APIView):
                 "title": module.title,
                 "description": module.description,
                 "sub_modules": sub_modules_data,
-                "users": [_user_payload(u, module_permitted_ids) for u in org_users],
+                "users": [_user_payload(u, module_permitted_ids, module_admin_ids) for u in org_users],
             })
 
         return Response({
@@ -163,10 +175,12 @@ class OrgModuleAccessView(APIView):
         user_id = request.data.get("user_id")
         grant = bool(request.data.get("grant"))
 
-        if target not in ("module", "sub_module") or not obj_id or not user_id:
+        # "module_admin" - yalnız Module səviyyəsində mövcuddur (alt-modul yoxdur):
+        # istifadəçiyə bu modul daxilində əlavə/redaktə səlahiyyəti verir/geri alır.
+        if target not in ("module", "sub_module", "module_admin") or not obj_id or not user_id:
             return Response({"detail": "target, id və user_id sahələri məcburidir."}, status=HTTP_400_BAD_REQUEST)
 
-        model = Module if target == "module" else SubModule
+        model = Module if target in ("module", "module_admin") else SubModule
         try:
             obj = model.objects.get(id=obj_id)
         except model.DoesNotExist:
@@ -187,7 +201,16 @@ class OrgModuleAccessView(APIView):
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        if grant:
+        if target == "module_admin":
+            if grant:
+                obj.admin_users.add(target_user)
+                # Modul admini avtomatik giriş də əldə etməlidir.
+                obj.permitted_users.add(target_user)
+                logger.info(f"{request.user} - {target_user.username} üçün {obj} MODUL ADMİNİ təyin etdi")
+            else:
+                obj.admin_users.remove(target_user)
+                logger.info(f"{request.user} - {target_user.username} üçün {obj} modul admin statusunu ləğv etdi")
+        elif grant:
             obj.permitted_users.add(target_user)
             logger.info(f"{request.user} - {target_user.username} üçün {obj} girişi AÇDI")
         else:

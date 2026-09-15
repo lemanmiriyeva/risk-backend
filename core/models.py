@@ -37,6 +37,17 @@ class Module(TimestampsModel):
             "admininin admin panelindən) verilir."
         )
     )
+    admin_users = models.ManyToManyField(
+        "authentication.User", related_name="administered_modules", blank=True,
+        verbose_name="Modul adminləri (əlavə/redaktə icazəli)",
+        help_text=(
+            "Bu modul daxilində məzmun əlavə etmək/redaktə etmək səlahiyyəti olan "
+            "istifadəçilər. Modul admini avtomatik olaraq modula giriş də əldə edir "
+            "(permitted_users-a əlavə edilməsinə ehtiyac yoxdur). Konkret app-larda "
+            "bu, `core.permissions.is_module_admin(user, module_code)` vasitəsilə "
+            "yoxlanılıb 'add'/'change' səlahiyyəti kimi tətbiq oluna bilər."
+        ),
+    )
     url_endpoint = models.CharField(max_length=120, verbose_name="Url linki")
     image = models.ImageField(upload_to='module_images/%Y/%m/%d', null=True, blank=True, verbose_name="Modul ikonu")
 
@@ -53,6 +64,13 @@ class Module(TimestampsModel):
         org_id = getattr(user, "organization_id", None)
         return bool(org_id) and self.permitted_organizations.filter(id=org_id).exists()
 
+    def is_admin_user(self, user):
+        if not user or not user.is_authenticated:
+            return False
+        if user.is_superuser:
+            return True
+        return self.admin_users.filter(id=user.id).exists()
+
     def has_permission(self, user):
         if not user or not user.is_authenticated:
             return False
@@ -62,6 +80,8 @@ class Module(TimestampsModel):
             org_id = getattr(user, "organization_id", None)
             if org_id and self.permitted_organizations.filter(id=org_id).exists():
                 return True
+        if self.admin_users.filter(id=user.id).exists():
+            return True
         return self.permitted_users.filter(id=user.id).exists()
 
     def get_permitted_sub_modules(self, user):
