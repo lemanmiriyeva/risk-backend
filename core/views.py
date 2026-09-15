@@ -85,6 +85,7 @@ class ModuleOrganizationAccessView(APIView):
                 "title": module.title,
                 "description": module.description,
                 "organization_ids": module_org_ids,
+                "is_public": module.is_public,
                 "sub_modules": sub_modules_data,
             })
 
@@ -93,8 +94,24 @@ class ModuleOrganizationAccessView(APIView):
     def post(self, request, *args, **kwargs):
         target = request.data.get("target")
         obj_id = request.data.get("id")
-        organization_id = request.data.get("organization_id")
         grant = bool(request.data.get("grant"))
+
+        # "module_public" - modulu (və onun bütün alt modullarını) "hər kəsə
+        # açıq" edir/geri alır. Yalnız Module səviyyəsində mövcuddur, qurum
+        # seçilməsinə ehtiyac yoxdur - girişi bütün qurum/istifadəçi
+        # icazələrindən asılı olmadan hamıya açır.
+        if target == "module_public":
+            if not obj_id:
+                return Response({"detail": "id sahəsi məcburidir."}, status=HTTP_400_BAD_REQUEST)
+            module = Module.objects.filter(id=obj_id).first()
+            if not module:
+                return Response({"detail": MODULE_DOES_NOT_EXIST}, status=HTTP_404_NOT_FOUND)
+            module.is_public = grant
+            module.save(update_fields=["is_public"])
+            logger.info(f"{request.user} - {module} modulunu 'hər kəsə açıq' = {grant} olaraq dəyişdi")
+            return Response({"is_public": grant}, status=HTTP_200_OK)
+
+        organization_id = request.data.get("organization_id")
 
         if target not in ("module", "sub_module") or not obj_id or not organization_id:
             return Response(

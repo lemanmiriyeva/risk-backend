@@ -717,23 +717,18 @@ class AttendancePermissionConfigView(APIView):
 
         departments = (
             Department.objects
-            .filter(
-                # Department modelində organization yoxdur.
-                # User-lər vasitəsilə qurumun departamentlərini tapırıq.
-                id__in=User.objects.filter(
-                    organization=organization,
-                    department__isnull=False,
-                ).values("department_id").distinct()
-            )
+            .filter(organization=organization)
             .select_related("manager")
             .prefetch_related("attendance_permission_config")
             .order_by("order", "title")
         )
 
         department_configs = {
+            # department sahəsi OneToOneField-dir - bir departamentin DB-də cəmi
+            # BİR konfiqurasiya sətri ola bilər (organization-dan asılı olmayaraq).
+            # Ona görə burada `organization` ilə əlavə filtr qoymuruq.
             config.department_id: config
             for config in AttendancePermissionDepartmentConfig.objects.filter(
-                organization=organization,
                 department__in=departments,
             ).select_related(
                 "department",
@@ -747,11 +742,14 @@ class AttendancePermissionConfigView(APIView):
             config = department_configs.get(department.id)
 
             if not config:
-                config = AttendancePermissionDepartmentConfig.objects.create(
-                    organization=organization,
+                config, _ = AttendancePermissionDepartmentConfig.objects.get_or_create(
                     department=department,
-                    manager_enabled=True,
+                    defaults={"organization": organization, "manager_enabled": True},
                 )
+
+            if config.organization_id != organization.id:
+                config.organization = organization
+                config.save(update_fields=["organization"])
 
             department_data.append(
                 AttendancePermissionDepartmentConfigSerializer(
@@ -832,23 +830,19 @@ class AttendancePermissionDepartmentConfigView(APIView):
         )
 
         # Departament həmin qurumda real istifadə olunurmu?
-        belongs_to_org = User.objects.filter(
-            organization=organization,
-            department=department,
-        ).exists()
-
-        if not belongs_to_org:
+        if not department.organization_id or department.organization_id != organization.id:
             return Response(
                 {"detail": "Bu departament sizin qurumunuza aid deyil."},
                 status=HTTP_403_FORBIDDEN,
             )
 
-        config, _ = (
-            AttendancePermissionDepartmentConfig.objects.get_or_create(
-                organization=organization,
-                department=department,
-            )
+        config, _ = AttendancePermissionDepartmentConfig.objects.get_or_create(
+            department=department,
+            defaults={"organization": organization},
         )
+        if config.organization_id != organization.id:
+            config.organization = organization
+            config.save(update_fields=["organization"])
 
         serializer = AttendancePermissionDepartmentConfigSerializer(
             config,

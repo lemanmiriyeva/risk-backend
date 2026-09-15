@@ -50,6 +50,14 @@ class Module(TimestampsModel):
     )
     url_endpoint = models.CharField(max_length=120, verbose_name="Url linki")
     image = models.ImageField(upload_to='module_images/%Y/%m/%d', null=True, blank=True, verbose_name="Modul ikonu")
+    is_public = models.BooleanField(
+        default=False, verbose_name="Hər kəsə açıq",
+        help_text=(
+            "Aktiv edilsə, bu modul VƏ onun bütün alt modulları qurum/istifadəçi "
+            "icazələrindən asılı olmayaraq bütün autentifikasiya olunmuş istifadəçilərə "
+            "görünür və açıq olur."
+        ),
+    )
 
     def __str__(self):
         return self.title
@@ -59,6 +67,8 @@ class Module(TimestampsModel):
         verbose_name_plural = "Modullar"
 
     def is_user_eligible(self, user):
+        if self.is_public:
+            return True
         if not self.permitted_organizations.exists():
             return True
         org_id = getattr(user, "organization_id", None)
@@ -75,6 +85,8 @@ class Module(TimestampsModel):
         if not user or not user.is_authenticated:
             return False
         if user.is_superuser:
+            return True
+        if self.is_public:
             return True
         if getattr(user, "is_org_admin", False):
             org_id = getattr(user, "organization_id", None)
@@ -125,6 +137,8 @@ class SubModule(TimestampsModel):
         unique_together = ("module", "title")
 
     def is_user_eligible(self, user):
+        if self.module.is_public:
+            return True
         if not self.permitted_organizations.exists():
             return True
         org_id = getattr(user, "organization_id", None)
@@ -133,6 +147,10 @@ class SubModule(TimestampsModel):
     def has_permission(self, user):
         if not user or not user.is_authenticated:
             return False
+        # Modul "hər kəsə açıq" (is_public) olaraq işarələnibsə, əsas modulla
+        # birlikdə bütün alt modulları da avtomatik hər kəsə açıq olur.
+        if self.module.is_public:
+            return True
         if not self.module.has_permission(user):
             return False
         if user.is_superuser:

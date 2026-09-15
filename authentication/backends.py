@@ -10,11 +10,29 @@ from core.contstants import INACTIVE_ACCOUNT
 
 logger = logging.getLogger('django_auth_ldap')
 
+# LDAP vasitəsilə ilk dəfə giriş edən (yeni yaradılan) istifadəçilərə avtomatik
+# təyin ediləcək qurum. Bu qurum mövcud deyilsə, ilk yeni istifadəçi yaradılanda
+# avtomatik yaradılır.
+DEFAULT_LDAP_ORGANIZATION_TITLE = "Müdafiə Sənayesi Nazirliyi"
+
+
+def get_default_ldap_organization():
+    from authentication.models import Organization
+
+    organization, _ = Organization.objects.get_or_create(
+        title=DEFAULT_LDAP_ORGANIZATION_TITLE,
+        defaults={"is_active": True},
+    )
+    return organization
+
+
 class CustomLDAPBackend(LDAPBackend):
     def get_or_build_user(self, username, ldap_user):
         user, built = super().get_or_build_user(username, ldap_user)
         if hasattr(user, 'access_id') and not isinstance(user.access_id, int) and user.access_id is not None:
             user.access_id = None
+        if built and not user.organization_id:
+            user.organization = get_default_ldap_organization()
         return user, built
 
     def authenticate(self, request=None, username=None, password=None, **kwargs):
@@ -74,7 +92,8 @@ class CustomLDAPBackend(LDAPBackend):
                             email=user_attrs.get('email', ''),
                             firstname=user_attrs.get('firstname', ''),
                             lastname=user_attrs.get('lastname', ''),
-                            is_active=True
+                            is_active=True,
+                            organization=get_default_ldap_organization(),
                         )
 
                         logger.debug(f"Created new Django user for LDAP user {username}")
