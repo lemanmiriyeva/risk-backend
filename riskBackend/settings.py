@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'attendance_permissions',
     'notifications',
     'operations',
+    'bulletin',
 ]
 # settings.py
 

@@ -2204,3 +2204,21 @@ INFO 2026-09-15 12:08:27,491 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-09-15 12:08:37,382 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
 INFO 2026-09-15 12:08:37,398 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
 INFO 2026-09-15 12:08:37,417 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-09-15 14:30:36,913 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 14:30:36,934 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 14:30:41,664 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-15 14:30:41,717 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-09-15 14:30:50,601 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-15 14:31:01,843 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-15 14:31:01,885 views laman.bashirova uğurla daxil oldu
+INFO 2026-09-15 14:31:01,885 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-09-15 14:31:01,928 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 14:31:01,938 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 14:31:58,201 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 14:31:58,221 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 14:31:58,249 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 15:38:57,303 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 15:38:57,335 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-15 15:38:57,495 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 15:38:58,241 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-15 15:38:58,307 views UserView.get - laman.bashirova öz məlumatını sorğuladı

@@ -10,5 +10,6 @@ urlpatterns = [
     path('notifications/', include('notifications.urls')),
 
     path('operations/', include('operations.urls')),
+    path('bulletin/', include('bulletin.urls')),
 
 ]

@@ -27,4 +27,13 @@ class Command(BaseCommand):
             defaults={"title": "İkinci Modul", "url_endpoint": "ikinci-modul"}
         )
 
+        Module.objects.update_or_create(
+            code="bulletin",
+            defaults={
+                "title": "Elanlar lövhəsi",
+                "description": "Sərəncamlar, fərmanlar, daxili qaydalar, xəbərlər və doğum günləri.",
+                "url_endpoint": "elanlar",
+            }
+        )
+
         self.stdout.write(self.style.SUCCESS("Modullar seed edildi."))
