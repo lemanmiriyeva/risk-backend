@@ -286,9 +286,13 @@ def get_configured_apparatus_head(organization):
         return None
 
     if config and config.apparatus_head_id:
-        return config.apparatus_head
+        head = config.apparatus_head
+    else:
+        head = get_apparatus_head(organization)
 
-    return get_apparatus_head(organization)
+    # Aparat rəhbəri məzuniyyətdədirsə, əvəzləyicisinə yönləndirilir
+    # (məzuniyyət bitəndə avtomatik geri qayıdır).
+    return get_active_delegate_for(head)
 
 
 def get_configured_department_reviewer(department):
@@ -312,9 +316,90 @@ def get_configured_department_reviewer(department):
     )
 
     if not config:
-        return get_department_manager(department)
+        reviewer = get_department_manager(department)
+    elif config.manager_enabled:
+        reviewer = get_department_manager(department)
+    else:
+        reviewer = config.replacement_user
 
-    if config.manager_enabled:
-        return get_department_manager(department)
+    # Təyin olunmuş şəxs hazırda məzuniyyətdədirsə, sorğu onun seçdiyi
+    # əvəzləyiciyə yönləndirilir. Bu, tarixə görə hesablandığı üçün
+    # məzuniyyət bitən kimi avtomatik geri qayıdır (bax: LeavePeriod).
+    return get_active_delegate_for(reviewer)
 
-    return config.replacement_user
+
+# ---------------------------------------------------------------------------
+# MƏZUNİYYƏT DÖVRÜ / ƏVƏZLƏYİCİ
+# ---------------------------------------------------------------------------
+
+def can_set_leave_period(user):
+    """
+    Məzuniyyət dövrü və əvəzləyici təyin etmək səlahiyyəti YALNIZ şöbə müdiri
+    və ondan yuxarı vəzifələr üçündür (adi əməkdaşın icazə axınında təsdiq
+    rolu olmadığı üçün əvəzləyiciyə ehtiyacı yoxdur).
+
+    «Şöbə müdiri və ondan yuxarı» sayılanlar:
+      - superuser / qurum admini
+      - Aparat rəhbəri (User.is_apparatus_head)
+      - vəzifəsi şöbə rəhbəri səlahiyyətli olanlar (Role.is_manager_role)
+      - hər hansı departamentin təyin edilmiş rəhbəri (Department.manager)
+    """
+    if not user or not getattr(user, "is_authenticated", False):
+        return False
+
+    if user.is_superuser or getattr(user, "is_org_admin", False):
+        return True
+
+    if getattr(user, "is_apparatus_head", False):
+        return True
+
+    role = getattr(user, "role", None)
+    if role and getattr(role, "is_manager_role", False):
+        return True
+
+    from authentication.models import Department
+    return Department.objects.filter(manager_id=user.id).exists()
+
+
+def get_active_leave_period(user, day=None):
+    """Verilən gün üçün istifadəçinin aktiv məzuniyyət dövrünü qaytarır."""
+    if not user:
+        return None
+
+    from django.utils import timezone
+    from .models import LeavePeriod
+
+    day = day or timezone.localdate()
+    return (
+        LeavePeriod.objects.filter(
+            user_id=user.id,
+            is_cancelled=False,
+            start_date__lte=day,
+            end_date__gte=day,
+        )
+        .select_related("replacement_user")
+        .first()
+    )
+
+
+def get_active_delegate_for(user, day=None, _seen=None):
+    """
+    İstifadəçi məzuniyyətdədirsə, onu əvəz edən şəxsi qaytarır; əks halda
+    istifadəçinin özünü.
+
+    Zəncirvari əvəzləmələri də həll edir (A → B, B özü də məzuniyyətdədirsə
+    B → C). `_seen` dövrə (A → B → A) halında sonsuz döngəni dayandırır.
+    """
+    if not user:
+        return None
+
+    _seen = _seen or set()
+    if user.id in _seen:
+        return user
+    _seen.add(user.id)
+
+    leave = get_active_leave_period(user, day)
+    if not leave or not leave.replacement_user_id:
+        return user
+
+    return get_active_delegate_for(leave.replacement_user, day, _seen)

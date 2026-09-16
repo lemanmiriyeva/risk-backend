@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import UserManager, AbstractBaseUser, PermissionsMixin, Group, GroupManager, Permission
 from django.utils import timezone
 from core.models import TimestampsModel
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.contrib.auth.hashers import make_password
 
 
@@ -68,6 +68,11 @@ class Organization(TimestampsModel):
 
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(unique=True, max_length=13, verbose_name='Telefon nömrəsi', null=True, blank=True)
+    work_phone_number = models.CharField(
+        max_length=4, null=True, blank=True, verbose_name='İş telefonu (daxili)',
+        validators=[RegexValidator(r'^\d{4}$', 'Daxili nömrə düz 4 rəqəmdən ibarət olmalıdır.')],
+        help_text="Ofis daxili nömrəsi (4 rəqəm), məs. 1234.",
+    )
     fin_kod = models.CharField(
         max_length=7, null=True, blank=True, verbose_name="FIN kod"
     )

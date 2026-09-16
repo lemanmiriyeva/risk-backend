@@ -32,3 +32,30 @@ class BulletinEditorPermission(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return self.has_permission(request, view)
+
+class BulletinCategoryPermission(BasePermission):
+    """
+    Kateqoriyalara (Sərəncam/Fərman/Daxili qayda növləri) BAXIŞ - modula
+    girişi olan hər kəs üçün.
+
+    Yeni kateqoriya ƏLAVƏ ETMƏK / redaktə / silmək - YALNIZ bu modulun
+    təyin edilmiş admini (Module.admin_users) və superuser üçün.
+
+    Diqqət: `BulletinEditorPermission`-dan fərqli olaraq burada qurum admini
+    (is_org_admin) KİFAYƏT DEYİL - kateqoriya siyahısı bütün qurumlar üçün
+    ortaq olduğundan, onu yalnız modulun öz admini idarə etməlidir.
+    """
+
+    def has_permission(self, request, view):
+        if not ModuleAccessPermission().has_permission(request, view):
+            return False
+
+        if request.method in SAFE_METHODS:
+            return True
+
+        return bool(is_module_admin(request.user, BULLETIN_MODULE_CODE))
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return self.has_permission(request, view)

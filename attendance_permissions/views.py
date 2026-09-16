@@ -33,12 +33,14 @@ from authentication.models import User, Department
 from .models import (
     AttendancePermissionOrganizationConfig,
     AttendancePermissionDepartmentConfig,
+    LeavePeriod,
 )
 
 from .serializers import (
     AttendancePermissionOrganizationConfigSerializer,
     AttendancePermissionDepartmentConfigSerializer,
     AttendancePermissionUserShortSerializer,
+    LeavePeriodSerializer,
 )
 
 from .permissions import (
@@ -58,7 +60,13 @@ from .permissions import (
     FLOW_AUTO,
     FLOW_APPARATUS_ONLY,
     FLOW_FULL, can_manage_attendance_permission_config,
+
+    can_set_leave_period,
+    get_active_leave_period,
 )
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 logger = logging.getLogger("colored")
 
 
@@ -893,3 +901,77 @@ class AttendancePermissionConfigUsersView(APIView):
             ).data,
             status=HTTP_200_OK,
         )
+
+class MyLeavePeriodViewSet(viewsets.ModelViewSet):
+    """
+    İstifadəçinin ÖZ məzuniyyət dövrləri (şəxsi kabinet üçün).
+
+    Yalnız şöbə müdiri və ondan yuxarı vəzifələr istifadə edə bilər
+    (bax: can_set_leave_period). Hər kəs yalnız öz qeydlərini görür və
+    dəyişir - `user` sahəsi sorğudan GÖTÜRÜLMÜR, serverdə təyin edilir.
+    """
+
+    serializer_class = LeavePeriodSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return (
+            LeavePeriod.objects.filter(user=self.request.user)
+            .select_related("replacement_user", "replacement_user__role")
+        )
+
+    def _ensure_eligible(self):
+        if not can_set_leave_period(self.request.user):
+            raise PermissionDenied(
+                "Məzuniyyət dövrü və əvəzləyici yalnız şöbə müdiri və ondan "
+                "yuxarı vəzifələr üçün təyin edilə bilər."
+            )
+
+    def perform_create(self, serializer):
+        self._ensure_eligible()
+        serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        self._ensure_eligible()
+        serializer.save(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        self._ensure_eligible()
+        instance.delete()
+
+    @action(detail=False, methods=["get"], url_path="eligibility")
+    def eligibility(self, request):
+        """
+        Şəxsi kabinetdə «Məzuniyyət» tabının göstərilib-göstərilməyəcəyini
+        və hazırda aktiv əvəzləməni bildirir.
+        """
+        allowed = can_set_leave_period(request.user)
+        active = get_active_leave_period(request.user) if allowed else None
+
+        # Əvəzləyici seçimi üçün eyni qurumdakı digər aktiv işçilər.
+        replacements = []
+        if allowed:
+            qs = (
+                User.objects.filter(
+                    organization_id=request.user.organization_id,
+                    is_active=True,
+                )
+                .exclude(id=request.user.id)
+                .select_related("role", "department")
+                .order_by("firstname", "lastname")
+            )
+            replacements = [
+                {
+                    "id": u.id,
+                    "name": u.name,
+                    "role_name": u.role.title if u.role else None,
+                    "department_name": u.department.title if u.department else None,
+                }
+                for u in qs
+            ]
+
+        return Response({
+            "allowed": allowed,
+            "active_leave": LeavePeriodSerializer(active).data if active else None,
+            "replacement_options": replacements,
+        })

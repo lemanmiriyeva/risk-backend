@@ -183,3 +183,67 @@ class AttendancePermissionDepartmentConfig(TimestampsModel):
 
     def __str__(self):
         return f"{self.organization.title} / {self.department.title}"
+
+class LeavePeriod(TimestampsModel):
+    """
+    Məzuniyyət dövrü və həmin dövr üçün əvəzləyici şəxs.
+
+    Yalnız ŞÖBƏ MÜDİRİ və ondan YUXARI vəzifələr üçün nəzərdə tutulub
+    (bax: `can_set_leave_period`), çünki məqsəd icazə sorğularını təsdiq
+    edən şəxsin məzuniyyətdə olduğu müddətdə işlərin dayanmamasıdır.
+
+    AVTOMATİK GERİ QAYITMA:
+    Bu model «həqiqət mənbəyi»dir - departament konfiqurasiyasındakı
+    `replacement_user` sahəsi ÜZƏRİNƏ YAZILMIR. Əvəzləmə hər sorğuda
+    tarixə görə HESABLANIR (bax: `get_active_delegate_for`), ona görə
+    məzuniyyət bitən kimi heç bir cron/planlayıcı olmadan avtomatik
+    olaraq köhnə vəziyyətə qayıdır. Eyni səbəbdən keçmiş dövrlər tarixçə
+    kimi saxlanılır və audit üçün əlçatan qalır.
+    """
+
+    user = models.ForeignKey(
+        "authentication.User",
+        on_delete=models.CASCADE,
+        related_name="leave_periods",
+        verbose_name="Əməkdaş",
+    )
+    replacement_user = models.ForeignKey(
+        "authentication.User",
+        on_delete=models.CASCADE,
+        related_name="leave_delegations",
+        verbose_name="Əvəzləyici şəxs",
+        help_text="Məzuniyyət dövründə işləri həll edəcək şəxs.",
+    )
+    start_date = models.DateField(verbose_name="Başlama tarixi")
+    end_date = models.DateField(verbose_name="Bitmə tarixi")
+    note = models.CharField(max_length=255, blank=True, default="", verbose_name="Qeyd")
+    is_cancelled = models.BooleanField(
+        default=False,
+        verbose_name="Ləğv edilib",
+        help_text="Məzuniyyət vaxtından əvvəl bitirilibsə işarələnir.",
+    )
+
+    class Meta:
+        ordering = ("-start_date",)
+        verbose_name = "Məzuniyyət dövrü"
+        verbose_name_plural = "Məzuniyyət dövrləri"
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(end_date__gte=models.F("start_date")),
+                name="leave_period_end_after_start",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.user} — {self.start_date} / {self.end_date}"
+
+    def covers(self, day):
+        return (
+            not self.is_cancelled
+            and self.start_date <= day <= self.end_date
+        )
+
+    @property
+    def is_active_now(self):
+        from django.utils import timezone
+        return self.covers(timezone.localdate())

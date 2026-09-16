@@ -159,6 +159,12 @@ class SubModule(TimestampsModel):
             org_id = getattr(user, "organization_id", None)
             if org_id and self.permitted_organizations.filter(id=org_id).exists():
                 return True
+        # Əsas modulun admini (Module.admin_users) bu alt-modula da tam
+        # (əlavə/redaktə daxil) giriş əldə edir - ayrıca alt-modul səviyyəsində
+        # təyin olunmasına ehtiyac yoxdur. Bax: Module.is_admin_user /
+        # core.permissions.is_module_admin.
+        if self.module.admin_users.filter(id=user.id).exists():
+            return True
         return self.permitted_users.filter(id=user.id).exists()
 
 class Status(TimestampsModel):

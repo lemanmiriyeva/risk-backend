@@ -7,7 +7,12 @@ from .views import (
     AttendancePermissionConfigView,
     AttendancePermissionDepartmentConfigView,
     AttendancePermissionConfigUsersView,
+    MyLeavePeriodViewSet,
 )
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register("my-leave-periods", MyLeavePeriodViewSet, basename="my-leave-period")
 
 app_name = "attendance_permissions"
 
@@ -47,4 +52,4 @@ urlpatterns = [
         AttendancePermissionDepartmentConfigView.as_view(),
         name="department-config",
     ),
-]
+] + router.urls

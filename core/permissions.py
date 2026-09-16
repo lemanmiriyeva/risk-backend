@@ -49,10 +49,12 @@ def is_module_admin(user, module_code):
     Verilən `module_code`-lu modul üçün istifadəçinin "modul admini" (əlavə/redaktə
     səlahiyyətli) olub-olmadığını yoxlayır (bax: Module.admin_users).
 
-    Superuser həmişə True qaytarır. Konkret app-ların permission siniflərində
-    (məs. risk/permissions.py-dəki RiskPermission) bunu `has_perm` yoxlamalarına
-    əlavə çağırıb, modul admininə həmin modul daxilində add/change səlahiyyəti
-    vermək üçün istifadə etmək olar:
+    Superuser həmişə True qaytarır. QEYD: `ModuleAccessPermission`-dan istifadə
+    edən bütün app-lar (risk, inventory, operations, activity_logs) üçün bu,
+    ARTIQ AVTOMATİK işləyir - Module.has_permission() və SubModule.has_permission()
+    admin_users-ı özləri yoxlayır, ayrıca kod yazmağa ehtiyac yoxdur. Bu funksiya
+    yalnız `ModuleAccessPermission` çərçivəsindən KƏNAR, xüsusi (custom) permission
+    məntiqi lazım olan hallar üçün nəzərdə tutulub:
 
         from core.permissions import is_module_admin
         if is_module_admin(request.user, "risk"):

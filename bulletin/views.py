@@ -14,7 +14,7 @@ from core.permissions import is_module_admin
 from .filters import CircularFilterSet, NewsPostFilterSet
 from .mixins import BulletinOrgScopedMixin
 from .models import BulletinCategory, Circular, NewsPost
-from .permissions import BulletinEditorPermission
+from .permissions import BulletinCategoryPermission, BulletinEditorPermission
 from .serializers import (
     BirthdayUserSerializer,
     BulletinCategorySerializer,
@@ -47,15 +47,18 @@ class BulletinCategoryViewSet(viewsets.ModelViewSet):
     """
     Sənəd kateqoriyaları (Fərman, Sərəncam, Daxili qayda və s.).
 
-    Sərt siyahı deyil - modul admini (superuser/qurum admini/bu modulun
-    admini) paneldən istənilən qədər yeni kateqoriya əlavə edə, sırasını
-    dəyişə və ya deaktiv edə bilər. Baxış modula girişi olan hər kəs üçün
-    açıqdır (bax: BulletinEditorPermission).
+    Sərt siyahı deyil - paneldən istənilən qədər yeni kateqoriya əlavə
+    etmək, sırasını dəyişmək və ya deaktiv etmək mümkündür.
+
+    YAZMA səlahiyyəti YALNIZ bu modulun admini (Module.admin_users) və
+    superuser üçündür - qurum admini kifayət deyil (bax:
+    BulletinCategoryPermission). Baxış isə modula girişi olan hər kəs
+    üçün açıqdır.
     """
 
     queryset = BulletinCategory.objects.all()
     serializer_class = BulletinCategorySerializer
-    permission_classes = [BulletinEditorPermission]
+    permission_classes = [BulletinCategoryPermission]
     module_code = BULLETIN_MODULE_CODE
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ["order", "label", "created_at"]
@@ -66,7 +69,13 @@ class BulletinCategoryViewSet(viewsets.ModelViewSet):
         # Sadə istifadəçi (idarəetmə hüququ olmayan) yalnız aktiv
         # kateqoriyaları görsün - deaktiv edilmiş növlər forma/filtrlərdə
         # görünməsin.
-        if not _can_manage_bulletin(self.request.user):
+        user = self.request.user
+        can_manage_categories = bool(
+            user.is_superuser or is_module_admin(user, BULLETIN_MODULE_CODE)
+        )
+        # Deaktiv edilmiş kateqoriyaları yalnız onları idarə edə bilən şəxs
+        # görsün - digərləri (qurum admini daxil) yalnız aktivləri görür.
+        if not can_manage_categories:
             return qs.filter(is_active=True)
         return qs
 
@@ -160,7 +169,16 @@ class BulletinPermissionsView(APIView):
     permission_classes = [BulletinEditorPermission]
 
     def get(self, request, *args, **kwargs):
-        return Response({"can_manage": _can_manage_bulletin(request.user)})
+        return Response({
+            "can_manage": _can_manage_bulletin(request.user),
+            # Kateqoriya əlavə etmək/redaktə daha dar səlahiyyətdir: yalnız
+            # modulun öz admini (və superuser). Qurum admini sənəd/xəbər
+            # yarada bilər, amma kateqoriya siyahısına toxuna bilməz.
+            "can_manage_categories": bool(
+                request.user.is_superuser
+                or is_module_admin(request.user, BULLETIN_MODULE_CODE)
+            ),
+        })
 
 
 class BulletinDashboardView(APIView):

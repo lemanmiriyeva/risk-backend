@@ -76,7 +76,8 @@ class UserSerializer(ModelSerializer):
         model = User
         depth = 2
         fields = (
-          "id", "username", "email", "firstname", "lastname", "is_active", "phone_number", "birth_date", "image",
+          "id", "username", "email", "firstname", "lastname", "is_active", "phone_number",
+          "work_phone_number", "birth_date", "image",
           "fin_kod", "gender",
           "role", "department", "main_department", "name",
           "special_permissions", 'permissions',
@@ -133,15 +134,23 @@ class UserProfileUpdateSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("firstname", "lastname", "phone_number", "birth_date", "gender", "image")
+        fields = ("firstname", "lastname", "phone_number", "work_phone_number", "birth_date", "gender", "image")
         extra_kwargs = {
             "firstname": {"required": False, "allow_blank": True},
             "lastname": {"required": False, "allow_blank": True},
             "phone_number": {"required": False, "allow_null": True},
+            "work_phone_number": {"required": False, "allow_null": True, "allow_blank": True},
             "birth_date": {"required": False, "allow_null": True},
             "gender": {"required": False, "allow_null": True},
             "image": {"required": False, "allow_null": True},
         }
+
+    def validate_work_phone_number(self, value):
+        if value in (None, ""):
+            return value
+        if not value.isdigit() or len(value) != 4:
+            raise serializers.ValidationError("Daxili nömrə düz 4 rəqəmdən ibarət olmalıdır (məs. 1234).")
+        return value
 
 
 class OrganizationSerializer(ModelSerializer):
@@ -190,7 +199,7 @@ class OrgUserSerializer(ModelSerializer):
         model = User
         fields = (
             "id", "username", "email", "firstname", "lastname", "name",
-            "phone_number", "birth_date", "is_active", "role", "role_name",
+            "phone_number", "work_phone_number", "birth_date", "is_active", "role", "role_name",
             "department", "department_name", "fin_kod", "is_org_admin", "organization",
             "two_fa_confirmed", "is_approved",
         )

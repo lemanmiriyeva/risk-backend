@@ -3,7 +3,7 @@ from datetime import time
 from django.utils import timezone
 from rest_framework import serializers
 
-from .models import AttendancePermission
+from .models import AttendancePermission, LeavePeriod
 
 from authentication.models import User, Department
 
@@ -286,5 +286,77 @@ class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer
                     "əvəzləyici şəxs seçilməlidir."
                 )
             })
+
+        return attrs
+
+class LeavePeriodSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source="user.name", read_only=True)
+    replacement_user_name = serializers.CharField(source="replacement_user.name", read_only=True)
+    replacement_role_name = serializers.SerializerMethodField()
+    is_active_now = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = LeavePeriod
+        fields = (
+            "id",
+            "user",
+            "user_name",
+            "replacement_user",
+            "replacement_user_name",
+            "replacement_role_name",
+            "start_date",
+            "end_date",
+            "note",
+            "is_cancelled",
+            "is_active_now",
+            "created_at",
+        )
+        read_only_fields = ("id", "user", "created_at")
+
+    def get_replacement_role_name(self, obj):
+        role = getattr(obj.replacement_user, "role", None)
+        return role.title if role else None
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+
+        start = attrs.get("start_date", getattr(self.instance, "start_date", None))
+        end = attrs.get("end_date", getattr(self.instance, "end_date", None))
+        replacement = attrs.get(
+            "replacement_user", getattr(self.instance, "replacement_user", None)
+        )
+
+        if start and end and end < start:
+            raise serializers.ValidationError(
+                {"end_date": "Bitmə tarixi başlama tarixindən əvvəl ola bilməz."}
+            )
+
+        if replacement and user and replacement.id == user.id:
+            raise serializers.ValidationError(
+                {"replacement_user": "Özünüzü əvəzləyici olaraq seçə bilməzsiniz."}
+            )
+
+        # Əvəzləyici eyni qurumdan olmalıdır.
+        if replacement and user and not user.is_superuser:
+            if replacement.organization_id != user.organization_id:
+                raise serializers.ValidationError(
+                    {"replacement_user": "Əvəzləyici eyni qurumdan seçilməlidir."}
+                )
+
+        # Üst-üstə düşən aktiv məzuniyyət dövrü olmasın.
+        if user and start and end:
+            overlapping = LeavePeriod.objects.filter(
+                user_id=user.id,
+                is_cancelled=False,
+                start_date__lte=end,
+                end_date__gte=start,
+            )
+            if self.instance:
+                overlapping = overlapping.exclude(id=self.instance.id)
+            if overlapping.exists():
+                raise serializers.ValidationError(
+                    "Bu tarixlərlə üst-üstə düşən başqa məzuniyyət dövrü artıq mövcuddur."
+                )
 
         return attrs
