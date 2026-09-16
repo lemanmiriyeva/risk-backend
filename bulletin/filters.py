@@ -4,7 +4,12 @@ from .models import Circular, NewsPost
 
 
 class CircularFilterSet(django_filters.FilterSet):
-    category = django_filters.ChoiceFilter(choices=Circular.CATEGORY_CHOICES)
+    # Qəsdən ChoiceFilter yox - `category` artıq FK-dır və dinamikdir, sərt
+    # `choices` siyahısı yoxdur. Slug (`?category=ferman`) ilə süzgəcləmək
+    # üçün sadə CharFilter kifayətdir; bu həm də əvvəlki
+    # "'super' object has no attribute '_set_choices'" xətasının mənbəyini
+    # (django-filter-in ChoiceField-i) tamamilə aradan qaldırır.
+    category = django_filters.CharFilter(field_name="category__key")
 
     class Meta:
         model = Circular

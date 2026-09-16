@@ -4,26 +4,78 @@ from django.utils import timezone
 from authentication.models import User
 
 
+class BulletinCategory(models.Model):
+    """
+    Sənəd növləri (Fərman, Sərəncam, Daxili qayda və s.).
+
+    Əvvəllər bu, `Circular.category` sahəsində sərt `choices` siyahısı idi.
+    İndi ayrıca cədvəldir ki, modul admini panel üzərindən (kodu toxunmadan)
+    yeni növ əlavə edə, sırasını dəyişə və ya lazım olmayanı deaktiv edə bilsin.
+
+    Qeyd: köhnə `django_filters.ChoiceFilter(choices=Circular.CATEGORY_CHOICES)`
+    Django 5.0 ilə uyğun gəlmirdi ("'super' object has no attribute
+    '_set_choices'") - bu modelə keçid səbəbi yalnız "dinamik kateqoriya"
+    tələbi deyil, həm də həmin xətanı kökündən aradan qaldırmaqdır (bax:
+    filters.py - artıq ChoiceFilter istifadə olunmur).
+    """
+
+    ICON_CHOICES = [
+        ("gavel", "Ədalət çəkisi"),
+        ("assignment", "Tapşırıq"),
+        ("rule", "Qayda"),
+        ("description", "Sənəd"),
+        ("article", "Məqalə"),
+        ("policy", "Siyasət"),
+        ("campaign", "Elan"),
+        ("event_note", "Tədbir"),
+        ("shield", "Qalxan"),
+        ("folder", "Qovluq"),
+    ]
+
+    key = models.SlugField(
+        max_length=50, unique=True, verbose_name="Açar",
+        help_text="Kiçik hərflərlə, boşluqsuz (məs. ferman) - keçidlərdə istifadə olunur.",
+    )
+    label = models.CharField(max_length=100, verbose_name="Ad")
+    plural_label = models.CharField(
+        max_length=100, blank=True, default="", verbose_name="Cəm forma",
+        help_text="Boş buraxılsa, «Ad» sahəsi istifadə olunur.",
+    )
+    description = models.CharField(max_length=255, blank=True, default="", verbose_name="Qısa izah")
+    icon = models.CharField(max_length=30, choices=ICON_CHOICES, default="description", verbose_name="İkon")
+    order = models.PositiveIntegerField(default=0, verbose_name="Sıra")
+    is_active = models.BooleanField(default=True, verbose_name="Aktivdir")
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Yaradılma tarixi")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Son dəyişiklik tarixi")
+
+    class Meta:
+        ordering = ("order", "id")
+        verbose_name = "Sənəd kateqoriyası"
+        verbose_name_plural = "Sənəd kateqoriyaları"
+
+    def __str__(self):
+        return self.label
+
+    def save(self, *args, **kwargs):
+        if not self.plural_label:
+            self.plural_label = self.label
+        super().save(*args, **kwargs)
+
+
 class Circular(models.Model):
     """
-    Sərəncamlar / Fərmanlar / Daxili qaydalar üçün ortaq model.
+    Fərman / Sərəncam / Daxili qayda və (dinamik) digər kateqoriyalı sənədlər üçün ortaq model.
 
     `organization` boş qalarsa (null), sənəd BÜTÜN qurumlara aiddir (məs.
     Nazirlik səviyyəsində bir sərəncam) - əks halda yalnız həmin qurumun
     işçilərinə göstərilir. Bax: BulletinQuerysetMixin.
     """
 
-    CATEGORY_SERENCAM = "serencam"
-    CATEGORY_FERMAN = "ferman"
-    CATEGORY_DAXILI_QAYDA = "daxili_qayda"
-    CATEGORY_CHOICES = [
-        (CATEGORY_SERENCAM, "Sərəncam"),
-        (CATEGORY_FERMAN, "Fərman"),
-        (CATEGORY_DAXILI_QAYDA, "Daxili qayda"),
-    ]
-
-    category = models.CharField(
-        max_length=20, choices=CATEGORY_CHOICES, verbose_name="Növ"
+    category = models.ForeignKey(
+        BulletinCategory, on_delete=models.PROTECT, related_name="circulars",
+        verbose_name="Növ",
+        help_text="Kateqoriyalar 'Sənəd kateqoriyaları' bölməsindən idarə olunur.",
     )
     title = models.CharField(max_length=255, verbose_name="Başlıq")
     number = models.CharField(max_length=50, blank=True, default="", verbose_name="Nömrə")
@@ -55,7 +107,7 @@ class Circular(models.Model):
         verbose_name_plural = "Sərəncamlar, Fərmanlar, Daxili qaydalar"
 
     def __str__(self):
-        return f"{self.get_category_display()} — {self.title}"
+        return f"{self.category.label} — {self.title}"
 
 
 class NewsPost(models.Model):

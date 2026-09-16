@@ -1,11 +1,38 @@
 from rest_framework import serializers
 
 from authentication.models import User
-from .models import Circular, NewsPost
+from .models import BulletinCategory, Circular, NewsPost
+
+
+class BulletinCategorySerializer(serializers.ModelSerializer):
+    documents_count = serializers.IntegerField(source="circulars.count", read_only=True)
+
+    class Meta:
+        model = BulletinCategory
+        fields = (
+            "id",
+            "key",
+            "label",
+            "plural_label",
+            "description",
+            "icon",
+            "order",
+            "is_active",
+            "documents_count",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "documents_count", "created_at", "updated_at")
+
+    def validate_key(self, value):
+        return value.strip().lower().replace(" ", "_")
 
 
 class CircularSerializer(serializers.ModelSerializer):
-    category_display = serializers.CharField(source="get_category_display", read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=BulletinCategory.objects.all())
+    category_key = serializers.CharField(source="category.key", read_only=True)
+    category_label = serializers.CharField(source="category.label", read_only=True)
+    category_icon = serializers.CharField(source="category.icon", read_only=True)
     organization_name = serializers.CharField(source="organization.title", read_only=True, default=None)
     created_by_name = serializers.CharField(source="created_by.name", read_only=True, default=None)
     file_url = serializers.SerializerMethodField()
@@ -15,7 +42,9 @@ class CircularSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "category",
-            "category_display",
+            "category_key",
+            "category_label",
+            "category_icon",
             "title",
             "number",
             "document_date",

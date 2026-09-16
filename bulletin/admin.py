@@ -1,6 +1,19 @@
 from django.contrib import admin
 
-from .models import Circular, NewsPost
+from .models import BulletinCategory, Circular, NewsPost
+
+
+@admin.register(BulletinCategory)
+class BulletinCategoryAdmin(admin.ModelAdmin):
+    list_display = ("label", "key", "icon", "order", "is_active", "documents_count")
+    list_editable = ("order", "is_active")
+    list_filter = ("is_active",)
+    search_fields = ("label", "key", "description")
+    prepopulated_fields = {"key": ("label",)}
+
+    def documents_count(self, obj):
+        return obj.circulars.count()
+    documents_count.short_description = "Sənəd sayı"
 
 
 @admin.register(Circular)
