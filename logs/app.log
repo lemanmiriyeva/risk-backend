@@ -2345,3 +2345,17 @@ INFO 2026-09-16 11:08:03,749 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-09-16 11:08:21,166 views UserView.patch - laman.bashirova öz profilini yenilədi
 INFO 2026-09-16 11:08:21,177 middleware [LOQ] laman.bashirova - Dəyişiklik etdi - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda "Laman Bashirova" adlı qeydi redaktə etdi - ip=::1
 INFO 2026-09-16 11:08:41,333 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-16 11:13:27,014 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-16 11:13:27,060 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-16 11:13:31,139 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-28 09:48:33,481 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-28 09:48:49,633 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-28 09:48:49,680 views laman.bashirova uğurla daxil oldu
+INFO 2026-09-28 09:48:49,689 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-09-28 09:48:49,728 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 09:48:49,742 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 09:49:15,742 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 09:49:15,756 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 09:49:25,784 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 09:49:25,802 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 09:49:25,832 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
