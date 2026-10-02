@@ -123,6 +123,17 @@ class SubModule(TimestampsModel):
             "ilə (və ya qurum admininin admin panelindən) verilir."
         )
     )
+    admin_users = models.ManyToManyField(
+        "authentication.User", related_name="administered_sub_modules", blank=True,
+        verbose_name="Alt modul adminləri",
+        help_text=(
+            "Yalnız BU alt modul daxilində idarəetmə (əlavə/redaktə) səlahiyyəti olan "
+            "istifadəçilər. Eyni modulun müxtəlif alt modullarının adminləri fərqli "
+            "şəxslər ola bilər (məs. 'Təlim materialları' və 'Təlim statistikası'). "
+            "Əsas modulun admini (Module.admin_users) bütün alt modullarda avtomatik "
+            "admin sayılır. Bax: core.permissions.is_sub_module_admin."
+        ),
+    )
     url_endpoint = models.CharField(max_length=120, verbose_name="Url linki")
     image = models.ImageField(
         upload_to='sub_module_images/%Y/%m/%d', null=True, blank=True, verbose_name="Alt modul ikonu"
@@ -165,7 +176,23 @@ class SubModule(TimestampsModel):
         # core.permissions.is_module_admin.
         if self.module.admin_users.filter(id=user.id).exists():
             return True
+        # Alt modulun öz admini də ona avtomatik giriş əldə edir.
+        if self.admin_users.filter(id=user.id).exists():
+            return True
         return self.permitted_users.filter(id=user.id).exists()
+
+    def is_admin_user(self, user):
+        """Alt modulun admini: superuser, əsas modulun admini və ya bu alt modulun öz admini."""
+        if not user or not user.is_authenticated:
+            return False
+        if user.is_superuser:
+            return True
+        if not self.has_permission(user):
+            return False
+        return (
+            self.module.admin_users.filter(id=user.id).exists()
+            or self.admin_users.filter(id=user.id).exists()
+        )
 
 class Status(TimestampsModel):
 

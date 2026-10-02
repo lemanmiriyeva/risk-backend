@@ -35,8 +35,8 @@ class SubModuleAdminForm(_EligibleUsersFormMixin):
 class SubModuleInline(admin.TabularInline):
     model = SubModule
     extra = 0
-    fields = ("title", "url_endpoint", "permitted_organizations", "permitted_users")
-    filter_horizontal = ("permitted_organizations", "permitted_users")
+    fields = ("title", "url_endpoint", "permitted_organizations", "permitted_users", "admin_users")
+    filter_horizontal = ("permitted_organizations", "permitted_users", "admin_users")
 
 
 @admin.register(Module)
@@ -57,9 +57,9 @@ class ModuleAdmin(admin.ModelAdmin):
 class SubModuleAdmin(admin.ModelAdmin):
     form = SubModuleAdminForm
     list_display = ("title", "module", "url_endpoint",)
-    list_filter = ("module", "permitted_organizations", "permitted_users")
+    list_filter = ("module", "permitted_organizations", "permitted_users", "admin_users")
     search_fields = ("title", "module__title",)
-    filter_horizontal = ("permitted_organizations", "permitted_users")
+    filter_horizontal = ("permitted_organizations", "permitted_users", "admin_users")
 
 
 @admin.register(Status)

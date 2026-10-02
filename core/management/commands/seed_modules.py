@@ -36,4 +36,31 @@ class Command(BaseCommand):
             }
         )
 
+        # Təlimlər: iki alt modul - hər birinin girişi və admini AYRICA təyin olunur
+        # (SubModule.permitted_users / SubModule.admin_users).
+        trainings_module, _ = Module.objects.update_or_create(
+            code="trainings",
+            defaults={
+                "title": "Təlimlər",
+                "description": "Təlim videoları, quizlər və təlim statistikası.",
+                "url_endpoint": "telimler",
+            }
+        )
+        SubModule.objects.update_or_create(
+            module=trainings_module, code="training_materials",
+            defaults={
+                "title": "Təlim materialları",
+                "description": "Təlim videolarına baxın, quizi tamamlayın və rəy bildirin.",
+                "url_endpoint": "materiallar",
+            }
+        )
+        SubModule.objects.update_or_create(
+            module=trainings_module, code="training_statistics",
+            defaults={
+                "title": "Təlim statistikası",
+                "description": "Kim hansı təlimə nə vaxt baxıb, quiz nəticələri və rəylər.",
+                "url_endpoint": "statistika",
+            }
+        )
+
         self.stdout.write(self.style.SUCCESS("Modullar seed edildi."))

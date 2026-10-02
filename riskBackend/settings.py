@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'notifications',
     'operations',
     'bulletin',
+    'trainings',
 ]
 # settings.py
 

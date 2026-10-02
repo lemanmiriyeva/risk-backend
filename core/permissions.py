@@ -16,9 +16,12 @@ def get_user_modules(user):
     if getattr(user, "is_org_admin", False) and getattr(user, "organization_id", None):
         return Module.objects.filter(
             Q(permitted_users=user) | Q(permitted_organizations=user.organization_id)
+            | Q(admin_users=user)
         ).distinct()
 
-    return Module.objects.filter(permitted_users=user).distinct()
+    # Modul admini (admin_users) Module.has_permission()-də olduğu kimi
+    # permitted_users-da olmasa belə modula giriş əldə edir.
+    return Module.objects.filter(Q(permitted_users=user) | Q(admin_users=user)).distinct()
 
 
 def get_user_sub_modules(user, module=None):
@@ -36,7 +39,8 @@ def get_user_sub_modules(user, module=None):
         ).distinct()
     else:
         qs = SubModule.objects.filter(
-            permitted_users=user, module_id__in=permitted_module_ids
+            Q(permitted_users=user) | Q(admin_users=user),
+            module_id__in=permitted_module_ids,
         ).distinct()
 
     if module is not None:
@@ -69,6 +73,30 @@ def is_module_admin(user, module_code):
     except Module.DoesNotExist:
         return False
     return module.admin_users.filter(id=user.id).exists()
+
+
+def is_sub_module_admin(user, module_code, sub_module_code):
+    """
+    İstifadəçinin konkret alt modulun admini olub-olmadığını yoxlayır
+    (bax: SubModule.admin_users / SubModule.is_admin_user).
+
+    Superuser və əsas modulun admini həmişə True alır. Bu sayədə eyni modulun
+    alt modullarına FƏRQLİ adminlər təyin etmək mümkündür:
+
+        is_sub_module_admin(user, "trainings", "training_materials")
+    """
+    if not user or not user.is_authenticated:
+        return False
+    if user.is_superuser:
+        return True
+    sub_module = (
+        SubModule.objects.select_related("module")
+        .filter(module__code=module_code, code=sub_module_code)
+        .first()
+    )
+    if not sub_module:
+        return False
+    return sub_module.is_admin_user(user)
 
 
 def user_has_any_module_access(user):

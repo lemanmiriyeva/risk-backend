@@ -45,6 +45,20 @@ def _user_payload(user, permitted_ids, admin_ids=None):
     }
 
 
+def _sub_user_payload(user, permitted_ids, module_admin_ids, sub_admin_ids):
+    """
+    Alt modul üçün istifadəçi vəziyyəti. `is_module_admin` burada ƏSAS modulun
+    admini deməkdir (bütün alt modullarda avtomatik admin + giriş),
+    `is_sub_module_admin` isə yalnız bu alt modulun öz adminidir.
+    """
+    payload = _user_payload(user, permitted_ids, module_admin_ids)
+    is_sub_admin = user.id in sub_admin_ids
+    payload["is_sub_module_admin"] = is_sub_admin
+    if is_sub_admin:
+        payload["has_access"] = True
+    return payload
+
+
 class IsSuperUser(BasePermission):
     def has_permission(self, request, view):
         user = request.user
@@ -162,11 +176,15 @@ class OrgModuleAccessView(APIView):
             sub_modules_data = []
             for sub in module.sub_modules.filter(permitted_organizations=organization).order_by("id"):
                 sub_permitted_ids = set(sub.permitted_users.values_list("id", flat=True))
+                sub_admin_ids = set(sub.admin_users.values_list("id", flat=True))
                 # Modul admini əsas modulun bütün alt-modullarına da girişə malikdir.
                 sub_modules_data.append({
                     "id": sub.id,
                     "title": sub.title,
-                    "users": [_user_payload(u, sub_permitted_ids, module_admin_ids) for u in org_users],
+                    "users": [
+                        _sub_user_payload(u, sub_permitted_ids, module_admin_ids, sub_admin_ids)
+                        for u in org_users
+                    ],
                 })
 
             modules_data.append({
@@ -194,7 +212,10 @@ class OrgModuleAccessView(APIView):
 
         # "module_admin" - yalnız Module səviyyəsində mövcuddur (alt-modul yoxdur):
         # istifadəçiyə bu modul daxilində əlavə/redaktə səlahiyyəti verir/geri alır.
-        if target not in ("module", "sub_module", "module_admin") or not obj_id or not user_id:
+        # "sub_module_admin" - yalnız konkret alt modul daxilində idarəetmə
+        # səlahiyyəti (məs. Təlim materialları və Təlim statistikasının adminləri
+        # fərqli şəxslər ola bilər). Bax: SubModule.admin_users.
+        if target not in ("module", "sub_module", "module_admin", "sub_module_admin") or not obj_id or not user_id:
             return Response({"detail": "target, id və user_id sahələri məcburidir."}, status=HTTP_400_BAD_REQUEST)
 
         model = Module if target in ("module", "module_admin") else SubModule
@@ -212,7 +233,7 @@ class OrgModuleAccessView(APIView):
             logger.info(f"{request.user} - başqa qurumun user-inə icazə vermə cəhdi: user_id={user_id}")
             return Response({"detail": USER_OUTSIDE_ORG}, status=HTTP_403_FORBIDDEN)
 
-        if target == "sub_module" and grant and not obj.module.has_permission(target_user):
+        if target in ("sub_module", "sub_module_admin") and grant and not obj.module.has_permission(target_user):
             return Response(
                 {"detail": "Əvvəlcə istifadəçiyə əsas modula giriş verilməlidir."},
                 status=HTTP_400_BAD_REQUEST,
@@ -227,6 +248,14 @@ class OrgModuleAccessView(APIView):
             else:
                 obj.admin_users.remove(target_user)
                 logger.info(f"{request.user} - {target_user.username} üçün {obj} modul admin statusunu ləğv etdi")
+        elif target == "sub_module_admin":
+            if grant:
+                obj.admin_users.add(target_user)
+                obj.permitted_users.add(target_user)
+                logger.info(f"{request.user} - {target_user.username} üçün {obj} ALT MODUL ADMİNİ təyin etdi")
+            else:
+                obj.admin_users.remove(target_user)
+                logger.info(f"{request.user} - {target_user.username} üçün {obj} alt modul admin statusunu ləğv etdi")
         elif grant:
             obj.permitted_users.add(target_user)
             logger.info(f"{request.user} - {target_user.username} üçün {obj} girişi AÇDI")
