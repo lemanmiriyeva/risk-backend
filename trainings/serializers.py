@@ -10,14 +10,12 @@ from .models import (
     TrainingFeedback,
     TrainingProgress,
 )
+from core.media_urls import media_url
 
 
 def _abs_url(context, field_file):
-    if not field_file:
-        return None
-    request = context.get("request")
-    url = field_file.url
-    return request.build_absolute_uri(url) if request else url
+    # BACKEND_BASE_URL nəzərə alınır - bax: core/media_urls.py
+    return media_url(context.get("request"), field_file)
 
 
 def _user_info(user):

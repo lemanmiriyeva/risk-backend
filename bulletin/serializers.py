@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from authentication.models import User
 from .models import BulletinCategory, Circular, NewsPost
+from core.media_urls import media_url
 
 
 class BulletinCategorySerializer(serializers.ModelSerializer):
@@ -75,9 +76,7 @@ class CircularSerializer(serializers.ModelSerializer):
     def get_file_url(self, obj):
         if not obj.file:
             return None
-        request = self.context.get("request")
-        url = obj.file.url
-        return request.build_absolute_uri(url) if request else url
+        return media_url(self.context.get("request"), obj.file)
 
 
 class NewsPostSerializer(serializers.ModelSerializer):
@@ -109,9 +108,7 @@ class NewsPostSerializer(serializers.ModelSerializer):
     def get_image_url(self, obj):
         if not obj.image:
             return None
-        request = self.context.get("request")
-        url = obj.image.url
-        return request.build_absolute_uri(url) if request else url
+        return media_url(self.context.get("request"), obj.image)
 
 
 class BirthdayUserSerializer(serializers.ModelSerializer):
@@ -138,9 +135,7 @@ class BirthdayUserSerializer(serializers.ModelSerializer):
     def get_image_url(self, obj):
         if not obj.image:
             return None
-        request = self.context.get("request")
-        url = obj.image.url
-        return request.build_absolute_uri(url) if request else url
+        return media_url(self.context.get("request"), obj.image)
 
     def get_is_today(self, obj):
         today = self.context.get("today")
