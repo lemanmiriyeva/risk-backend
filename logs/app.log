@@ -2460,3 +2460,287 @@ INFO 2026-10-02 12:12:03,717 middleware [LOQ] laman.bashirova - Baxdı - modul=�
 INFO 2026-10-02 12:12:10,241 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
 INFO 2026-10-02 12:13:04,333 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
 INFO 2026-10-02 12:13:04,410 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:16:23,416 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-06 10:16:35,037 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-06 10:16:35,086 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-06 10:16:35,097 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-06 10:16:35,293 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:16:35,311 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:16:44,202 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:16:51,155 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+ERROR 2026-10-06 10:16:59,518 permissions Module code='activity_logs' does not exist.
+ERROR 2026-10-06 10:16:59,544 permissions Module code='activity_logs' does not exist.
+ERROR 2026-10-06 10:16:59,770 permissions Module code='activity_logs' does not exist.
+INFO 2026-10-06 10:17:00,191 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:17:00,237 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+ERROR 2026-10-06 10:17:07,420 permissions Module code='activity_logs' does not exist.
+ERROR 2026-10-06 10:17:07,445 permissions Module code='activity_logs' does not exist.
+INFO 2026-10-06 10:17:08,243 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:17:08,281 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:17:08,323 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:17:39,473 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:17:39,494 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:17:47,017 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:18:06,230 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:18:08,442 views laman.bashirova - test2 üçün Admin girişi AÇDI
+INFO 2026-10-06 10:18:08,951 views laman.bashirova - test2 üçün Loqlar girişi AÇDI
+INFO 2026-10-06 10:18:09,605 views laman.bashirova - test2 üçün İnventar uçotu girişi AÇDI
+INFO 2026-10-06 10:18:10,291 views laman.bashirova - test2 üçün İkinci Modul girişi AÇDI
+INFO 2026-10-06 10:18:10,675 views laman.bashirova - test2 üçün Təlimlər girişi AÇDI
+INFO 2026-10-06 10:18:10,980 views laman.bashirova - test2 üçün Elanlar lövhəsi girişi AÇDI
+INFO 2026-10-06 10:18:11,424 views laman.bashirova - test2 üçün Təlimlər / Təlim materialları girişi AÇDI
+INFO 2026-10-06 10:18:11,811 views laman.bashirova - test2 üçün Təlimlər / Təlim statistikası girişi AÇDI
+ERROR 2026-10-06 10:18:19,443 permissions Module code='activity_logs' does not exist.
+ERROR 2026-10-06 10:18:19,465 permissions Module code='activity_logs' does not exist.
+INFO 2026-10-06 10:18:20,240 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:18:20,261 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:18:20,302 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:18:52,153 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:24:14,493 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:24:14,518 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:24:14,551 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:24:30,802 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:24:30,820 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:24:30,866 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:00,420 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:35:00,453 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:00,473 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 10:35:13,682 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:13,703 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:18,137 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:24,086 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:33,715 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:37,634 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:52,178 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 10:35:52,206 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:24:40,537 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:24:40,564 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:24:40,594 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:24:41,580 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:24:55,789 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:24:55,814 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:24:55,847 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:25:04,641 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:25:04,716 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:25:35,007 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:25:35,036 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:25:35,060 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:25:48,005 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:25:48,038 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:25:48,074 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:26:20,860 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:28,621 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:28,640 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:41,226 middleware [LOQ] laman.bashirova - Baxdı - modul=Əməliyyatlar - Əməliyyatlar moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:46,404 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:46,415 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:54,952 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:26:54,973 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:27:12,318 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:27:40,315 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:27:40,355 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:27:56,148 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:27:56,161 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:27:56,181 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:28:02,674 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:31:19,197 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:31:19,229 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:31:19,277 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:31:21,093 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:31:21,214 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:33:40,649 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:33:40,673 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:33:40,704 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:40:38,371 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:40:38,419 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:40:38,442 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:41:17,341 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:41:17,361 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:41:19,583 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:42:53,829 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:42:53,848 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:43:35,906 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:43:35,928 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:47:19,375 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:52:34,402 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:52:34,431 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:52:34,469 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:56:29,803 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:56:29,847 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:56:29,881 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:56:45,362 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 11:56:45,404 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 11:56:45,441 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 12:10:29,129 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Məxfi sənəd dövriyyəsi serverinə icazəsiz giriş
+INFO 2026-10-06 12:10:29,132 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 12:10:29,135 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 12:10:29,137 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Ehtiyat surətlərin bərpa edilə bilməməsi
+INFO 2026-10-06 12:10:29,139 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Şəbəkə təhlükəsizlik divarının proqram təminatında aşkarlanmış boşluq
+INFO 2026-10-06 12:10:29,141 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Konstruktor sənədlərinin (CAD/PDM) icazəsiz yayılması
+INFO 2026-10-06 12:10:29,145 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - CNC emal mərkəzinin idarəetmə sisteminin zərərli proqramla yoluxması
+INFO 2026-10-06 12:10:29,148 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - CNC emal mərkəzinin idarəetmə sisteminin zərərli proqramla yoluxması
+INFO 2026-10-06 12:10:29,151 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Elektrik enerjisinin kəsilməsi nəticəsində server otağının dayanması
+INFO 2026-10-06 12:10:29,153 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Giriş-nəzarət kartlarının icazəsiz istifadəsi
+INFO 2026-10-06 12:10:29,156 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Videomüşahidə yazılarının itirilməsi
+INFO 2026-10-06 12:10:29,158 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 12:10:29,160 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 12:10:29,163 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Xidməti noutbukun itməsi və ya oğurlanması
+INFO 2026-10-06 12:10:29,166 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Ölçmə avadanlığının kalibrləmə müddətinin keçməsi
+INFO 2026-10-06 12:10:29,170 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Mühasibat proqram təminatına texniki dəstəyin dayandırılması
+INFO 2026-10-06 12:10:29,174 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 12:10:29,176 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 12:10:29,178 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Anbar mühafizə siqnalizasiyasının nasazlığı
+INFO 2026-10-06 12:10:29,181 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Elektron sənəd dövriyyəsi sistemində məlumatların bütövlüyünün pozulması
+INFO 2026-10-06 12:10:29,184 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - İş stansiyasında lisenziyasız proqram təminatının istifadəsi
+INFO 2026-10-06 12:10:29,187 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 12:10:29,191 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 12:10:29,209 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-09-18 11:00:00-13:00:00 | Dövlət Xidmətlər Agentliyi (ASAN xidmət)
+INFO 2026-10-06 12:10:29,219 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-09-25 15:30:00-17:00:00 | Rəqəmsal İnkişaf və Nəqliyyat Nazirliyi
+INFO 2026-10-06 12:10:29,225 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-09-30 09:00:00-10:30:00 | Poliklinika
+INFO 2026-10-06 12:10:29,233 services [ƏMƏLİYYAT] laman.bashirova - yeni təsdiq sorğusu - kateqoriya=İcazələr - laman.bashirova | 2026-10-07 14:00:00-16:00:00 | Bakı Dövlət Universiteti
+INFO 2026-10-06 12:10:53,592 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 12:10:53,653 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:10:53,687 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 12:11:06,876 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:26:28,655 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 12:26:28,656 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - İş stansiyasında lisenziyasız proqram təminatının istifadəsi
+INFO 2026-10-06 12:26:28,658 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Elektron sənəd dövriyyəsi sistemində məlumatların bütövlüyünün pozulması
+INFO 2026-10-06 12:26:28,660 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Anbar mühafizə siqnalizasiyasının nasazlığı
+INFO 2026-10-06 12:26:28,662 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 12:26:28,664 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Mühasibat proqram təminatına texniki dəstəyin dayandırılması
+INFO 2026-10-06 12:26:28,666 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Ölçmə avadanlığının kalibrləmə müddətinin keçməsi
+INFO 2026-10-06 12:26:28,669 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Xidməti noutbukun itməsi və ya oğurlanması
+INFO 2026-10-06 12:26:28,672 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 12:26:28,673 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Videomüşahidə yazılarının itirilməsi
+INFO 2026-10-06 12:26:28,675 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Giriş-nəzarət kartlarının icazəsiz istifadəsi
+INFO 2026-10-06 12:26:28,677 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Elektrik enerjisinin kəsilməsi nəticəsində server otağının dayanması
+INFO 2026-10-06 12:26:28,679 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - CNC emal mərkəzinin idarəetmə sisteminin zərərli proqramla yoluxması
+INFO 2026-10-06 12:26:28,680 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Konstruktor sənədlərinin (CAD/PDM) icazəsiz yayılması
+INFO 2026-10-06 12:26:28,682 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Şəbəkə təhlükəsizlik divarının proqram təminatında aşkarlanmış boşluq
+INFO 2026-10-06 12:26:28,684 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Ehtiyat surətlərin bərpa edilə bilməməsi
+INFO 2026-10-06 12:26:28,686 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 12:26:28,689 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Məxfi sənəd dövriyyəsi serverinə icazəsiz giriş
+INFO 2026-10-06 12:26:29,114 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Məxfi sənəd dövriyyəsi serverinə icazəsiz giriş
+INFO 2026-10-06 12:26:29,117 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 12:26:29,119 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 12:26:29,123 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Ehtiyat surətlərin bərpa edilə bilməməsi
+INFO 2026-10-06 12:26:29,126 services [ƏMƏLİYYAT] elvin.ibrahimov - Yaratdı - kateqoriya=Risk Reyestri - Şəbəkə təhlükəsizlik divarının proqram təminatında aşkarlanmış boşluq
+INFO 2026-10-06 12:26:29,129 services [ƏMƏLİYYAT] gulnara.karimova - Yaratdı - kateqoriya=Risk Reyestri - Konstruktor sənədlərinin (CAD/PDM) icazəsiz yayılması
+INFO 2026-10-06 12:26:29,132 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Dövlət müdafiə sifarişləri üzrə məxfi məlumatların sızması
+INFO 2026-10-06 12:26:29,134 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Dövlət müdafiə sifarişləri üzrə məxfi məlumatların sızması
+INFO 2026-10-06 12:26:29,136 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - Elektrik enerjisinin kəsilməsi nəticəsində server otağının dayanması
+INFO 2026-10-06 12:26:29,139 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Giriş-nəzarət kartlarının icazəsiz istifadəsi
+INFO 2026-10-06 12:26:29,141 services [ƏMƏLİYYAT] elvin.ibrahimov - Yaratdı - kateqoriya=Risk Reyestri - Videomüşahidə yazılarının itirilməsi
+INFO 2026-10-06 12:26:29,143 services [ƏMƏLİYYAT] gulnara.karimova - Yaratdı - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 12:26:29,145 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 12:26:29,148 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Xidməti noutbukun itməsi və ya oğurlanması
+INFO 2026-10-06 12:26:29,151 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - İdxal-ixrac əməliyyatları üzrə məlumatların icazəsiz dəyişdirilməsi
+INFO 2026-10-06 12:26:29,153 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Mühasibat proqram təminatına texniki dəstəyin dayandırılması
+INFO 2026-10-06 12:26:29,155 services [ƏMƏLİYYAT] elvin.ibrahimov - Yaratdı - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 12:26:29,158 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 12:26:29,160 services [ƏMƏLİYYAT] gulnara.karimova - Yaratdı - kateqoriya=Risk Reyestri - Arxiv otağının mühafizə siqnalizasiyasının nasazlığı
+INFO 2026-10-06 12:26:29,162 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Elektron sənəd dövriyyəsi sistemində məlumatların bütövlüyünün pozulması
+INFO 2026-10-06 12:26:29,165 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - İş stansiyasında lisenziyasız proqram təminatının istifadəsi
+INFO 2026-10-06 12:26:29,167 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 12:26:29,170 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 12:26:29,177 services [ƏMƏLİYYAT] elvin.ibrahimov - yeni təsdiq sorğusu - kateqoriya=İcazələr - elvin.ibrahimov | 2026-09-20 11:00:00-13:00:00 | Dövlət Xidmətlər Agentliyi (ASAN xidmət)
+INFO 2026-10-06 12:26:29,189 services [ƏMƏLİYYAT] tural.suleymanli - yeni təsdiq sorğusu - kateqoriya=İcazələr - tural.suleymanli | 2026-09-24 15:30:00-17:00:00 | Dövlət Xəzinədarlıq Agentliyi
+INFO 2026-10-06 12:26:29,199 services [ƏMƏLİYYAT] kamala.babayeva - yeni təsdiq sorğusu - kateqoriya=İcazələr - kamala.babayeva | 2026-09-29 09:00:00-10:30:00 | Poliklinika
+INFO 2026-10-06 12:26:29,206 services [ƏMƏLİYYAT] gulsum.rzayeva - yeni təsdiq sorğusu - kateqoriya=İcazələr - gulsum.rzayeva | 2026-10-01 14:00:00-16:00:00 | Xarici İşlər Nazirliyi
+INFO 2026-10-06 12:26:29,213 services [ƏMƏLİYYAT] aygun.barkhudarova - yeni təsdiq sorğusu - kateqoriya=İcazələr - aygun.barkhudarova | 2026-10-05 10:00:00-12:00:00 | Dövlət Gömrük Komitəsi
+INFO 2026-10-06 12:26:29,220 services [ƏMƏLİYYAT] elvin.ibrahimov - yeni təsdiq sorğusu - kateqoriya=İcazələr - elvin.ibrahimov | 2026-10-07 14:00:00-16:00:00 | Bakı Dövlət Universiteti
+INFO 2026-10-06 12:26:29,224 services [ƏMƏLİYYAT] javid.rustamli - yeni təsdiq sorğusu - kateqoriya=İcazələr - javid.rustamli | 2026-10-08 16:00:00-18:00:00 | Rəqəmsal İnkişaf və Nəqliyyat Nazirliyi
+INFO 2026-10-06 12:27:16,347 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 12:27:16,399 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:27:16,425 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 12:27:41,113 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:28:08,752 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:28:08,772 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:28:18,514 middleware [LOQ] laman.bashirova - Baxdı - modul=Əməliyyatlar - Əməliyyatlar moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:56:27,844 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:56:27,857 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:56:34,643 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər modulunda baxdı - ip=::1
+INFO 2026-10-06 12:56:34,771 middleware [LOQ] laman.bashirova - Yaratdı - modul=Təlimlər - Təlimlər modulunda yaratdı - ip=::1
+INFO 2026-10-06 12:58:06,535 views laman.bashirova təlimi tam izlədi: Məxfi sənədlərlə iş qaydaları
+INFO 2026-10-06 12:58:06,539 middleware [LOQ] laman.bashirova - Yaratdı - modul=Təlimlər - Təlimlər modulunda yaratdı - ip=::1
+INFO 2026-10-06 12:58:06,619 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər modulunda baxdı - ip=::1
+INFO 2026-10-06 12:58:16,408 views laman.bashirova quiz təsdiqlədi: Məxfi sənədlərlə iş qaydaları - 33%
+INFO 2026-10-06 12:58:16,417 middleware [LOQ] laman.bashirova - Yaratdı - modul=Təlimlər - Təlimlər modulunda "#15" adlı qeydi yaratdı - ip=::1
+INFO 2026-10-06 12:58:16,486 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər modulunda baxdı - ip=::1
+INFO 2026-10-06 12:58:38,713 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:58:51,977 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 12:59:00,687 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:01:04,961 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:01:27,749 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:01:35,297 views laman.bashirova - Azərbaycan Respublikasının Müdafiə Sənayesi Nazirliyi üçün Hərəkət tarixçəsi girişi AÇDI
+INFO 2026-10-06 13:01:35,926 views laman.bashirova - Azərbaycan Respublikasının Müdafiə Sənayesi Nazirliyi üçün Admin girişi AÇDI
+INFO 2026-10-06 13:01:37,545 views laman.bashirova - Hərəkət tarixçəsi modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:39,566 views laman.bashirova - Admin modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:41,720 views laman.bashirova - İcazələr modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:42,149 views laman.bashirova - İnventar uçotu modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:42,777 views laman.bashirova - Əməliyyatlar modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:44,143 views laman.bashirova - Təlimlər modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:44,838 views laman.bashirova - Elanlar lövhəsi modulunu 'hər kəsə açıq' = True olaraq dəyişdi
+INFO 2026-10-06 13:01:49,955 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:02:11,695 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:11,166 middleware [LOQ] laman.bashirova - Baxdı - modul=Əməliyyatlar - Əməliyyatlar moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:23,342 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:23,367 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:33,564 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:33,612 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:51,941 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:08:54,148 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:12:45,785 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 13:12:45,788 services [ƏMƏLİYYAT] elnur.hasanov - Sildi - kateqoriya=Risk Reyestri - İş stansiyasında lisenziyasız proqram təminatının istifadəsi
+INFO 2026-10-06 13:12:45,790 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Elektron sənəd dövriyyəsi sistemində məlumatların bütövlüyünün pozulması
+INFO 2026-10-06 13:12:45,793 services [ƏMƏLİYYAT] gulnara.karimova - Sildi - kateqoriya=Risk Reyestri - Arxiv otağının mühafizə siqnalizasiyasının nasazlığı
+INFO 2026-10-06 13:12:45,795 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 13:12:45,796 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Mühasibat proqram təminatına texniki dəstəyin dayandırılması
+INFO 2026-10-06 13:12:45,798 services [ƏMƏLİYYAT] elnur.hasanov - Sildi - kateqoriya=Risk Reyestri - İdxal-ixrac əməliyyatları üzrə məlumatların icazəsiz dəyişdirilməsi
+INFO 2026-10-06 13:12:45,800 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Xidməti noutbukun itməsi və ya oğurlanması
+INFO 2026-10-06 13:12:45,803 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 13:12:45,805 services [ƏMƏLİYYAT] elvin.ibrahimov - Sildi - kateqoriya=Risk Reyestri - Videomüşahidə yazılarının itirilməsi
+INFO 2026-10-06 13:12:45,807 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Giriş-nəzarət kartlarının icazəsiz istifadəsi
+INFO 2026-10-06 13:12:45,809 services [ƏMƏLİYYAT] elnur.hasanov - Sildi - kateqoriya=Risk Reyestri - Elektrik enerjisinin kəsilməsi nəticəsində server otağının dayanması
+INFO 2026-10-06 13:12:45,811 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Dövlət müdafiə sifarişləri üzrə məxfi məlumatların sızması
+INFO 2026-10-06 13:12:45,813 services [ƏMƏLİYYAT] gulnara.karimova - Sildi - kateqoriya=Risk Reyestri - Konstruktor sənədlərinin (CAD/PDM) icazəsiz yayılması
+INFO 2026-10-06 13:12:45,815 services [ƏMƏLİYYAT] elvin.ibrahimov - Sildi - kateqoriya=Risk Reyestri - Şəbəkə təhlükəsizlik divarının proqram təminatında aşkarlanmış boşluq
+INFO 2026-10-06 13:12:45,816 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Ehtiyat surətlərin bərpa edilə bilməməsi
+INFO 2026-10-06 13:12:45,818 services [ƏMƏLİYYAT] araz.mustafa - Sildi - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 13:12:45,820 services [ƏMƏLİYYAT] laman.bashirova - Sildi - kateqoriya=Risk Reyestri - Məxfi sənəd dövriyyəsi serverinə icazəsiz giriş
+INFO 2026-10-06 13:12:46,304 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Məxfi sənəd dövriyyəsi serverinə icazəsiz giriş
+INFO 2026-10-06 13:12:46,307 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 13:12:46,310 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi
+INFO 2026-10-06 13:12:46,313 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Ehtiyat surətlərin bərpa edilə bilməməsi
+INFO 2026-10-06 13:12:46,315 services [ƏMƏLİYYAT] elvin.ibrahimov - Yaratdı - kateqoriya=Risk Reyestri - Şəbəkə təhlükəsizlik divarının proqram təminatında aşkarlanmış boşluq
+INFO 2026-10-06 13:12:46,319 services [ƏMƏLİYYAT] gulnara.karimova - Yaratdı - kateqoriya=Risk Reyestri - Konstruktor sənədlərinin (CAD/PDM) icazəsiz yayılması
+INFO 2026-10-06 13:12:46,322 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Dövlət müdafiə sifarişləri üzrə məxfi məlumatların sızması
+INFO 2026-10-06 13:12:46,325 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Dövlət müdafiə sifarişləri üzrə məxfi məlumatların sızması
+INFO 2026-10-06 13:12:46,328 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - Elektrik enerjisinin kəsilməsi nəticəsində server otağının dayanması
+INFO 2026-10-06 13:12:46,330 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Giriş-nəzarət kartlarının icazəsiz istifadəsi
+INFO 2026-10-06 13:12:46,333 services [ƏMƏLİYYAT] elvin.ibrahimov - Yaratdı - kateqoriya=Risk Reyestri - Videomüşahidə yazılarının itirilməsi
+INFO 2026-10-06 13:12:46,335 services [ƏMƏLİYYAT] gulnara.karimova - Yaratdı - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 13:12:46,337 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı
+INFO 2026-10-06 13:12:46,340 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Xidməti noutbukun itməsi və ya oğurlanması
+INFO 2026-10-06 13:12:46,343 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - İdxal-ixrac əməliyyatları üzrə məlumatların icazəsiz dəyişdirilməsi
+INFO 2026-10-06 13:12:46,346 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Mühasibat proqram təminatına texniki dəstəyin dayandırılması
+INFO 2026-10-06 13:12:46,349 services [ƏMƏLİYYAT] elvin.ibrahimov - Yaratdı - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 13:12:46,351 services [ƏMƏLİYYAT] araz.mustafa - Redaktə etdi - kateqoriya=Risk Reyestri - Kriptoqrafik açarların düzgün idarə edilməməsi
+INFO 2026-10-06 13:12:46,354 services [ƏMƏLİYYAT] gulnara.karimova - Yaratdı - kateqoriya=Risk Reyestri - Arxiv otağının mühafizə siqnalizasiyasının nasazlığı
+INFO 2026-10-06 13:12:46,356 services [ƏMƏLİYYAT] laman.bashirova - Yaratdı - kateqoriya=Risk Reyestri - Elektron sənəd dövriyyəsi sistemində məlumatların bütövlüyünün pozulması
+INFO 2026-10-06 13:12:46,359 services [ƏMƏLİYYAT] elnur.hasanov - Yaratdı - kateqoriya=Risk Reyestri - İş stansiyasında lisenziyasız proqram təminatının istifadəsi
+INFO 2026-10-06 13:12:46,362 services [ƏMƏLİYYAT] araz.mustafa - Yaratdı - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 13:12:46,365 services [ƏMƏLİYYAT] laman.bashirova - Redaktə etdi - kateqoriya=Risk Reyestri - Ehtiyat generatorun yanacaq ehtiyatının kifayət etməməsi
+INFO 2026-10-06 13:12:46,373 services [ƏMƏLİYYAT] elvin.ibrahimov - yeni təsdiq sorğusu - kateqoriya=İcazələr - elvin.ibrahimov | 2026-09-20 11:00:00-13:00:00 | Dövlət Xidmətlər Agentliyi (ASAN xidmət)
+INFO 2026-10-06 13:12:46,385 services [ƏMƏLİYYAT] tural.suleymanli - yeni təsdiq sorğusu - kateqoriya=İcazələr - tural.suleymanli | 2026-09-24 15:30:00-17:00:00 | Dövlət Xəzinədarlıq Agentliyi
+INFO 2026-10-06 13:12:46,396 services [ƏMƏLİYYAT] kamala.babayeva - yeni təsdiq sorğusu - kateqoriya=İcazələr - kamala.babayeva | 2026-09-29 09:00:00-10:30:00 | Poliklinika
+INFO 2026-10-06 13:12:46,403 services [ƏMƏLİYYAT] gulsum.rzayeva - yeni təsdiq sorğusu - kateqoriya=İcazələr - gulsum.rzayeva | 2026-10-01 14:00:00-16:00:00 | Xarici İşlər Nazirliyi
+INFO 2026-10-06 13:12:46,411 services [ƏMƏLİYYAT] aygun.barkhudarova - yeni təsdiq sorğusu - kateqoriya=İcazələr - aygun.barkhudarova | 2026-10-05 10:00:00-12:00:00 | Dövlət Gömrük Komitəsi
+INFO 2026-10-06 13:12:46,417 services [ƏMƏLİYYAT] elvin.ibrahimov - yeni təsdiq sorğusu - kateqoriya=İcazələr - elvin.ibrahimov | 2026-10-07 14:00:00-16:00:00 | Bakı Dövlət Universiteti
+INFO 2026-10-06 13:12:46,422 services [ƏMƏLİYYAT] javid.rustamli - yeni təsdiq sorğusu - kateqoriya=İcazələr - javid.rustamli | 2026-10-08 16:00:00-18:00:00 | Rəqəmsal İnkişaf və Nəqliyyat Nazirliyi
+INFO 2026-10-06 13:12:59,833 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 13:12:59,913 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:12:59,934 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-06 13:13:00,037 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:13:14,637 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-06 13:13:33,911 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
