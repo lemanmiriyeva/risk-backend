@@ -26,11 +26,11 @@ class AttendancePermission(TimestampsModel):
     location = models.CharField(max_length=255, blank=True, default="", verbose_name="Yer")
     reason = models.TextField(blank=True, default="", verbose_name="Səbəb / qeyd")
 
-    # Yaradılan an istifadəçidən avtomatik köçürülür - sonradan user öz departamentini/
+    # Yaradılan an istifadəçidən avtomatik köçürülür - sonradan user öz şöbəsini/
     # qurumunu dəyişsə belə, bu konkret sorğunun aid olduğu skop dəyişməsin deyə saxlanılır.
     department = models.ForeignKey(
         "authentication.Department", on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="attendance_permissions", verbose_name="Departament",
+        related_name="attendance_permissions", verbose_name="Şöbə",
     )
     organization = models.ForeignKey(
         "authentication.Organization", on_delete=models.SET_NULL, null=True, blank=True,
@@ -113,7 +113,7 @@ class AttendancePermissionOrganizationConfig(TimestampsModel):
 
 class AttendancePermissionDepartmentConfig(TimestampsModel):
     """
-    Hər departament üçün ayrıca icazə workflow konfiqurasiyası.
+    Hər şöbə üçün ayrıca icazə workflow konfiqurasiyası.
 
     manager_enabled=False olduqda replacement_user seçilməlidir.
     """
@@ -129,7 +129,7 @@ class AttendancePermissionDepartmentConfig(TimestampsModel):
         "authentication.Department",
         on_delete=models.CASCADE,
         related_name="attendance_permission_config",
-        verbose_name="Departament",
+        verbose_name="Şöbə",
     )
 
     manager_enabled = models.BooleanField(
@@ -172,8 +172,8 @@ class AttendancePermissionDepartmentConfig(TimestampsModel):
     )
 
     class Meta:
-        verbose_name = "Departament icazə konfiqurasiyası"
-        verbose_name_plural = "Departament icazə konfiqurasiyaları"
+        verbose_name = "Şöbə icazə konfiqurasiyası"
+        verbose_name_plural = "Şöbə icazə konfiqurasiyaları"
         constraints = [
             models.UniqueConstraint(
                 fields=["organization", "department"],
@@ -193,7 +193,7 @@ class LeavePeriod(TimestampsModel):
     edən şəxsin məzuniyyətdə olduğu müddətdə işlərin dayanmamasıdır.
 
     AVTOMATİK GERİ QAYITMA:
-    Bu model «həqiqət mənbəyi»dir - departament konfiqurasiyasındakı
+    Bu model «həqiqət mənbəyi»dir - şöbə konfiqurasiyasındakı
     `replacement_user` sahəsi ÜZƏRİNƏ YAZILMIR. Əvəzləmə hər sorğuda
     tarixə görə HESABLANIR (bax: `get_active_delegate_for`), ona görə
     məzuniyyət bitən kimi heç bir cron/planlayıcı olmadan avtomatik

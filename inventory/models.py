@@ -15,12 +15,12 @@ class InventoryOwnerPerson(models.Model):
 
 
 class InventoryOwnerDepartment(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name="Departament adı")
+    name = models.CharField(max_length=255, unique=True, verbose_name="Şöbənin adı")
 
     class Meta:
         ordering = ('name',)
-        verbose_name = "İnventar sahibi (departament)"
-        verbose_name_plural = "İnventar sahibləri (departamentlər)"
+        verbose_name = "İnventar sahibi (şöbə)"
+        verbose_name_plural = "İnventar sahibləri (şöbələr)"
 
     def __str__(self):
         return self.name
@@ -43,7 +43,7 @@ class Inventory(models.Model):
     OWNER_APPARATUS = 'aparat'
     OWNER_TYPE_CHOICES = [
         (OWNER_PERSON, 'Şəxs'),
-        (OWNER_DEPARTMENT, 'Departament'),
+        (OWNER_DEPARTMENT, 'Şöbə'),
         (OWNER_APPARATUS, 'Aparat (hamı üçün)'),
     ]
 
@@ -59,7 +59,7 @@ class Inventory(models.Model):
     )
     owner_department = models.ForeignKey(
         InventoryOwnerDepartment, on_delete=models.PROTECT, null=True, blank=True,
-        related_name='inventories', verbose_name="Sahib (departament)"
+        related_name='inventories', verbose_name="Sahib (şöbə)"
     )
 
     created_by = models.ForeignKey(

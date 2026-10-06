@@ -111,7 +111,7 @@ class AttendancePermissionListCreateView(APIView):
         flow = get_approval_flow(user)
 
         # ---------------------------------------------------------
-        # DEPARTAMENT KONFİQURASİYASI: şöbə müdiri deaktivdirsə (yoxdursa)
+        # ŞÖBƏ KONFİQURASİYASI: şöbə müdiri deaktivdirsə (yoxdursa)
         # və admin "Birbaşa Aparat rəhbəri" seçibsə, normal FULL axının
         # 1-ci mərhələsi (şöbə müdiri/əvəzləyici) tamamilə keçilir və
         # sorğu mövcud APARAT RƏHBƏRİ YALNIZ axını ilə emal olunur.
@@ -330,7 +330,7 @@ class AttendancePermissionListCreateView(APIView):
                 instance.status = AttendancePermission.STATUS_REJECTED
                 instance.reviewed_at = timezone.now()
                 instance.review_comment = (
-                    "Departament üçün şöbə müdiri və ya "
+                    "Şöbə üçün şöbə müdiri və ya "
                     "əvəzləyici təyin edilməyib."
                 )
 
@@ -346,7 +346,7 @@ class AttendancePermissionListCreateView(APIView):
                     user,
                     title="İcazə sorğusu yaradıla bilmədi",
                     body=(
-                        "Departament üçün icazə təsdiqləyicisi "
+                        "Şöbə üçün icazə təsdiqləyicisi "
                         "təyin edilməyib."
                     ),
                     notification_type=(
@@ -360,7 +360,7 @@ class AttendancePermissionListCreateView(APIView):
                 return Response(
                     {
                         "detail": (
-                            "Bu departament üçün icazə "
+                            "Bu şöbə üçün icazə "
                             "təsdiqləyicisi təyin edilməyib."
                         )
                     },
@@ -677,7 +677,7 @@ class AttendancePermissionConfigView(APIView):
     Qurum üzrə icazə konfiqurasiyası.
 
     GET:
-        Aparat rəhbəri + bütün departamentlər + onların config-ləri
+        Aparat rəhbəri + bütün şöbə və struktur bölmələr + onların config-ləri
 
     PATCH:
         Aparat rəhbəri konfiqurasiyasını dəyişir.
@@ -732,7 +732,7 @@ class AttendancePermissionConfigView(APIView):
         )
 
         department_configs = {
-            # department sahəsi OneToOneField-dir - bir departamentin DB-də cəmi
+            # department sahəsi OneToOneField-dir - bir şöbənin DB-də cəmi
             # BİR konfiqurasiya sətri ola bilər (organization-dan asılı olmayaraq).
             # Ona görə burada `organization` ilə əlavə filtr qoymuruq.
             config.department_id: config
@@ -815,7 +815,7 @@ class AttendancePermissionConfigView(APIView):
 
 class AttendancePermissionDepartmentConfigView(APIView):
     """
-    Konkret departamentin icazə workflow konfiqurasiyası.
+    Konkret şöbənin icazə workflow konfiqurasiyası.
     """
 
     permission_classes = [IsAuthenticated]
@@ -837,10 +837,10 @@ class AttendancePermissionDepartmentConfigView(APIView):
             id=department_id,
         )
 
-        # Departament həmin qurumda real istifadə olunurmu?
+        # Şöbə həmin qurumda real istifadə olunurmu?
         if not department.organization_id or department.organization_id != organization.id:
             return Response(
-                {"detail": "Bu departament sizin qurumunuza aid deyil."},
+                {"detail": "Bu şöbə sizin qurumunuza aid deyil."},
                 status=HTTP_403_FORBIDDEN,
             )
 

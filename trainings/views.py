@@ -479,6 +479,9 @@ class StatisticsSummaryView(_StatsScopeMixin, APIView):
             if scoped_user_ids is not None:
                 audience &= scoped_user_ids
             started_ids = {r["user_id"] for r in records}
+            # Təlimə real baxmış hər kəs (məs. superuser) auditoriyaya daxil sayılır -
+            # əks halda "tam baxış" auditoriyadan çox çıxır (133% kimi).
+            audience |= started_ids
             completed = sum(1 for r in records if r["status"] == TrainingProgress.STATUS_COMPLETED)
             in_progress = len(records) - completed
             not_started = len(audience - started_ids)

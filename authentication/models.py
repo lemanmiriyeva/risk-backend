@@ -93,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=True)
     role = models.ForeignKey("Role", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Vəzifə")
     department = models.ForeignKey("Department", on_delete=models.SET_NULL, null=True, blank=True,
-                                   verbose_name="Departament/Şöbə")
+                                   verbose_name="Şöbə / struktur bölmə")
     organization = models.ForeignKey(
         "authentication.Organization", on_delete=models.SET_NULL, null=True, blank=True,
         related_name="users", verbose_name="Qurum"
@@ -172,14 +172,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Department(TimestampsModel):
-    title = models.CharField(max_length=255, verbose_name="Departamentin adı")
+    title = models.CharField(max_length=255, verbose_name="Şöbənin / struktur bölmənin adı")
     shortname = models.CharField(max_length=255, default="", verbose_name="Adın qısaltması")
     organization = models.ForeignKey(
         "authentication.Organization", on_delete=models.CASCADE, null=True, blank=True,
         related_name="departments", verbose_name="Qurum",
         help_text=(
-            "Bu departamentin aid olduğu qurum. Alt (child) departamentlər üçün bu sahə "
-            "avtomatik olaraq valideyn departamentin qurumu ilə eyniləşdirilir."
+            "Bu şöbənin aid olduğu qurum. Alt struktur bölmələr üçün bu sahə "
+            "avtomatik olaraq valideyn şöbənin qurumu ilə eyniləşdirilir."
         ),
     )
     parent = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True, related_name='children',)
@@ -187,18 +187,18 @@ class Department(TimestampsModel):
                                 related_name='managed_departments')
 
     order = models.PositiveIntegerField(default=2, verbose_name="Sıra")
-    unique_code = models.CharField(max_length=64, verbose_name="Departamentin unikal kodu", null=True, blank=True,)
+    unique_code = models.CharField(max_length=64, verbose_name="Şöbənin unikal kodu", null=True, blank=True,)
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ['order']
-        verbose_name = "Departament"
-        verbose_name_plural = "Departamentlər"
+        verbose_name = "Şöbə"
+        verbose_name_plural = "Şöbə və struktur bölmələr"
 
     def save(self, *args, **kwargs):
-        # Child departament həmişə valideyninin qurumuna aid olur (data uyğunsuzluğunun qarşısını almaq üçün).
+        # Child şöbə həmişə valideyninin qurumuna aid olur (data uyğunsuzluğunun qarşısını almaq üçün).
         if self.parent_id and self.parent.organization_id:
             self.organization_id = self.parent.organization_id
         super().save(*args, **kwargs)
@@ -208,14 +208,14 @@ class Role(TimestampsModel):
     title = models.CharField(max_length=255, blank=True, verbose_name="Vəzifə")
     department = models.ForeignKey(
         'Department', on_delete=models.CASCADE, null=True, blank=True, related_name='roles',
-        verbose_name="Departament",
-        help_text="Bu vəzifənin aid olduğu departament (və dolayısı ilə qurum).",
+        verbose_name="Şöbə",
+        help_text="Bu vəzifənin aid olduğu şöbə (və dolayısı ilə qurum).",
     )
     is_manager_role = models.BooleanField(
         default=False,
         verbose_name="Şöbə rəhbəri səlahiyyəti",
         help_text=(
-            "Bu vəzifədə olan istifadəçilər öz departamentlərindəki əməkdaşların "
+            "Bu vəzifədə olan istifadəçilər öz şöbələrindəki əməkdaşların "
             "icazə sorğularını görə və təsdiq/rədd edə bilər."
         ),
     )

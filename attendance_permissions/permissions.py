@@ -15,7 +15,7 @@ Aparat rəhbəri təyini İKİ yolla ola bilər (hər hansı biri kifayətdir):
 APPARATUS_HEAD_ROLE_ORDER = 2
 
 # Sorğunu YARADAN şəxsin öz vəzifə sırasına (Role.order) görə hansı təsdiq
-# axınından keçəcəyini müəyyən edir. Səbəb: şöbə müdiri/departament rəhbəri
+# axınından keçəcəyini müəyyən edir. Səbəb: şöbə müdiri/şöbə rəhbəri
 # səviyyəsində olan şəxslər öz sorğusunu özü təsdiqləyə bilməz (can_review bunu
 # artıq qadağan edir), ona görə həmin mərhələ ümumiyyətlə keçilməlidir.
 #
@@ -52,7 +52,7 @@ def get_approval_flow(user):
 
 def is_department_manager(user):
     """
-    Şöbə müdiri = (Role.is_manager_role=True) VƏ YA (öz idarə etdiyi departamentin
+    Şöbə müdiri = (Role.is_manager_role=True) VƏ YA (öz idarə etdiyi şöbənin
     Department.manager sahəsi məhz bu user-dirsə).
     """
     if not user or not getattr(user, "is_authenticated", False):
@@ -78,8 +78,8 @@ def is_apparatus_head(user):
 
 def get_department_descendant_ids(department):
     """
-    Verilən departamentin öz id-si + bütün alt-şöbələrinin (children, nəvə-şöbələr də daxil)
-    id-lərini qaytarır. Departament rəhbəri/direktoru yalnız öz department_id-sinə DEQIQ bərabər
+    Verilən şöbənin öz id-si + bütün alt-şöbələrinin (children, nəvə-şöbələr də daxil)
+    id-lərini qaytarır. Şöbə rəhbəri/direktoru yalnız öz department_id-sinə DEQIQ bərabər
     olan sorğuları deyil, öz iyerarxiyasındakı bütün alt-şöbələrin sorğularını da görməlidir.
     """
     ids = [department.id]
@@ -114,10 +114,10 @@ def get_visible_queryset(user, queryset):
 
 def get_department_manager(department):
     """
-    Bildiriş göndərmək üçün: departamentin rəhbərini tapır.
-    Əvvəlcə departamentin özündə axtarır (Department.manager, olmasa rolu manager olan işçi);
-    tapılmasa YUXARI (parent) departamentlərə qalxaraq davam edir - çünki alt-şöbənin öz
-    rəhbəri təyin olunmaya bilər, bu halda əsl rəhbər üst departamentin direktorudur.
+    Bildiriş göndərmək üçün: şöbənin rəhbərini tapır.
+    Əvvəlcə şöbənin özündə axtarır (Department.manager, olmasa rolu manager olan işçi);
+    tapılmasa YUXARI (parent) şöbə və struktur bölmələrə qalxaraq davam edir - çünki alt-şöbənin öz
+    rəhbəri təyin olunmaya bilər, bu halda əsl rəhbər üst şöbənin direktorudur.
     """
     from authentication.models import User
 
@@ -186,7 +186,7 @@ def can_review(user, permission_obj):
 
         if not reviewer:
             return False, (
-                "Bu departament üçün icazə təsdiqləyicisi təyin edilməyib."
+                "Bu şöbə üçün icazə təsdiqləyicisi təyin edilməyib."
             )
 
         if reviewer.id != user.id:
@@ -297,7 +297,7 @@ def get_configured_apparatus_head(organization):
 
 def get_configured_department_reviewer(department):
     """
-    Departament üçün workflow-da birinci mərhələdə baxacaq şəxsi qaytarır.
+    Şöbə üçün workflow-da birinci mərhələdə baxacaq şəxsi qaytarır.
 
     manager_enabled=True:
         Department.manager
@@ -342,7 +342,7 @@ def can_set_leave_period(user):
       - superuser / qurum admini
       - Aparat rəhbəri (User.is_apparatus_head)
       - vəzifəsi şöbə rəhbəri səlahiyyətli olanlar (Role.is_manager_role)
-      - hər hansı departamentin təyin edilmiş rəhbəri (Department.manager)
+      - hər hansı şöbənin təyin edilmiş rəhbəri (Department.manager)
     """
     if not user or not getattr(user, "is_authenticated", False):
         return False

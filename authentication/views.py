@@ -733,7 +733,7 @@ class RoleListView(APIView):
 
 
 # ---------------------------------------------------------------------------
-# İnzibatçı paneli: Departamentlər (quruma bağlı, valideyn/child hierarxiyası)
+# İnzibatçı paneli: Şöbə və struktur bölmələr (quruma bağlı, valideyn/child hierarxiyası)
 # ---------------------------------------------------------------------------
 
 NO_DEPARTMENT_ORGANIZATION = "İdarə etdiyiniz qurum təyin edilə bilmədi."
@@ -780,7 +780,7 @@ class OrgDepartmentsView(APIView):
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
         department = serializer.save()
 
-        logger.info(f"{requester.username} - yeni departament yaratdı: {department.title}")
+        logger.info(f"{requester.username} - yeni şöbə yaratdı: {department.title}")
         return Response(DepartmentAdminSerializer(department).data, status=HTTP_201_CREATED)
 
 
@@ -789,14 +789,14 @@ def _get_scoped_department(request, id):
     department = Department.objects.select_related("organization", "parent", "manager") \
         .prefetch_related("children", "roles").filter(id=id).first()
     if not department:
-        return None, Response({"detail": "Departament tapılmadı."}, status=HTTP_404_NOT_FOUND)
+        return None, Response({"detail": "Şöbə tapılmadı."}, status=HTTP_404_NOT_FOUND)
 
     if requester.is_superuser:
         return department, None
 
     if requester.is_org_admin:
         if not requester.organization_id or department.organization_id != requester.organization_id:
-            return None, Response({"detail": "Bu departament sizin qurumunuza aid deyil."}, status=HTTP_403_FORBIDDEN)
+            return None, Response({"detail": "Bu şöbə sizin qurumunuza aid deyil."}, status=HTTP_403_FORBIDDEN)
         return department, None
 
     return None, Response({"detail": "İcazəniz yoxdur."}, status=HTTP_403_FORBIDDEN)
@@ -819,7 +819,7 @@ class OrgDepartmentDetailView(APIView):
 
         data = {k: v for k, v in request.data.items()}
         if not request.user.is_superuser:
-            # Qurum admini departamenti başqa quruma köçürə bilməz.
+            # Qurum admini şöbəni başqa quruma köçürə bilməz.
             data.pop("organization", None)
 
         serializer = DepartmentWriteSerializer(department, data=data, partial=True)
@@ -827,7 +827,7 @@ class OrgDepartmentDetailView(APIView):
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
         serializer.save()
 
-        logger.info(f"{request.user.username} - {department.title} departamentini yenilədi")
+        logger.info(f"{request.user.username} - {department.title} şöbəsini yenilədi")
         return Response(DepartmentAdminSerializer(department).data, status=HTTP_200_OK)
 
     def delete(self, request, id, *args, **kwargs):
@@ -837,28 +837,28 @@ class OrgDepartmentDetailView(APIView):
 
         if department.children.exists():
             return Response(
-                {"detail": "Alt departamentləri olan departament silinə bilməz. Əvvəlcə onları silin."},
+                {"detail": "Alt struktur bölmələri olan şöbə silinə bilməz. Əvvəlcə onları silin."},
                 status=HTTP_400_BAD_REQUEST,
             )
         if department.roles.exists():
             return Response(
-                {"detail": "Vəzifələri olan departament silinə bilməz. Əvvəlcə vəzifələri silin."},
+                {"detail": "Vəzifələri olan şöbə silinə bilməz. Əvvəlcə vəzifələri silin."},
                 status=HTTP_400_BAD_REQUEST,
             )
         if department.user_set.exists():
             return Response(
-                {"detail": "Bu departamentə bağlı işçilər var. Əvvəlcə onları başqa departamentə köçürün."},
+                {"detail": "Bu şöbəyə bağlı işçilər var. Əvvəlcə onları başqa şöbəyə köçürün."},
                 status=HTTP_400_BAD_REQUEST,
             )
 
         title = department.title
         department.delete()
-        logger.info(f"{request.user.username} - {title} departamentini sildi")
-        return Response({"detail": "Departament silindi."}, status=HTTP_200_OK)
+        logger.info(f"{request.user.username} - {title} şöbəsini sildi")
+        return Response({"detail": "Şöbə silindi."}, status=HTTP_200_OK)
 
 
 # ---------------------------------------------------------------------------
-# İnzibatçı paneli: Vəzifələr (Role) - departamentə (və dolayısı ilə quruma) bağlı
+# İnzibatçı paneli: Vəzifələr (Role) - şöbəyə (və dolayısı ilə quruma) bağlı
 # ---------------------------------------------------------------------------
 
 class OrgRolesView(APIView):
@@ -893,7 +893,7 @@ class OrgRolesView(APIView):
 
         department_id = data.get("department")
         if not department_id:
-            return Response({"detail": "Departament seçilməlidir."}, status=HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Şöbə seçilməlidir."}, status=HTTP_400_BAD_REQUEST)
         department, error = _get_scoped_department(request, department_id)
         if error:
             return error
@@ -943,7 +943,7 @@ class OrgRoleDetailView(APIView):
         data = {k: v for k, v in request.data.items()}
         new_department_id = data.get("department")
         if new_department_id and not request.user.is_superuser:
-            # Qurum admini vəzifəni başqa quruma aid departamentə köçürə bilməz.
+            # Qurum admini vəzifəni başqa quruma aid şöbəyə köçürə bilməz.
             _, dep_error = _get_scoped_department(request, new_department_id)
             if dep_error:
                 return dep_error

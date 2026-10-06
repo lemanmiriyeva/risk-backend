@@ -218,14 +218,14 @@ class OrgUserSerializer(ModelSerializer):
 
 
 # ---------------------------------------------------------------------------
-# İnzibatçı paneli: Departament və Vəzifə (Role) idarəetməsi.
-# Departament və vəzifə quruma bağlıdır - hər qurumun öz "ana" (parent=None)
-# departament(lər)i, onların child departamentləri, və hər departamentin öz
+# İnzibatçı paneli: Şöbə və Vəzifə (Role) idarəetməsi.
+# Şöbə və vəzifə quruma bağlıdır - hər qurumun öz "ana" (parent=None)
+# şöbə(lər)i, onların child şöbə və struktur bölmələri, və hər şöbənin öz
 # vəzifələri (Role.department) olur.
 # ---------------------------------------------------------------------------
 
 class RoleAdminSerializer(ModelSerializer):
-    """Vəzifələr (Role) - departamentə bağlı, oxuma üçün."""
+    """Vəzifələr (Role) - şöbəyə bağlı, oxuma üçün."""
     department_title = SerializerMethodField()
     organization = SerializerMethodField()
 
@@ -262,13 +262,13 @@ class RoleWriteSerializer(ModelSerializer):
         department = attrs.get("department", getattr(self.instance, "department", None))
         if parent and department and parent.department_id and parent.department_id != department.id:
             raise serializers.ValidationError(
-                {"parent": "Valideyn vəzifə fərqli departamentə aiddir."}
+                {"parent": "Valideyn vəzifə fərqli şöbəyə aiddir."}
             )
         return attrs
 
 
 class DepartmentAdminSerializer(ModelSerializer):
-    """Departamentlərin siyahısı/detalı üçün - qurum, valideyn, child-lar və vəzifələr daxil olmaqla."""
+    """Şöbə və struktur bölmələrin siyahısı/detalı üçün - qurum, valideyn, child-lar və vəzifələr daxil olmaqla."""
     organization_title = SerializerMethodField()
     parent_title = SerializerMethodField()
     manager_name = SerializerMethodField()
@@ -302,7 +302,7 @@ class DepartmentAdminSerializer(ModelSerializer):
 
 
 class DepartmentWriteSerializer(ModelSerializer):
-    """Departament yaratmaq/redaktə etmək üçün."""
+    """Şöbə yaratmaq/redaktə etmək üçün."""
 
     class Meta:
         model = Department
@@ -321,10 +321,10 @@ class DepartmentWriteSerializer(ModelSerializer):
                 attrs["organization"] = organization
             elif parent.organization_id and organization and parent.organization_id != organization.id:
                 raise serializers.ValidationError(
-                    {"parent": "Valideyn departament fərqli quruma aiddir."}
+                    {"parent": "Üst şöbə fərqli quruma aiddir."}
                 )
             if self.instance and parent_id_equals_self(self.instance, parent):
-                raise serializers.ValidationError({"parent": "Departament öz-özünün valideyni ola bilməz."})
+                raise serializers.ValidationError({"parent": "Şöbə öz-özünün valideyni ola bilməz."})
         elif not organization:
             raise serializers.ValidationError({"organization": "Qurum seçilməlidir."})
 

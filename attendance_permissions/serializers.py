@@ -224,7 +224,16 @@ class AttendancePermissionDepartmentConfigSerializer(serializers.ModelSerializer
         )
 
     def get_manager_name(self, obj):
-        return obj.department.manager.name if obj.department.manager else None
+        # Şöbənin rəhbəri: əvvəlcə Department.manager sahəsi, o boşdursa həmin
+        # şöbədə vəzifəsi "şöbə rəhbəri səlahiyyətli" (Role.is_manager_role) olan işçi.
+        department = obj.department
+        if department.manager_id:
+            return department.manager.name
+        from authentication.models import User
+        manager = User.objects.filter(
+            department=department, role__is_manager_role=True, is_active=True,
+        ).first()
+        return manager.name if manager else None
 
     def get_replacement_user_name(self, obj):
         return (

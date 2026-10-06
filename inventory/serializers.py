@@ -51,7 +51,7 @@ class InventorySerializer(serializers.ModelSerializer):
         elif owner_type == Inventory.OWNER_DEPARTMENT:
             has_existing = self.instance and self.instance.owner_department_id
             if not attrs.get('owner_department_name') and not has_existing:
-                raise serializers.ValidationError({'owner_department_name': 'Departament seçilməlidir.'})
+                raise serializers.ValidationError({'owner_department_name': 'Şöbə seçilməlidir.'})
         # OWNER_APPARATUS üçün əlavə seçim tələb olunmur
 
         return attrs
