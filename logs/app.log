@@ -2359,3 +2359,104 @@ INFO 2026-09-28 09:49:15,756 middleware [LOQ] laman.bashirova - Baxdı - modul=-
 INFO 2026-09-28 09:49:25,784 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
 INFO 2026-09-28 09:49:25,802 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
 INFO 2026-09-28 09:49:25,832 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 10:08:06,616 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "yufk" adlı qeydi yaratdı - ip=::1
+INFO 2026-09-28 10:08:06,905 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 10:08:15,514 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 10:08:15,538 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 10:08:15,581 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 10:08:30,708 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "ui" adlı qeydi yaratdı - ip=::1
+INFO 2026-09-28 10:08:30,773 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 10:08:38,900 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "uy" adlı qeydi yaratdı - ip=::1
+INFO 2026-09-28 10:08:52,059 middleware [LOQ] laman.bashirova - Yaratdı - modul=- - sistem modulunda "yug" adlı qeydi yaratdı - ip=::1
+INFO 2026-09-28 10:08:52,108 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 10:08:55,856 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 10:08:55,904 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 10:08:55,958 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 15:06:17,905 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 15:06:17,932 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:06:25,215 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-28 15:06:37,085 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-09-28 15:06:37,125 views laman.bashirova uğurla daxil oldu
+INFO 2026-09-28 15:06:37,139 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-09-28 15:06:37,184 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 15:06:37,193 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:06:41,433 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:07:49,886 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 15:07:49,912 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:07:49,933 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 15:07:53,100 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:08:37,249 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:08:37,270 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:08:37,289 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:08:37,328 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:10:26,362 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-09-28 15:10:26,371 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-09-28 15:10:26,397 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-01 14:09:26,368 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-01 14:09:38,178 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-01 14:09:38,232 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-01 14:09:38,245 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-01 14:09:38,292 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-01 14:09:38,299 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-02 12:10:29,158 middleware [LOQ] orgadmin - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:29,164 views orgadmin - worker üçün Təlimlər / S ALT MODUL ADMİNİ təyin etdi
+INFO 2026-10-02 12:10:29,165 middleware [LOQ] orgadmin - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:29,172 middleware [LOQ] orgadmin - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:29,951 views matadmin yeni təlim yüklədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:29,956 services [BİLDİRİŞ] viewer <- Yeni təlim materialı
+INFO 2026-10-02 12:10:29,960 middleware [LOQ] matadmin - Yaratdı - modul=- - sistem modulunda "Yanğın təhlükəsizliyi" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:29,970 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:29,980 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:29,989 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,000 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,009 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,022 middleware [LOQ] viewer - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,789 views matadmin yeni təlim yüklədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:30,793 services [BİLDİRİŞ] viewer <- Yeni təlim materialı
+INFO 2026-10-02 12:10:30,796 middleware [LOQ] matadmin - Yaratdı - modul=- - sistem modulunda "Yanğın təhlükəsizliyi" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,804 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,814 middleware [LOQ] matadmin - Sildi - modul=- - sistem modulunda sildi - ip=127.0.0.1
+INFO 2026-10-02 12:10:30,824 middleware [LOQ] viewer - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:31,788 middleware [LOQ] boss - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:32,601 views matadmin yeni təlim yüklədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:32,607 services [BİLDİRİŞ] viewer <- Yeni təlim materialı
+INFO 2026-10-02 12:10:32,611 middleware [LOQ] matadmin - Yaratdı - modul=- - sistem modulunda "Yanğın təhlükəsizliyi" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:32,622 middleware [LOQ] statadmin - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,478 views matadmin yeni təlim yüklədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:33,482 services [BİLDİRİŞ] viewer <- Yeni təlim materialı
+INFO 2026-10-02 12:10:33,485 middleware [LOQ] matadmin - Yaratdı - modul=- - sistem modulunda "Yanğın təhlükəsizliyi" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,490 middleware [LOQ] statadmin - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,494 middleware [LOQ] matadmin - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,516 middleware [LOQ] viewer - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,523 middleware [LOQ] viewer - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,531 middleware [LOQ] viewer - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:33,535 middleware [LOQ] outsider - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,345 views matadmin yeni təlim yüklədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:34,349 services [BİLDİRİŞ] viewer <- Yeni təlim materialı
+INFO 2026-10-02 12:10:34,352 middleware [LOQ] matadmin - Yaratdı - modul=- - sistem modulunda "Yanğın təhlükəsizliyi" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,366 views matadmin təlim quiz-ini yenilədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:34,369 middleware [LOQ] matadmin - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,378 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,387 views viewer təlimi tam izlədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:34,388 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,402 middleware [LOQ] viewer - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,416 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,431 views viewer quiz təsdiqlədi: Yanğın təhlükəsizliyi - 50%
+INFO 2026-10-02 12:10:34,433 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda "#1" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,446 middleware [LOQ] viewer - Yaratdı - modul=- - sistem modulunda "#1" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,460 middleware [LOQ] statadmin - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,479 middleware [LOQ] statadmin - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,859 views matadmin təlim quiz-ini yenilədi: Yanğın təhlükəsizliyi
+INFO 2026-10-02 12:10:34,861 middleware [LOQ] matadmin - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,868 middleware [LOQ] statadmin - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-10-02 12:10:34,875 views statadmin baxış qeydini sıfırladı: viewer — Yanğın təhlükəsizliyi (Tam baxılıb)
+INFO 2026-10-02 12:10:34,876 middleware [LOQ] statadmin - Sildi - modul=- - sistem modulunda sildi - ip=127.0.0.1
+INFO 2026-10-02 12:11:54,895 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-02 12:12:03,613 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-02 12:12:03,659 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-02 12:12:03,668 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-02 12:12:03,702 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-02 12:12:03,717 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-02 12:12:10,241 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-10-02 12:13:04,333 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-10-02 12:13:04,410 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
