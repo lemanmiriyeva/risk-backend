@@ -457,7 +457,8 @@ class StatisticsSummaryView(_StatsScopeMixin, APIView):
             progress_by_training.setdefault(row["training_id"], []).append(row)
 
         attempt_stats = {
-            r["training_id"]: r for r in attempts_qs.values("training_id").annotate(
+            r["training_id"]: r
+            for r in attempts_qs.order_by().values("training_id").annotate(
                 attempts=Count("id"),
                 users=Count("user", distinct=True),
                 passed_users=Count("user", filter=Q(passed=True), distinct=True),
@@ -510,7 +511,7 @@ class StatisticsSummaryView(_StatsScopeMixin, APIView):
             totals["feedback"] += row["feedback_count"]
 
         totals["trainings"] = len(trainings)
-        overall_avg = attempts_qs.aggregate(v=Avg("percent"))["v"]
+        overall_avg = attempts_qs.order_by().aggregate(v=Avg("percent"))["v"]
         totals["quiz_avg_percent"] = round(overall_avg, 1) if overall_avg is not None else None
         return Response({
             "totals": totals,
