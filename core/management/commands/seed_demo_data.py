@@ -869,7 +869,7 @@ class Command(BaseCommand):
                 rows.append((perm.user, Notification.TYPE_ATTENDANCE_PERMISSION_APPROVED, "İcazə sorğunuz təsdiqləndi",
                              f"{perm.date:%d.%m.%Y} tarixli icazə sorğunuz təsdiqləndi.", ts, True, perm.pk))
             elif perm.status == AttendancePermission.STATUS_REJECTED:
-                rows.append((perm.user, Notification.TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazə sorğunuz rədd edildi",
+                rows.append((perm.user, Notification.TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazə sorğunuzdan imtina edildi",
                              f"{perm.date:%d.%m.%Y} tarixli sorğu: {perm.review_comment}", ts, False, perm.pk))
             elif perm.status == AttendancePermission.STATUS_AWAITING_APPARATUS:
                 rows.append((self.u(APPARATUS_HEAD), Notification.TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED,

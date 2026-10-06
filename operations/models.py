@@ -40,7 +40,7 @@ class Operation(TimestampsModel):
         (STATUS_PENDING, 'Gözləmədə'),
         (STATUS_IN_PROGRESS, 'Baxılır'),
         (STATUS_APPROVED, 'Təsdiqləndi'),
-        (STATUS_REJECTED, 'Rədd edildi'),
+        (STATUS_REJECTED, 'İmtina edildi'),
         (STATUS_CANCELED, 'Ləğv edildi'),
     ]
 
@@ -123,7 +123,7 @@ class OperationApprovalStep(TimestampsModel):
     STATUS_CHOICES = [
         (STATUS_PENDING, 'Gözləmədə'),
         (STATUS_APPROVED, 'Təsdiqləndi'),
-        (STATUS_REJECTED, 'Rədd edildi'),
+        (STATUS_REJECTED, 'İmtina edildi'),
         (STATUS_SKIPPED, 'Keçildi'),
     ]
 

@@ -97,7 +97,7 @@ class AttendancePermissionListCreateView(APIView):
                 {
                     "detail": (
                         "Aparat rəhbəri icazə sorğusu yarada bilməz - "
-                        "yalnız təsdiq/rədd edə bilər."
+                        "yalnız təsdiq edə və ya imtina edə bilər."
                     )
                 },
                 status=HTTP_403_FORBIDDEN,
@@ -569,10 +569,10 @@ class AttendancePermissionReviewView(APIView):
 
                 notify(
                     instance.user,
-                    title="İcazə sorğunuz rədd edildi",
+                    title="İcazə sorğunuzdan imtina edildi",
                     body=(
-                            f"{instance.date} tarixli sorğunuz şöbə müdiri "
-                            f"tərəfindən rədd edildi."
+                            f"{instance.date} tarixli sorğunuzdan şöbə müdiri "
+                            f"tərəfindən imtina edildi."
                             + (f" Səbəb: {comment}" if comment else "")
                     ),
                     notification_type=(
@@ -647,12 +647,14 @@ class AttendancePermissionReviewView(APIView):
                     title=(
                         "İcazəniz təsdiqləndi"
                         if action == "approve"
-                        else "İcazəniz rədd edildi"
+                        else "İcazə sorğunuzdan imtina edildi"
                     ),
                     body=(
-                            f"{instance.date} tarixli icazə sorğunuz "
-                            f"Aparat rəhbəri tərəfindən "
-                            f"{'təsdiqləndi' if action == 'approve' else 'rədd edildi'}."
+                            (
+                                f"{instance.date} tarixli icazə sorğunuz Aparat rəhbəri tərəfindən təsdiqləndi."
+                                if action == "approve"
+                                else f"{instance.date} tarixli icazə sorğunuzdan Aparat rəhbəri tərəfindən imtina edildi."
+                            )
                             + (f" Səbəb: {comment}" if comment else "")
                     ),
                     notification_type=(
@@ -948,14 +950,16 @@ class MyLeavePeriodViewSet(viewsets.ModelViewSet):
         allowed = can_set_leave_period(request.user)
         active = get_active_leave_period(request.user) if allowed else None
 
-        # Əvəzləyici seçimi üçün eyni qurumdakı digər aktiv işçilər.
+        # Əvəzləyici seçimi üçün YALNIZ istifadəçinin öz şöbəsinin (və onun alt
+        # sektorlarının) aktiv işçiləri. Şöbəsi təyin edilməyibsə - eyni qurum.
         replacements = []
         if allowed:
+            qs = User.objects.filter(organization_id=request.user.organization_id, is_active=True)
+            if request.user.department_id:
+                from .permissions import get_department_descendant_ids
+                qs = qs.filter(department_id__in=get_department_descendant_ids(request.user.department))
             qs = (
-                User.objects.filter(
-                    organization_id=request.user.organization_id,
-                    is_active=True,
-                )
+                qs
                 .exclude(id=request.user.id)
                 .select_related("role", "department")
                 .order_by("firstname", "lastname")

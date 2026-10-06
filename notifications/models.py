@@ -13,7 +13,7 @@ class Notification(TimestampsModel):
         (TYPE_ATTENDANCE_PERMISSION_NEW, "Yeni icazə sorğusu"),
         (TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED, "Şöbə müdiri təsdiqlədi"),
         (TYPE_ATTENDANCE_PERMISSION_APPROVED, "İcazə təsdiqləndi"),
-        (TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazə rədd edildi"),
+        (TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazədən imtina edildi"),
         (TYPE_OTHER, "Digər"),
     ]
 

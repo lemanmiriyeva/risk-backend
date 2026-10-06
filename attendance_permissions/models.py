@@ -12,7 +12,7 @@ class AttendancePermission(TimestampsModel):
         (STATUS_PENDING, "Gözləmədə"),
         (STATUS_AWAITING_APPARATUS, "Aparat rəhbərinin təsdiqini gözləyir"),
         (STATUS_APPROVED, "Təsdiqlənib"),
-        (STATUS_REJECTED, "Rədd edilib"),
+        (STATUS_REJECTED, "İmtina edilib"),
     ]
 
     user = models.ForeignKey(

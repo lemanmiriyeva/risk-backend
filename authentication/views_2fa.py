@@ -35,7 +35,7 @@ class TwoFASetupView(APIView):
             user.save(update_fields=["two_fa_secret"])
 
         totp = pyotp.totp.TOTP(user.two_fa_secret)
-        uri = totp.provisioning_uri(name=user.username, issuer_name="Risk Reyestri Sistemi")
+        uri = totp.provisioning_uri(name=user.username, issuer_name="MİS")
 
         img = qrcode.make(uri)
         buf = io.BytesIO()

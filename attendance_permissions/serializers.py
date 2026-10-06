@@ -353,6 +353,14 @@ class LeavePeriodSerializer(serializers.ModelSerializer):
                     {"replacement_user": "Əvəzləyici eyni qurumdan seçilməlidir."}
                 )
 
+        # Əvəzləyici istifadəçinin öz şöbəsindən (və ya onun alt sektorlarından) olmalıdır.
+        if replacement and user and user.department_id:
+            from .permissions import get_department_descendant_ids
+            if replacement.department_id not in set(get_department_descendant_ids(user.department)):
+                raise serializers.ValidationError(
+                    {"replacement_user": "Əvəzləyici yalnız öz şöbənizin əməkdaşlarından seçilə bilər."}
+                )
+
         # Üst-üstə düşən aktiv məzuniyyət dövrü olmasın.
         if user and start and end:
             overlapping = LeavePeriod.objects.filter(
