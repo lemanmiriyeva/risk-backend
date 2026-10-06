@@ -22,6 +22,13 @@ class Command(BaseCommand):
             defaults={"title": "Risk Logları", "url_endpoint": "logs"}
         )
 
+        # Loqlar (audit jurnalı). Kod ActivityLogViewSet.module_code ilə eyni olmalıdır.
+        # Mövcud modulun adı/linki dəyişdirilməsin deyə yalnız yoxdursa yaradılır.
+        Module.objects.get_or_create(
+            code="activity_logs",
+            defaults={"title": "Loqlar", "url_endpoint": "loqlar"}
+        )
+
         Module.objects.update_or_create(
             code="ikinci_modul",
             defaults={"title": "İkinci Modul", "url_endpoint": "ikinci-modul"}
