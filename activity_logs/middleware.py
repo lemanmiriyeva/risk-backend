@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 from .models import ActivityLog
 from .services import get_client_ip, resolve_module, sanitize_body, humanize_changes
@@ -35,6 +36,16 @@ IGNORED_PREFIXES = (
     '/static/',
     '/media/',
     '/admin/',
+    # Səhifənin fonda etdiyi köməkçi sorğular - istifadəçi hərəkəti deyil.
+    '/api/bulletin/permissions',
+    '/api/trainings/permissions',
+)
+
+# Təlim videosu izlənərkən brauzer hər 5 saniyədən bir irəliləyiş göndərir;
+# bunlar jurnala yazılsa, hər baxış yüzlərlə qeyd yaradardı. Baxışın özü
+# (start/complete) və statistikası trainings app-ında ayrıca saxlanılır.
+IGNORED_PATTERNS = (
+    re.compile(r'^/api/trainings/materials/\d+/progress/?$'),
 )
 
 
@@ -100,6 +111,8 @@ class ActivityLogMiddleware:
         if not path.startswith('/api/'):
             return
         if any(path.startswith(p) for p in IGNORED_PREFIXES):
+            return
+        if any(p.match(path) for p in IGNORED_PATTERNS):
             return
 
         user = getattr(request, 'user', None)

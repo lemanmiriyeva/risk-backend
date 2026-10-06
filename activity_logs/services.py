@@ -14,6 +14,13 @@ MODULE_PREFIX_MAP = {
     'status': ('core', 'Statuslar'),
     'activity-logs': ('activity_logs', 'Loqlar'),
     'inventory': ('inventory', 'İnventar Uçotu'),
+    # Aşağıdakılar əvvəllər xəritədə yox idi - bu modullardakı hər GET sorğusu
+    # "sistem moduluna daxil oldu" kimi yazılırdı.
+    'attendance-permissions': ('attendance_permissions', 'İcazələr'),
+    'operations': ('operations', 'Əməliyyatlar'),
+    'bulletin': ('bulletin', 'Elanlar lövhəsi'),
+    'trainings': ('trainings', 'Təlimlər'),
+    'statuses': ('core', 'Statuslar'),
 }
 
 SENSITIVE_FIELDS = {'password', 'password1', 'password2', 'new_password', 'old_password', 'code', 'refresh', 'access'}
