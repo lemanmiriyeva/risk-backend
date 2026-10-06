@@ -28,7 +28,19 @@ class BulletinCategorySerializer(serializers.ModelSerializer):
         return value.strip().lower().replace(" ", "_")
 
 
+class _DefaultTrueBooleanField(serializers.BooleanField):
+    """
+    multipart/form-data ilə göndərilən formada (fayl / şəkil əlavə edildikdə)
+    BooleanField göndərilməsə, DRF onu HTML checkbox kimi `False` sayır. Nəticədə
+    şəkilli xəbər və ya fayllı sənəd `is_active=False` ilə yaradılır və siyahıda
+    görünmür. Göndərilməyən dəyər standart (True) qəbul olunur.
+    """
+
+    default_empty_html = serializers.empty
+
+
 class CircularSerializer(serializers.ModelSerializer):
+    is_active = _DefaultTrueBooleanField(required=False, default=True)
     category = serializers.PrimaryKeyRelatedField(queryset=BulletinCategory.objects.all())
     category_key = serializers.CharField(source="category.key", read_only=True)
     category_label = serializers.CharField(source="category.label", read_only=True)
@@ -69,6 +81,7 @@ class CircularSerializer(serializers.ModelSerializer):
 
 
 class NewsPostSerializer(serializers.ModelSerializer):
+    is_active = _DefaultTrueBooleanField(required=False, default=True)
     organization_name = serializers.CharField(source="organization.title", read_only=True, default=None)
     created_by_name = serializers.CharField(source="created_by.name", read_only=True, default=None)
     image_url = serializers.SerializerMethodField()
