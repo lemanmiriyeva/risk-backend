@@ -12,7 +12,7 @@ MODULE_PREFIX_MAP = {
     'roles': ('authentication', 'İstifadəçi idarəetməsi'),
     'modules': ('core', 'Modullar'),
     'status': ('core', 'Statuslar'),
-    'activity-logs': ('activity_logs', 'Loqlar'),
+    'activity-logs': ('activity_logs', 'Hərəkət tarixçəsi'),
     'inventory': ('inventory', 'İnventar Uçotu'),
     # Aşağıdakılar əvvəllər xəritədə yox idi - bu modullardakı hər GET sorğusu
     # "sistem moduluna daxil oldu" kimi yazılırdı.

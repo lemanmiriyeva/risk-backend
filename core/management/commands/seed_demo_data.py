@@ -1,14 +1,19 @@
 """
 Sistemi test/nümayiş üçün hazırlayır.
 
-DİQQƏT: bu əmr bütün iş məlumatlarını SİLİR (risklər, inventar, loqlar,
+DİQQƏT: bu əmr bütün iş məlumatlarını SİLİR (risklər, inventar, hərəkət tarixçəsi,
 icazələr, elanlar, təlimlər, bildirişlər, qurumlar, şöbələr, vəzifələr və
-laman.bashirova-dan başqa bütün istifadəçilər). Modullar və alt modullar
-saxlanılır.
+istifadəçilər) və Nazirlik Aparatının real strukturu və əməkdaşları ilə yenidən
+doldurur (bax: _msn_staff.py). laman.bashirova hesabı (parolu və 2FA ilə) saxlanılır.
+Modullar saxlanılır, «İkinci Modul» silinir.
 
 İstifadə:
     python manage.py seed_demo_data --yes
     python manage.py seed_demo_data --yes --araz-password "YeniParol!2026"
+
+Əməkdaşlar LDAP vasitəsilə domen parolu ilə daxil olur - onlar üçün lokal parol
+təyin edilmir. araz.mustafa üçün LDAP olmayan mühitdə yoxlamaq məqsədilə lokal
+parol qoyulur.
 """
 import copy
 import os
@@ -29,6 +34,7 @@ from attendance_permissions.models import (
     AttendancePermissionOrganizationConfig,
     LeavePeriod,
 )
+from attendance_permissions.permissions import get_department_manager
 from authentication.models import Department, LoginAttempt, Organization, PasswordReset, Role, User
 from bulletin.models import BulletinCategory, Circular, NewsPost
 from core.models import Module, SubModule
@@ -38,96 +44,49 @@ from operations.models import Operation, OperationApprovalStep
 from risk.models import Risk, RiskLog
 from trainings.models import QuizAnswer, QuizAttempt, QuizOption, QuizQuestion, Training, TrainingFeedback, TrainingProgress
 
+from ._msn_staff import (
+    APPARATUS_HEAD, DEPARTMENTS, MANAGER_ROLES, ORGANIZATION, ROLE_ORDER, STAFF, SUPERUSERS,
+)
+
 ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "seed_assets")
 
 KEEP_USERNAME = "laman.bashirova"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
-IPS = {"laman.bashirova": "10.20.4.37", "araz.mustafa": "10.20.4.12"}
+LOG_TITLE = "Hərəkət tarixçəsi"
 
-# ---------------------------------------------------------------------------
-# Qurumlar və onların şöbə / struktur bölmələri
-# ---------------------------------------------------------------------------
-ORGANIZATIONS = [
-    {
-        "key": "msn",
-        "title": "Azərbaycan Respublikasının Müdafiə Sənayesi Nazirliyi",
-        "short_name": "MSN",
-        "departments": [
-            ("it", "İnformasiya texnologiyaları şöbəsi", "İT", [
-                ("it-cyber", "Kibertəhlükəsizlik sektoru", "KTS"),
-                ("it-infra", "İnfrastruktur və şəbəkə sektoru", "İŞS"),
-                ("it-soft", "Proqram təminatı və rəqəmsal həllər sektoru", "PTS"),
-            ]),
-            ("htes", "Hərbi-texniki əməkdaşlıq şöbəsi", "HTƏŞ", []),
-            ("elm", "Elm, innovasiya və texnologiyalar şöbəsi", "EİTŞ", []),
-            ("plan", "İstehsalatın planlaşdırılması və koordinasiyası şöbəsi", "İPKŞ", []),
-            ("keyf", "Keyfiyyət və standartlaşdırma şöbəsi", "KSŞ", []),
-            ("rejim", "Rejim və məxfilik şöbəsi", "RMŞ", []),
-            ("maliyye", "Maliyyə və iqtisadiyyat şöbəsi", "MİŞ", [
-                ("maliyye-muh", "Mühasibat uçotu sektoru", "MUS"),
-            ]),
-            ("kadr", "İnsan resursları şöbəsi", "İRŞ", []),
-            ("huquq", "Hüquq şöbəsi", "HŞ", []),
-            ("beynelxalq", "Beynəlxalq əlaqələr şöbəsi", "BƏŞ", []),
-            ("audit", "Daxili audit şöbəsi", "DAŞ", []),
-            ("ümumi", "Ümumi şöbə", "ÜŞ", []),
-            ("mtt", "Maddi-texniki təminat şöbəsi", "MTTŞ", []),
-            ("metbuat", "Mətbuat xidməti", "MX", []),
-        ],
-    },
-    {
-        "key": "ettkm",
-        "title": "Elmi-Tədqiqat və Təcrübə-Konstruktor Mərkəzi",
-        "short_name": "ETTKM",
-        "departments": [
-            ("ettkm-kb", "Konstruktor bürosu", "KB", []),
-            ("ettkm-lab", "Sınaq laboratoriyası", "SL", []),
-            ("ettkm-tex", "Texnoloji hazırlıq şöbəsi", "THŞ", []),
-            ("ettkm-it", "İnformasiya texnologiyaları xidməti", "İTX", []),
-        ],
-    },
-    {
-        "key": "zavod",
-        "title": "Mexaniki Emal və Montaj Zavodu",
-        "short_name": "MEMZ",
-        "departments": [
-            ("zavod-sex", "Mexaniki emal sexi", "MES", []),
-            ("zavod-tns", "Texniki nəzarət şöbəsi", "TNŞ", []),
-            ("zavod-anbar", "Anbar təsərrüfatı", "AT", []),
-            ("zavod-emek", "Əməyin mühafizəsi və texniki təhlükəsizlik bölməsi", "ƏMTTB", []),
-        ],
-    },
+# Test məlumatlarında aktiv istifadəçilər (loqlar, risklər, inventar və s. bunların adından)
+ACTIVE_USERS = [
+    "laman.bashirova", "araz.mustafa", "elnur.hasanov", "elvin.ibrahimov", "azer.shukurov",
+    "gulnara.karimova", "ulvi.mikailov", "narmin.akhmedova", "aynura.ibrahimova", "azad.aslanov",
 ]
 
 # ---------------------------------------------------------------------------
-# İnventar: (açar, məhsulun adı, sahib növü, sahib, şöbə açarı - qurum üçün)
+# İnventar: (açar, məhsulun adı, sahib növü, sahib - bölmə kodu və ya şəxsin istifadəçi adı)
 # ---------------------------------------------------------------------------
 INVENTORY = [
-    ("server", "Məxfi sənəd dövriyyəsi serveri — Dell PowerEdge R750", "department", "it"),
-    ("mail", "Korporativ e-poçt serveri — Microsoft Exchange Server", "department", "it"),
-    ("backup", "Ehtiyat surətləmə sistemi — Dell PowerProtect DD6400", "department", "it"),
-    ("firewall", "Şəbəkə təhlükəsizlik divarı — FortiGate 600F", "department", "it"),
-    ("switch", "Nüvə şəbəkə kommutatoru — Cisco Catalyst 9300", "department", "it"),
-    ("rack", "Server şkafı və dəqiq kondisioner sistemi", "department", "it"),
+    ("server", "Məxfi sənəd dövriyyəsi serveri — Dell PowerEdge R750", "department", "11"),
+    ("mail", "Korporativ e-poçt serveri — Microsoft Exchange Server", "department", "11.2"),
+    ("backup", "Ehtiyat surətləmə sistemi — Dell PowerProtect DD6400", "department", "11.2"),
+    ("firewall", "Şəbəkə təhlükəsizlik divarı — FortiGate 600F", "department", "11.2"),
+    ("switch", "Nüvə şəbəkə kommutatoru — Cisco Catalyst 9300", "department", "11.2"),
+    ("rack", "Server şkafı və dəqiq kondisioner sistemi", "department", "11.2"),
     ("edms", "Elektron sənəd dövriyyəsi sistemi", "aparat", None),
     ("ups", "Kəsilməz enerji təchizatı qurğusu — APC Smart-UPS SRT 10kVA", "aparat", None),
     ("generator", "Ehtiyat dizel generatoru — 250 kVA", "aparat", None),
     ("acs", "Giriş-nəzarət sistemi (turniketlər və kart oxuyucuları)", "aparat", None),
-    ("cctv", "Videomüşahidə sistemi — 64 kanallı NVR", "department", "mtt"),
-    ("crypto", "Kriptoqrafik mühafizə vasitəsi (şəbəkə şifrələyicisi)", "department", "rejim"),
-    ("hr", "Kadr uçotu informasiya sistemi", "department", "kadr"),
-    ("acct", "Mühasibat uçotu proqram təminatı", "department", "maliyye"),
-    ("printer", "Çoxfunksiyalı printer — Canon imageRUNNER ADVANCE DX C5840i", "department", "ümumi"),
+    ("cctv", "Videomüşahidə sistemi — 64 kanallı NVR", "department", "7.4"),
+    ("crypto", "Kriptoqrafik mühafizə vasitəsi (şəbəkə şifrələyicisi)", "department", "12.1"),
+    ("alarm", "Arxiv otağının mühafizə siqnalizasiya sistemi", "department", "12.1"),
+    ("hr", "Kadr uçotu informasiya sistemi", "department", "9"),
+    ("acct", "Mühasibat uçotu proqram təminatı", "department", "7.1"),
+    ("dms", "Dövlət müdafiə sifarişlərinin monitorinqi məlumat bazası", "department", "4.1"),
+    ("pdm", "Konstruktor sənədləri arxivi (CAD/PDM sistemi)", "department", "4.2"),
+    ("eximp", "İdxal-ixrac əməliyyatlarının elektron uçotu sistemi", "department", "3.2"),
+    ("printer", "Çoxfunksiyalı printer — Canon imageRUNNER ADVANCE DX C5840i", "department", "10.1"),
     ("projector", "Lazer proyektor — Epson EB-L630U (iclas zalı)", "aparat", None),
-    ("laptop", "Noutbuk — Lenovo ThinkPad T14 Gen 4", "person", "Araz Mustafa"),
-    ("workstation", "İş stansiyası — HP Z4 G5", "person", "Laman Bashirova"),
-    ("pdm", "Konstruktor sənədləri arxivi (CAD/PDM sistemi)", "department", "ettkm-kb"),
-    ("cmm", "Koordinat ölçmə maşını (CMM) — sınaq laboratoriyası", "department", "ettkm-lab"),
-    ("cnc", "Rəqəmli proqram idarəetməli (CNC) emal mərkəzi — DMG MORI DMU 65", "department", "zavod-sex"),
-    ("alarm", "Anbar mühafizə siqnalizasiya sistemi", "department", "zavod-anbar"),
+    ("laptop", "Noutbuk — Lenovo ThinkPad T14 Gen 4", "person", "araz.mustafa"),
+    ("workstation", "İş stansiyası — HP Z4 G5", "person", "laman.bashirova"),
 ]
-# Şəxsə və ya aparata aid inventarın qurumu
-INVENTORY_ORG = {"laptop": "msn", "workstation": "msn"}
 
 L_INFO = "«İnformasiya, informasiyalaşdırma və informasiyanın mühafizəsi haqqında» Azərbaycan Respublikasının Qanunu"
 L_SECRET = "«Dövlət sirri haqqında» Azərbaycan Respublikasının Qanunu"
@@ -142,7 +101,7 @@ RISKS = [
     ("Məxfi sənəd dövriyyəsi serverinə icazəsiz giriş", "server", 5, 3, 5, "prevention",
      "Çoxfaktorlu autentifikasiya və rol əsaslı giriş tətbiq edildikdən sonra qalıq risk orta səviyyədədir.",
      f"{L_SECRET}; {L_INFO}", "ISO/IEC 27001:2022 — A.5.15 Girişə nəzarət, A.8.5 Təhlükəsiz autentifikasiya",
-     INTERNAL_POLICY, "Rüblük", "Uğursuz giriş cəhdləri SIEM vasitəsilə izlənilir; hadisə 1 saat ərzində Rejim və məxfilik şöbəsinə bildirilir.",
+     INTERNAL_POLICY, "Rüblük", "Uğursuz giriş cəhdləri SIEM vasitəsilə izlənilir; hadisə 1 saat ərzində Dövlət sirrinin mühafizəsi sektoruna bildirilir.",
      "ISO/IEC 27002:2022; NIST SP 800-53 Rev.5 — AC-2, AC-6", "laman.bashirova"),
     ("Fişinq e-poçtları vasitəsilə hesab məlumatlarının ələ keçirilməsi", "mail", 4, 4, 4, "mitigation",
      "E-poçt filtrləri və əməkdaşların maarifləndirilməsi ilə ehtimal azaldılıb; qalıq risk orta.",
@@ -152,7 +111,7 @@ RISKS = [
     ("Ehtiyat surətlərin bərpa edilə bilməməsi", "backup", 5, 2, 5, "mitigation",
      "Rüblük bərpa sınaqları keçirildikdə qalıq risk aşağı səviyyədədir.",
      L_INFO, "ISO/IEC 27001:2022 — A.8.13 Məlumatların ehtiyat surəti", INTERNAL_POLICY, "Rüblük",
-     "Bərpa sınağının uğursuz nəticəsi 24 saat ərzində İT şöbəsinin direktoruna məruzə edilir.",
+     "Bərpa sınağının uğursuz nəticəsi 24 saat ərzində İT şöbəsinin müdirinə məruzə edilir.",
      "ISO 22301:2019 — Biznesin davamlılığı", "laman.bashirova"),
     ("Şəbəkə təhlükəsizlik divarının proqram təminatında aşkarlanmış boşluq", "firewall", 4, 3, 4, "prevention",
      "İstehsalçının yeniləmələri 72 saat ərzində tətbiq edilir; qalıq risk aşağı.",
@@ -162,13 +121,13 @@ RISKS = [
     ("Konstruktor sənədlərinin (CAD/PDM) icazəsiz yayılması", "pdm", 5, 2, 5, "prevention",
      "Sənədlərin rəqəmsal su nişanı və çıxarılma nəzarəti tətbiq olunduqdan sonra qalıq risk orta.",
      f"{L_SECRET}; {L_INFO}", "ISO/IEC 27001:2022 — A.5.12 İnformasiyanın təsnifatı, A.8.12 Məlumat sızmasının qarşısının alınması",
-     INTERNAL_POLICY, "Yarımillik", "Sızma şübhəsi olduqda Rejim və məxfilik şöbəsi dərhal məlumatlandırılır.",
+     INTERNAL_POLICY, "Yarımillik", "Sızma şübhəsi olduqda Dövlət sirrinin mühafizəsi sektoru dərhal məlumatlandırılır.",
      "AQAP 2110; ISO/IEC 27002:2022", "laman.bashirova"),
-    ("CNC emal mərkəzinin idarəetmə sisteminin zərərli proqramla yoluxması", "cnc", 4, 2, 4, "mitigation",
-     "İstehsalat şəbəkəsi ofis şəbəkəsindən ayrılıb; qalıq risk aşağı.",
-     L_INFO, "IEC 62443 — Sənaye avtomatlaşdırma sistemlərinin təhlükəsizliyi", INTERNAL_POLICY, "Rüblük",
-     "Avadanlıqda qeyri-adi davranış müşahidə edildikdə istehsal dayandırılır və İT xidmətinə məlumat verilir.",
-     "IEC 62443-3-3; ISO/IEC 27001:2022 — A.8.22", "araz.mustafa"),
+    ("Dövlət müdafiə sifarişləri üzrə məxfi məlumatların sızması", "dms", 5, 2, 5, "prevention",
+     "Məlumat bazasına giriş yalnız sektor əməkdaşlarına verilib və bütün sorğular jurnallaşdırılır; qalıq risk orta.",
+     f"{L_SECRET}; {L_INFO}", "ISO/IEC 27001:2022 — A.5.12 İnformasiyanın təsnifatı, A.8.15 Jurnallaşdırma",
+     INTERNAL_POLICY, "Rüblük", "Sızma şübhəsi olduqda Dövlət sirrinin mühafizəsi və səfərbərlik şöbəsi dərhal məlumatlandırılır.",
+     "NIST SP 800-53 Rev.5 — AC-3, AU-6", "araz.mustafa"),
     ("Elektrik enerjisinin kəsilməsi nəticəsində server otağının dayanması", "ups", 4, 3, 3, "mitigation",
      "UPS və ehtiyat generator ilə 4 saatlıq fasiləsiz iş təmin edilir; qalıq risk aşağı.",
      L_INFO, "ISO/IEC 27001:2022 — A.7.11 Dəstəkləyici kommunal xidmətlər", INTERNAL_POLICY, "Yarımillik",
@@ -177,14 +136,14 @@ RISKS = [
     ("Giriş-nəzarət kartlarının icazəsiz istifadəsi", "acs", 3, 3, 3, "mitigation",
      "Kartlar şəxsi fotoşəkillə təchiz edilib, itirilmiş kartlar dərhal bloklanır.",
      L_SECRET, "ISO/IEC 27001:2022 — A.7.2 Fiziki giriş", INTERNAL_POLICY, "Rüblük",
-     "İtirilmiş kart barədə əməkdaş 2 saat ərzində Maddi-texniki təminat şöbəsinə məlumat verməlidir.",
+     "İtirilmiş kart barədə əməkdaş 2 saat ərzində Təsərrüfat və təchizat sektoruna məlumat verməlidir.",
      "ISO/IEC 27002:2022 — 7.2", "araz.mustafa"),
     ("Videomüşahidə yazılarının itirilməsi", "cctv", 3, 2, 3, "mitigation",
      "Yazılar 30 gün müddətində ikinci diskdə təkrarlanır.",
      L_INFO, "ISO/IEC 27001:2022 — A.7.4 Fiziki təhlükəsizliyin monitorinqi", INTERNAL_POLICY, "Yarımillik",
      "Disk nasazlığı barədə xəbərdarlıq avtomatik göndərilir.", "ISO/IEC 27002:2022 — 7.4", "laman.bashirova"),
     ("Kadr uçotu sistemində fərdi məlumatların qanunsuz emalı", "hr", 4, 2, 4, "prevention",
-     "Giriş yalnız İnsan resursları şöbəsinin əməkdaşlarına verilib; qalıq risk aşağı.",
+     "Giriş yalnız İnsan resurslarının idarə edilməsi şöbəsinin əməkdaşlarına verilib; qalıq risk aşağı.",
      f"{L_PD}; {L_LABOR}", "ISO/IEC 27001:2022 — A.5.34 Məxfilik və fərdi məlumatların qorunması",
      L_PD, "Yarımillik", "Fərdi məlumatların sızması aşkarlandıqda hüquq şöbəsi dərhal məlumatlandırılır.",
      "ISO/IEC 27701:2019", "araz.mustafa"),
@@ -193,12 +152,11 @@ RISKS = [
      L_INFO, "ISO/IEC 27001:2022 — A.8.1 İstifadəçi son qurğuları, A.8.24 Kriptoqrafiyanın tətbiqi",
      INTERNAL_POLICY, "İllik", "İtki halında qurğu uzaqdan bloklanır, hadisə 1 saat ərzində qeydə alınır.",
      "NIST SP 800-53 Rev.5 — MP-5, SC-28", "laman.bashirova"),
-    ("Ölçmə avadanlığının kalibrləmə müddətinin keçməsi", "cmm", 3, 3, 2, "mitigation",
-     "Kalibrləmə qrafiki elektron qaydada izlənilir; qalıq risk aşağı.",
-     "«Ölçmələrin vəhdətinin təmin edilməsi haqqında» Azərbaycan Respublikasının Qanunu",
-     "ISO/IEC 17025:2017 — Sınaq və kalibrləmə laboratoriyaları", "—", "Yarımillik",
-     "Müddəti keçmiş avadanlıqla aparılan ölçmələrin nəticələri etibarsız sayılır və təkrarlanır.",
-     "ISO/IEC 17025:2017; ISO 9001:2015 — 7.1.5", "araz.mustafa"),
+    ("İdxal-ixrac əməliyyatları üzrə məlumatların icazəsiz dəyişdirilməsi", "eximp", 4, 2, 4, "prevention",
+     "Dəyişikliklər iki mərhələli təsdiqlə aparılır və tarixçəsi saxlanılır; qalıq risk aşağı.",
+     L_INFO, "ISO/IEC 27001:2022 — A.5.15 Girişə nəzarət, A.8.15 Jurnallaşdırma", INTERNAL_POLICY, "Rüblük",
+     "Uyğunsuzluq aşkar edildikdə sənəd dövriyyəsi dayandırılır və Sənayenin tənzimlənməsi şöbəsinə məlumat verilir.",
+     "ISO/IEC 27002:2022 — 5.15, 8.15", "araz.mustafa"),
     ("Mühasibat proqram təminatına texniki dəstəyin dayandırılması", "acct", 3, 2, 2, "acceptance",
      "Yeni versiyaya keçid 2027-ci ilin büdcəsinə daxil edilib; risk qəbul edilib.",
      L_INFO, "ISO/IEC 27001:2022 — A.8.32 Dəyişikliklərin idarə edilməsi", "—", "İllik",
@@ -207,10 +165,10 @@ RISKS = [
      "Açarlar iki şəxsin iştirakı ilə yaradılır və seyfdə saxlanılır; qalıq risk aşağı.",
      f"{L_SECRET}; {L_ESIGN}", "ISO/IEC 27001:2022 — A.8.24 Kriptoqrafiyanın tətbiqi", INTERNAL_POLICY, "Rüblük",
      "Açarın kompromitasiyası şübhəsi olduqda açar dərhal ləğv edilir.", "NIST SP 800-57", "araz.mustafa"),
-    ("Anbar mühafizə siqnalizasiyasının nasazlığı", "alarm", 4, 2, 5, "mitigation",
+    ("Arxiv otağının mühafizə siqnalizasiyasının nasazlığı", "alarm", 4, 2, 5, "mitigation",
      "Sistem iki müstəqil kanal üzrə mühafizə postuna qoşulub; qalıq risk orta.",
      L_SECRET, "ISO/IEC 27001:2022 — A.7.4 Fiziki təhlükəsizliyin monitorinqi", INTERNAL_POLICY, "Aylıq",
-     "Nasazlıq zamanı anbar sahəsinə fiziki mühafizə postu əlavə edilir.",
+     "Nasazlıq zamanı arxiv otağına fiziki mühafizə postu təyin edilir.",
      "ISO 45001:2018", "laman.bashirova"),
     ("Elektron sənəd dövriyyəsi sistemində məlumatların bütövlüyünün pozulması", "edms", 4, 2, 3, "mitigation",
      "Sənədlər elektron imza ilə təsdiqlənir və dəyişikliklər jurnalda qeydə alınır.",
@@ -261,11 +219,11 @@ NEWS = [
      "sənədlərlə iş qaydaları üzrə video materiallar əlavə olunub. Hər materialdan sonra qısa test təqdim edilir.", 20),
     ("ehtiyat-suret", "Server otağında planlı profilaktika işləri aparılacaq",
      "Şənbə günü 10:00–14:00 arasında bəzi xidmətlərdə qısamüddətli fasilə ola bilər.",
-     "İnfrastruktur və şəbəkə sektoru tərəfindən server otağında kəsilməz enerji təchizatı qurğularının "
+     "Şəbəkə idarə edilməsi və texniki dəstək sektoru tərəfindən server otağında kəsilməz enerji təchizatı qurğularının "
      "və ehtiyat surətləmə sisteminin planlı profilaktikası aparılacaq. İş zamanı e-poçt və elektron sənəd "
      "dövriyyəsi sistemində qısamüddətli fasilələr mümkündür.", 27),
     ("sergi", "Beynəlxalq müdafiə sərgisində iştiraka hazırlıq",
-     "Hərbi-texniki əməkdaşlıq şöbəsi sərgi üzrə işçi qrupunun ilk iclasını keçirib.",
+     "Beynəlxalq əlaqələr şöbəsi sərgi üzrə işçi qrupunun ilk iclasını keçirib.",
      "İclasda Nazirliyin və tabe qurumların sərgidə nümayiş etdiriləcək məhsulları, stendin konsepsiyası və "
      "işçi qrupunun vəzifə bölgüsü müzakirə olunub.", 41),
 ]
@@ -303,7 +261,7 @@ TRAININGS = [
 
 MODULE_DESCRIPTIONS = {
     "risk": "İnformasiya aktivləri üzrə risklərin qiymətləndirilməsi, emalı və monitorinqi.",
-    "activity_logs": "İstifadəçi fəaliyyətinin və sistem hadisələrinin audit jurnalı.",
+    "activity_logs": "İstifadəçi fəaliyyətinin və sistem hadisələrinin tarixçəsi.",
     "admin": "İstifadəçilər, qurumlar, şöbə və struktur bölmələr, vəzifələr və modul icazələri.",
     "inventory": "İnformasiya aktivlərinin və avadanlığın uçotu.",
     "icazeler": "İş saatı ərzində çıxış icazələri: sorğu, təsdiq və tarixçə.",
@@ -315,13 +273,33 @@ SUB_MODULE_DESCRIPTIONS = {
     "risk_log": "Risk qeydləri üzrə dəyişikliklərin tarixçəsi.",
 }
 
+# İcazə sorğuları: (istifadəçi, gün əvvəl, başlama, bitmə, yer, səbəb, nəticə, rəy)
+#   nəticə: approved | rejected | awaiting | pending
+PERMISSIONS = [
+    ("elvin.ibrahimov", 16, time(11, 0), time(13, 0), "Dövlət Xidmətlər Agentliyi (ASAN xidmət)",
+     "Şəxsiyyət vəsiqəsinin yenilənməsi", "approved", "Razıyam."),
+    ("tural.suleymanli", 12, time(15, 30), time(17, 0), "Dövlət Xəzinədarlıq Agentliyi",
+     "Hesabatların təqdim edilməsi", "approved", "Təsdiq edirəm."),
+    ("kamala.babayeva", 7, time(9, 0), time(10, 30), "Poliklinika", "Tibbi müayinə", "rejected",
+     "Həmin saatda sektorun iclası planlaşdırılıb, başqa vaxt seçin."),
+    ("gulsum.rzayeva", 5, time(14, 0), time(16, 0), "Xarici İşlər Nazirliyi",
+     "Rəsmi nümayəndə heyətinin qəbulu ilə bağlı görüş", "approved", "Razıyam."),
+    ("aygun.barkhudarova", 1, time(10, 0), time(12, 0), "Dövlət Gömrük Komitəsi",
+     "İxrac sənədlərinin razılaşdırılması", "awaiting", "Razıyam."),
+    ("elvin.ibrahimov", -1, time(14, 0), time(16, 0), "Bakı Dövlət Universiteti",
+     "Kibertəhlükəsizlik üzrə seminarda iştirak", "pending", ""),
+    ("javid.rustamli", -2, time(16, 0), time(18, 0), "Rəqəmsal İnkişaf və Nəqliyyat Nazirliyi",
+     "Elektron imza sertifikatının yenilənməsi", "pending", ""),
+]
+
 
 class Command(BaseCommand):
-    help = "Bütün iş məlumatlarını sıfırlayır və sistemi rəsmi test məlumatları ilə doldurur."
+    help = "Bütün iş məlumatlarını sıfırlayır və sistemi Nazirlik Aparatının strukturu ilə doldurur."
 
     def add_arguments(self, parser):
         parser.add_argument("--yes", action="store_true", help="Silinməni təsdiqləyir.")
-        parser.add_argument("--araz-password", default="Araz@MIS2026", help="araz.mustafa üçün ilkin parol.")
+        parser.add_argument("--araz-password", default="Araz@MIS2026",
+                            help="araz.mustafa üçün lokal parol (LDAP olmayan mühit üçün).")
 
     def handle(self, *args, **options):
         if not options["yes"]:
@@ -337,27 +315,34 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             self._wipe(laman)
-            orgs, deps = self._structure()
-            laman, araz = self._users(laman, orgs, deps, options["araz_password"])
-            self._modules(laman, araz)
-            invs = self._inventory(orgs, deps, laman, araz)
-            self._risks(invs, laman, araz)
-            self._attendance(orgs, deps, laman, araz)
-            self._bulletin(laman, araz)
-            self._trainings(laman, araz)
-            self._activity_logs(laman, araz)
-            self._notifications(laman, araz)
+            self.org, self.deps = self._structure()
+            self.users = self._users(laman, options["araz_password"])
+            self._attendance_config()
+            self._modules()
+            invs = self._inventory()
+            self._risks(invs)
+            self._attendance()
+            self._bulletin()
+            self._trainings()
+            self._activity_logs()
+            self._notifications()
 
         self.stdout.write(self.style.SUCCESS(
-            "Hazırdır. Qurum: {}, şöbə/bölmə: {}, inventar: {}, risk: {}, loq: {}, elan: {}, təlim: {}.".format(
-                Organization.objects.count(), Department.objects.count(), Inventory.objects.count(),
+            "Hazırdır. İstifadəçi: {}, şöbə/bölmə: {}, inventar: {}, risk: {}, hərəkət: {}, elan: {}, təlim: {}.".format(
+                User.objects.count(), Department.objects.count(), Inventory.objects.count(),
                 Risk.objects.count(), ActivityLog.objects.count(),
                 Circular.objects.count() + NewsPost.objects.count(), Training.objects.count(),
             )
         ))
-        self.stdout.write(f"araz.mustafa parolu: {options['araz_password']}")
+        self.stdout.write(f"araz.mustafa lokal parolu: {options['araz_password']}")
 
     # ------------------------------------------------------------------ köməkçilər
+    def u(self, username):
+        return self.users[username]
+
+    def ip(self, user):
+        return f"10.20.{4 + user.pk % 9}.{20 + user.pk % 200}"
+
     def at(self, days_ago, hour, minute=0):
         """Bakı vaxtı ilə 'days_ago' gün əvvəl, göstərilən saatda."""
         day = (self.now - timedelta(days=days_ago)).date()
@@ -376,8 +361,6 @@ class Command(BaseCommand):
     def _wipe(self, laman):
         self.stdout.write("Köhnə məlumatlar silinir...")
         Notification.objects.all().delete()
-        OperationApprovalStep.objects.all().delete()
-        Operation.objects.all().delete()
         ActivityLog.objects.all().delete()
         RiskLog.objects.all().delete()
         Risk.objects.all().delete()
@@ -416,72 +399,79 @@ class Command(BaseCommand):
         Role.objects.all().delete()
         Department.objects.all().delete()
         Organization.objects.all().delete()
-        # Risklərin silinməsi siqnal vasitəsilə "Sildi" əməliyyatları yaradır - onları da təmizləyirik
+        # Risklərin silinməsi siqnal vasitəsilə "Sildi" əməliyyatları yaradır - hamısı təmizlənir
         OperationApprovalStep.objects.all().delete()
         Operation.objects.all().delete()
 
     # ------------------------------------------------------------------ struktur
     def _structure(self):
-        orgs, deps = {}, {}
-        order = 1
-        for o in ORGANIZATIONS:
-            org = Organization.objects.create(title=o["title"], short_name=o["short_name"])
-            orgs[o["key"]] = org
-            for key, title, short, children in o["departments"]:
-                dep = Department.objects.create(
-                    title=title, shortname=short, organization=org, order=order,
-                    unique_code=f"{o['short_name']}-{short}",
-                )
-                order += 1
-                deps[key] = dep
-                is_it = key == "it"
-                Role.objects.create(title="Direktor" if is_it else "Şöbə müdiri", department=dep,
-                                    is_manager_role=True, order=3)
-                Role.objects.create(title="Baş mütəxəssis", department=dep, order=6)
-                Role.objects.create(title="Aparıcı mütəxəssis", department=dep, order=7)
-                Role.objects.create(title="Mütəxəssis", department=dep, order=8)
-                for c_key, c_title, c_short in children:
-                    child = Department.objects.create(
-                        title=c_title, shortname=c_short, organization=org, parent=dep, order=order,
-                        unique_code=f"{o['short_name']}-{c_short}",
-                    )
-                    order += 1
-                    deps[c_key] = child
-                    Role.objects.create(title="Sektor müdiri", department=child, is_manager_role=True, order=5)
-                    Role.objects.create(title="Baş mütəxəssis", department=child, order=6)
-                    Role.objects.create(title="Aparıcı mütəxəssis", department=child, order=7)
-        return orgs, deps
+        org = Organization.objects.create(**ORGANIZATION)
+        deps = {}
+        for order, (code, title, parent) in enumerate(DEPARTMENTS, start=1):
+            deps[code] = Department.objects.create(
+                title=title, shortname=code, organization=org, order=order,
+                parent=deps[parent] if parent else None, unique_code=f"MSN-{code}",
+            )
+        return org, deps
+
+    def _role(self, title, department):
+        role, _ = Role.objects.get_or_create(
+            title=title, department=department,
+            defaults={"order": ROLE_ORDER.get(title, 10), "is_manager_role": title in MANAGER_ROLES},
+        )
+        return role
 
     # ------------------------------------------------------------------ istifadəçilər
-    def _users(self, laman, orgs, deps, araz_password):
-        it, msn = deps["it"], orgs["msn"]
-        laman.firstname = laman.firstname or "Laman"
-        laman.lastname = laman.lastname or "Bashirova"
-        laman.organization = msn
-        laman.department = it
-        laman.role = Role.objects.get(department=it, title="Aparıcı mütəxəssis")
-        laman.is_superuser = True
-        laman.is_staff = True
-        laman.is_active = True
-        laman.is_approved = True
-        laman.is_org_admin = False
-        laman.is_apparatus_head = False
-        laman.save()
+    def _users(self, laman, araz_password):
+        users = {}
+        for dep_code, role_title, lastname, firstname, gender, email, phone in STAFF:
+            username = email.split("@")[0]
+            department = self.deps[dep_code] if dep_code else None
+            role = self._role(role_title, department) if role_title else None
+            fields = dict(
+                email=email, firstname=firstname, lastname=lastname, gender=gender,
+                organization=self.org, department=department, role=role,
+                work_phone_number=phone, is_approved=True, is_active=True,
+                is_superuser=username in SUPERUSERS, is_staff=True,
+                is_apparatus_head=username == APPARATUS_HEAD, is_org_admin=False,
+            )
+            if username == laman.username:
+                for key, value in fields.items():
+                    setattr(laman, key, value)
+                laman.save()
+                user = laman
+            else:
+                user = User.objects.create_user(username=username, password=None, **fields)
+                if username == "araz.mustafa" and araz_password:
+                    user.set_password(araz_password)
+                    user.save(update_fields=["password"])
+            users[username] = user
 
-        araz = User.objects.create_user(
-            username="araz.mustafa", email="araz.mustafa@mdi.gov.az", password=araz_password,
-            firstname="Araz", lastname="Mustafa", gender="male",
-            organization=msn, department=it, role=Role.objects.get(department=it, title="Direktor"),
-            is_approved=True, birth_date=(self.now + timedelta(days=3)).date().replace(year=1986),
-            work_phone_number="1101",
+        # Şöbə / sektor rəhbərləri (Department.manager)
+        for user in users.values():
+            if user.role and user.role.title in MANAGER_ROLES and user.department and not user.department.manager_id:
+                user.department.manager = user
+                user.department.save(update_fields=["manager"])
+        return users
+
+    # ------------------------------------------------------------------ icazə konfiqurasiyası
+    def _attendance_config(self):
+        AttendancePermissionOrganizationConfig.objects.create(
+            organization=self.org, apparatus_head_enabled=True, apparatus_head=self.u(APPARATUS_HEAD),
         )
-        # İT şöbəsinin rəhbəri - araz.mustafa (laman.bashirova şöbə müdiri DEYİL)
-        it.manager = araz
-        it.save(update_fields=["manager"])
-        return laman, araz
+        for dep in self.deps.values():
+            dep.refresh_from_db()
+            has_manager = get_department_manager(dep) is not None
+            AttendancePermissionDepartmentConfig.objects.create(
+                organization=self.org, department=dep, manager_enabled=has_manager,
+                no_manager_fallback=(AttendancePermissionDepartmentConfig.FALLBACK_REPLACEMENT if has_manager
+                                     else AttendancePermissionDepartmentConfig.FALLBACK_APPARATUS),
+            )
 
     # ------------------------------------------------------------------ modullar
-    def _modules(self, laman, araz):
+    def _modules(self):
+        Module.objects.filter(code="ikinci_modul").delete()
+        Module.objects.filter(code="activity_logs").update(title=LOG_TITLE)
         for code, text in MODULE_DESCRIPTIONS.items():
             Module.objects.filter(code=code, description__in=["", None]).update(description=text)
         for code, text in SUB_MODULE_DESCRIPTIONS.items():
@@ -490,55 +480,68 @@ class Command(BaseCommand):
             title="Konfiqurasiya",
             description="Aparat rəhbəri və şöbə müdirləri üzrə təsdiq axınının tənzimlənməsi.",
         )
-        # araz.mustafa: İT şöbəsinin direktoru kimi iş modullarına girişi
-        for code in ("risk", "inventory", "icazeler", "operations", "bulletin", "trainings", "activity_logs"):
-            module = Module.objects.filter(code=code).first()
-            if module:
-                module.permitted_users.add(araz)
-        for code in ("risk_register", "risk_view_table", "risk_log", "training_materials", "training_statistics"):
-            sub = SubModule.objects.filter(code=code).first()
-            if sub:
-                sub.permitted_users.add(araz)
-        trainings = Module.objects.filter(code="trainings").first()
-        if trainings:
-            trainings.admin_users.add(araz)
+
+        everyone = [u for u in self.users.values() if not u.is_superuser]
+        by_dep = lambda *codes: [u for u in everyone if u.department and (
+            u.department.shortname in codes or (u.department.parent_id and u.department.parent.shortname in codes))]
+
+        def grant(code, users, admins=(), sub=False):
+            model = SubModule if sub else Module
+            obj = model.objects.filter(code=code).first()
+            if not obj:
+                return
+            obj.permitted_users.add(*users)
+            if admins:
+                obj.admin_users.add(*admins)
+
+        # Hamı üçün: icazələr, elanlar lövhəsi, təlim materialları
+        grant("icazeler", everyone)
+        grant("bulletin", everyone, admins=by_dep("15") + [self.u("aynura.ibrahimova")])
+        grant("trainings", everyone, admins=[self.u("nigar.mammadova")])
+        grant("training_materials", everyone, sub=True)
+        grant("training_statistics", [self.u("azad.aslanov"), self.u("nigar.mammadova")],
+              admins=[self.u("azad.aslanov")], sub=True)
+        # Risklər: İT və Dövlət sirrinin mühafizəsi şöbələri
+        risk_users = by_dep("11", "12")
+        grant("risk", risk_users)
+        for code in ("risk_register", "risk_view_table", "risk_log"):
+            grant(code, risk_users, sub=True)
+        # İnventar: İT şöbəsi və Dövlət əmlakının uçotu sektoru
+        grant("inventory", by_dep("11", "7.2"))
 
     # ------------------------------------------------------------------ inventar
-    def _inventory(self, orgs, deps, laman, araz):
+    def _inventory(self):
         invs = {}
         days = 75
-        for key, name, owner_type, owner in INVENTORY:
+        creators = [self.u("ulvi.mikailov"), self.u("elvin.ibrahimov"), self.u("araz.mustafa")]
+        for idx, (key, name, owner_type, owner) in enumerate(INVENTORY):
             kwargs = {"product_name": name, "owner_type": owner_type}
             if owner_type == "department":
-                kwargs["owner_department"], _ = InventoryOwnerDepartment.objects.get_or_create(name=deps[owner].title)
+                kwargs["owner_department"], _ = InventoryOwnerDepartment.objects.get_or_create(name=self.deps[owner].title)
             elif owner_type == "person":
-                kwargs["owner_person"], _ = InventoryOwnerPerson.objects.get_or_create(full_name=owner)
-            creator = laman if len(invs) % 3 else araz
+                kwargs["owner_person"], _ = InventoryOwnerPerson.objects.get_or_create(full_name=self.u(owner).name)
+            creator = creators[idx % len(creators)]
             inv = Inventory.objects.create(created_by=creator, updated_by=creator, **kwargs)
-            created = self.at(days, 10 + len(invs) % 6, 5 + (len(invs) * 7) % 50)
+            created = self.at(days, 10 + idx % 6, 5 + (idx * 7) % 50)
             Inventory.objects.filter(pk=inv.pk).update(created_at=created, updated_at=created)
             days -= 2
-            if owner_type == "department":
-                inv._org = deps[owner].organization
-            else:
-                inv._org = orgs[INVENTORY_ORG.get(key, "msn")]
             invs[key] = inv
         return invs
 
     # ------------------------------------------------------------------ risklər
-    def _risks(self, invs, laman, araz):
+    def _risks(self, invs):
         from risk import services as risk_services
 
-        users = {"laman.bashirova": laman, "araz.mustafa": araz}
+        creators = [self.u(n) for n in ("laman.bashirova", "elnur.hasanov", "araz.mustafa", "elvin.ibrahimov", "gulnara.karimova")]
         risk_ct = ContentType.objects.get_for_model(Risk)
         days = 44
         for idx, row in enumerate(RISKS):
             (designation, inv_key, h, m, n, treatment, residual, legal, intl, national,
-             freq, incident, standards, creator_name) = row
-            creator = users[creator_name]
+             freq, incident, standards, _creator) = row
+            creator = creators[idx % len(creators)]
             inv = invs[inv_key]
             risk = Risk.objects.create(
-                designation=designation, inventory=inv, organization=inv._org,
+                designation=designation, inventory=inv, organization=self.org,
                 asset_value=h, probability=m, impact=n, treatment_option=treatment,
                 residual_risk=residual, legal_basis=legal, international_framework=intl,
                 national_legal_reference=national, update_frequency=freq,
@@ -547,14 +550,14 @@ class Command(BaseCommand):
             )
             created = self.at(days, 10 + idx % 7, (idx * 13) % 60)
             risk_services.log_created(risk, creator)
-            RiskLog.objects.filter(risk=risk).update(timestamp=created, ip_address=IPS[creator.username], user_agent=UA)
+            RiskLog.objects.filter(risk=risk).update(timestamp=created, ip_address=self.ip(creator), user_agent=UA)
             Operation.objects.filter(content_type=risk_ct, object_id=risk.pk).update(
-                created_at=created, updated_at=created, ip_address=IPS[creator.username], user_agent=UA)
+                created_at=created, updated_at=created, ip_address=self.ip(creator), user_agent=UA)
             final_time = created
 
             # Bəzi risklər sonradan yenidən qiymətləndirilib
             if idx % 4 == 1:
-                editor = araz if creator == laman else laman
+                editor = self.u("araz.mustafa") if creator.username != "araz.mustafa" else self.u("laman.bashirova")
                 old = copy.copy(risk)
                 risk.probability = max(1, risk.probability - 1)
                 risk.residual_risk = residual + " Əlavə nəzarət tədbirləri tətbiq edilib."
@@ -563,66 +566,82 @@ class Command(BaseCommand):
                 risk_services.log_updated(old, risk, editor)
                 edited = created + timedelta(days=3, hours=2)
                 RiskLog.objects.filter(risk=risk, action_type=RiskLog.ACTION_UPDATED).update(
-                    timestamp=edited, ip_address=IPS[editor.username], user_agent=UA)
+                    timestamp=edited, ip_address=self.ip(editor), user_agent=UA)
                 Operation.objects.filter(content_type=risk_ct, object_id=risk.pk, action=Operation.ACTION_UPDATED).update(
-                    created_at=edited, updated_at=edited, ip_address=IPS[editor.username], user_agent=UA)
+                    created_at=edited, updated_at=edited, ip_address=self.ip(editor), user_agent=UA)
                 final_time = edited
             Risk.objects.filter(pk=risk.pk).update(created_at=created, updated_at=final_time)
             days -= 2
 
-        # Excel ixracı və siyahıya baxış qeydləri
-        for d, user in ((9, laman), (4, araz), (1, laman)):
+        # Siyahıya baxış və Excel ixracı qeydləri
+        for d, name in ((9, "laman.bashirova"), (4, "araz.mustafa"), (1, "gulnara.karimova")):
+            user = self.u(name)
             risk_services.log_viewed_list(user, Risk.objects.count())
             RiskLog.objects.filter(timestamp__gte=self.now - timedelta(minutes=5)).update(
-                timestamp=self.at(d, 11, 20), ip_address=IPS[user.username], user_agent=UA)
+                timestamp=self.at(d, 11, 20), ip_address=self.ip(user), user_agent=UA)
+        laman = self.u("laman.bashirova")
         risk_services.log_exported(laman, "risk_list", Risk.objects.count())
         RiskLog.objects.filter(action_type=RiskLog.ACTION_EXPORTED).update(
-            timestamp=self.at(1, 11, 26), ip_address=IPS[laman.username], user_agent=UA)
+            timestamp=self.at(1, 11, 26), ip_address=self.ip(laman), user_agent=UA)
 
     # ------------------------------------------------------------------ icazələr
-    def _attendance(self, orgs, deps, laman, araz):
-        msn = orgs["msn"]
-        # Test mühitində ayrıca Aparat rəhbəri yoxdur: sorğunu şöbə müdirinin təsdiqi yekunlaşdırır.
-        for org in orgs.values():
-            AttendancePermissionOrganizationConfig.objects.create(organization=org, apparatus_head_enabled=False)
-        for dep in deps.values():
-            AttendancePermissionDepartmentConfig.objects.create(
-                organization=dep.organization, department=dep, manager_enabled=True,
-            )
-
+    def _attendance(self):
+        apparatus = self.u(APPARATUS_HEAD)
         ap_ct = ContentType.objects.get_for_model(AttendancePermission)
-        rows = [
-            # (gün əvvəl, başlama, bitmə, yer, səbəb, status, rəy)
-            (18, time(11, 0), time(13, 0), "Dövlət Xidmətlər Agentliyi (ASAN xidmət)", "Şəxsiyyət vəsiqəsinin yenilənməsi", "approved", "Razıyam."),
-            (11, time(15, 30), time(17, 0), "Rəqəmsal İnkişaf və Nəqliyyat Nazirliyi", "Elektron imza sertifikatının yenilənməsi üzrə görüş", "approved", "Təsdiq edirəm."),
-            (6, time(9, 0), time(10, 30), "Poliklinika", "Tibbi müayinə", "rejected", "Həmin saatda şöbənin iclası planlaşdırılıb, başqa vaxt seçin."),
-            (-1, time(14, 0), time(16, 0), "Bakı Dövlət Universiteti", "Kibertəhlükəsizlik üzrə seminarda iştirak", "pending", ""),
-        ]
-        for days_ago, start, end, location, reason, status, comment in rows:
+        self.permission_events = []
+        for username, days_ago, start, end, location, reason, outcome, comment in PERMISSIONS:
+            user = self.u(username)
             created = self.at(max(days_ago, 0) + 2, 9, 40)
             perm = AttendancePermission.objects.create(
-                user=laman, date=(self.now - timedelta(days=days_ago)).date(),
+                user=user, date=(self.now - timedelta(days=days_ago)).date(),
                 start_time=start, end_time=end, location=location, reason=reason,
             )
-            if status != "pending":
-                reviewed = created + timedelta(hours=1, minutes=15)
-                perm.department_reviewed_by = araz
-                perm.department_reviewed_at = reviewed
+            op = Operation.objects.filter(content_type=ap_ct, object_id=perm.pk).first()
+            two_step = (op.total_steps or 0) == 2
+            manager = get_department_manager(user.department) if two_step else None
+            stage1 = created + timedelta(hours=1, minutes=10)
+            stage2 = stage1 + timedelta(hours=2, minutes=5)
+
+            if outcome == "pending":
+                self.permission_events.append((perm, manager or apparatus, None))
+            elif outcome == "awaiting":
+                perm.department_reviewed_by, perm.department_reviewed_at = manager, stage1
                 perm.department_review_comment = comment
-                perm.reviewed_by = araz
-                perm.reviewed_at = reviewed
-                perm.review_comment = comment if status == "rejected" else (
-                    "Şöbə müdiri tərəfindən təsdiqləndi. Aparat rəhbəri mərhələsi konfiqurasiyada deaktiv edilib."
-                )
-                perm.status = AttendancePermission.STATUS_APPROVED if status == "approved" else AttendancePermission.STATUS_REJECTED
+                perm.status = AttendancePermission.STATUS_AWAITING_APPARATUS
                 perm.save()
+                self.permission_events.append((perm, manager, stage1))
+            elif outcome == "rejected":
+                reviewer = manager or apparatus
+                if two_step:
+                    perm.department_reviewed_by, perm.department_reviewed_at = reviewer, stage1
+                    perm.department_review_comment = comment
+                perm.reviewed_by, perm.reviewed_at, perm.review_comment = reviewer, stage1, comment
+                perm.status = AttendancePermission.STATUS_REJECTED
+                perm.save()
+                self.permission_events.append((perm, reviewer, stage1))
+            else:  # approved
+                if two_step:
+                    perm.department_reviewed_by, perm.department_reviewed_at = manager, stage1
+                    perm.department_review_comment = comment
+                    perm.status = AttendancePermission.STATUS_AWAITING_APPARATUS
+                    perm.save()
+                    self.permission_events.append((perm, manager, stage1))
+                perm.reviewed_by, perm.reviewed_at, perm.review_comment = apparatus, stage2, "Təsdiq edirəm."
+                perm.status = AttendancePermission.STATUS_APPROVED
+                perm.save()
+                self.permission_events.append((perm, apparatus, stage2))
+
             AttendancePermission.objects.filter(pk=perm.pk).update(created_at=created, updated_at=created)
             ops = Operation.objects.filter(content_type=ap_ct, object_id=perm.pk)
-            ops.update(created_at=created, updated_at=created, ip_address=IPS["laman.bashirova"], user_agent=UA)
+            ops.update(created_at=created, updated_at=created, ip_address=self.ip(user), user_agent=UA)
             OperationApprovalStep.objects.filter(operation__in=ops).update(created_at=created, updated_at=created)
+            for step in OperationApprovalStep.objects.filter(operation__in=ops, reviewed_at__isnull=False):
+                step.reviewed_at = stage1 if step.step_number == 1 and two_step else (
+                    stage2 if outcome == "approved" else stage1)
+                step.save(update_fields=["reviewed_at"])
 
     # ------------------------------------------------------------------ elanlar
-    def _bulletin(self, laman, araz):
+    def _bulletin(self):
         cats = {
             "ferman": ("Fərman", "Fərmanlar", "gavel", 1),
             "serencam": ("Sərəncam", "Sərəncamlar", "assignment", 2),
@@ -633,6 +652,7 @@ class Command(BaseCommand):
             BulletinCategory.objects.get_or_create(
                 key=key, defaults={"label": label, "plural_label": plural, "icon": icon, "order": order},
             )
+        doc_authors = [self.u("aynura.ibrahimova"), self.u("hajar.rustamova")]
         for i, (key, title, number, when) in enumerate(CIRCULARS):
             if isinstance(when, tuple):
                 doc_date = datetime(*when).date()
@@ -642,25 +662,27 @@ class Command(BaseCommand):
                 doc_date = None
             c = Circular.objects.create(
                 category=BulletinCategory.objects.get(key=key), title=title, number=number,
-                document_date=doc_date, created_by=laman if i % 2 else araz,
+                document_date=doc_date, created_by=doc_authors[i % 2],
             )
             ts = self.at(abs(when) if isinstance(when, int) else 50, 12, 10)
             Circular.objects.filter(pk=c.pk).update(created_at=ts, updated_at=ts)
 
+        news_authors = [self.u("narmin.akhmedova"), self.u("ayishan.mamedova")]
         for i, (slug, title, summary, body, days_ago) in enumerate(NEWS):
             published = self.at(days_ago, 10, 30)
             post = NewsPost(title=title, summary=summary, body=body, published_at=published,
-                            created_by=laman if i % 2 == 0 else araz)
+                            created_by=news_authors[i % 2])
             with open(os.path.join(ASSETS, "news", f"{slug}.jpg"), "rb") as fh:
                 post.image.save(f"{slug}.jpg", File(fh), save=False)
             post.save()
             NewsPost.objects.filter(pk=post.pk).update(created_at=published, updated_at=published)
 
     # ------------------------------------------------------------------ təlimlər
-    def _trainings(self, laman, araz):
+    def _trainings(self):
+        author = self.u("nigar.mammadova")
         trainings = []
         for i, (slug, title, description, questions) in enumerate(TRAININGS):
-            t = Training(title=title, description=description, duration_seconds=45, pass_percent=60, created_by=araz)
+            t = Training(title=title, description=description, duration_seconds=45, pass_percent=60, created_by=author)
             with open(os.path.join(ASSETS, "videos", f"{slug}.mp4"), "rb") as fh:
                 t.video.save(f"{slug}.mp4", File(fh), save=False)
             with open(os.path.join(ASSETS, "thumbnails", f"{slug}.jpg"), "rb") as fh:
@@ -674,8 +696,9 @@ class Command(BaseCommand):
                     QuizOption.objects.create(question=q, text=opt, is_correct=o_idx == correct, order=o_idx)
             trainings.append(t)
 
-        def complete(user, training, days_ago, wrong=(), rating=None, comment=""):
-            started = self.at(days_ago, 14, 5)
+        def complete(username, training, days_ago, wrong=(), rating=None, comment=""):
+            user = self.u(username)
+            started = self.at(days_ago, 14, 5 + len(username) % 40)
             done = started + timedelta(seconds=training.duration_seconds + 20)
             TrainingProgress.objects.create(
                 user=user, training=training, status=TrainingProgress.STATUS_COMPLETED,
@@ -702,97 +725,119 @@ class Command(BaseCommand):
             attempt.save()
             if rating:
                 fb = TrainingFeedback.objects.create(user=user, training=training, rating=rating, comment=comment)
-                TrainingFeedback.objects.filter(pk=fb.pk).update(created_at=done + timedelta(minutes=4), updated_at=done + timedelta(minutes=4))
+                ts = done + timedelta(minutes=4)
+                TrainingFeedback.objects.filter(pk=fb.pk).update(created_at=ts, updated_at=ts)
 
-        complete(laman, trainings[0], 19, rating=5, comment="Material qısa və aydındır, praktik nümunələr faydalı oldu.")
-        complete(laman, trainings[1], 8, wrong=(2,), rating=4, comment="Nümunə məktubların ekran görüntüləri əlavə edilsə, daha yaxşı olardı.")
-        complete(araz, trainings[0], 18, rating=5, comment="Yeni əməkdaşlar üçün mütləq tövsiyə edirəm.")
-        complete(araz, trainings[2], 5, wrong=(1,), rating=4)
-        started = self.at(2, 16, 10)
-        TrainingProgress.objects.create(
-            user=araz, training=trainings[1], status=TrainingProgress.STATUS_IN_PROGRESS,
-            max_position=21, session_started_at=started, last_heartbeat_at=started + timedelta(seconds=21),
-            attempts_count=1, first_started_at=started,
-        )
+        def partial(username, training, days_ago, seconds):
+            started = self.at(days_ago, 16, 10)
+            TrainingProgress.objects.create(
+                user=self.u(username), training=training, status=TrainingProgress.STATUS_IN_PROGRESS,
+                max_position=seconds, session_started_at=started, last_heartbeat_at=started + timedelta(seconds=seconds),
+                attempts_count=1, first_started_at=started,
+            )
 
-    # ------------------------------------------------------------------ loqlar
-    def _activity_logs(self, laman, araz):
+        t1, t2, t3 = trainings
+        complete("laman.bashirova", t1, 19, rating=5, comment="Material qısa və aydındır.")
+        complete("araz.mustafa", t1, 18, rating=5)
+        complete("elvin.ibrahimov", t1, 17, wrong=(1,), rating=4)
+        complete("elnur.hasanov", t1, 16)
+        complete("kamala.babayeva", t1, 15, rating=4)
+        complete("gulnara.karimova", t3, 10, rating=5)
+        complete("akif.mammadov", t3, 9, wrong=(2,))
+        complete("laman.bashirova", t2, 8, wrong=(2,), rating=4)
+        complete("azer.shukurov", t2, 6)
+        complete("ilkin.bayramli", t2, 4, wrong=(0, 1))
+        partial("araz.mustafa", t2, 2, 21)
+        partial("tural.suleymanli", t1, 3, 12)
+        partial("aytan.fatullabayli", t3, 1, 30)
+
+    # ------------------------------------------------------------------ hərəkət tarixçəsi
+    def _activity_logs(self):
+        modules = {
+            "risk": ("risk", "Risk Reyestri", "/api/risk/"),
+            "inventory": ("inventory", "İnventar Uçotu", "/api/inventory/"),
+            "logs": ("activity_logs", LOG_TITLE, "/api/activity-logs/"),
+            "auth": ("authentication", "İstifadəçi idarəetməsi", "/api/authentication/organization/users/"),
+            "bulletin": ("bulletin", "Elanlar lövhəsi", "/api/bulletin/dashboard/"),
+            "trainings": ("trainings", "Təlimlər", "/api/trainings/materials/"),
+            "operations": ("operations", "Əməliyyatlar", "/api/operations/"),
+            "permissions": ("attendance_permissions", "İcazələr", "/api/attendance-permissions/"),
+        }
         visits = {
-            "laman.bashirova": [
-                ("risk", "Risk Reyestri", "/api/risk/"),
-                ("inventory", "İnventar Uçotu", "/api/inventory/"),
-                ("activity_logs", "Loqlar", "/api/activity-logs/"),
-                ("authentication", "İstifadəçi idarəetməsi", "/api/authentication/organization/users/"),
-                ("bulletin", "Elanlar lövhəsi", "/api/bulletin/dashboard/"),
-                ("trainings", "Təlimlər", "/api/trainings/materials/"),
-                ("operations", "Əməliyyatlar", "/api/operations/"),
-            ],
-            "araz.mustafa": [
-                ("attendance_permissions", "İcazələr", "/api/attendance-permissions/"),
-                ("risk", "Risk Reyestri", "/api/risk/"),
-                ("inventory", "İnventar Uçotu", "/api/inventory/"),
-                ("bulletin", "Elanlar lövhəsi", "/api/bulletin/dashboard/"),
-                ("trainings", "Təlimlər", "/api/trainings/materials/"),
-            ],
+            "laman.bashirova": ["risk", "inventory", "logs", "auth", "bulletin", "trainings", "operations"],
+            "araz.mustafa": ["permissions", "risk", "inventory", "logs", "bulletin", "operations"],
+            "elnur.hasanov": ["risk", "inventory", "bulletin", "trainings", "permissions"],
+            "elvin.ibrahimov": ["risk", "inventory", "permissions", "bulletin"],
+            "azer.shukurov": ["risk", "bulletin", "trainings"],
+            "gulnara.karimova": ["risk", "bulletin", "permissions"],
+            "ulvi.mikailov": ["inventory", "bulletin", "permissions"],
+            "narmin.akhmedova": ["bulletin", "permissions", "trainings"],
+            "aynura.ibrahimova": ["bulletin", "permissions"],
+            "azad.aslanov": ["trainings", "permissions", "bulletin"],
         }
         entries = []
 
-        def add(user, ts, action, description, module=("", ""), path="", method="", status=None, obj=""):
+        def add(user, ts, action, description, module=("", "", ""), method="", status=None, obj="", path=None):
             entries.append((ts, ActivityLog(
                 user=user, user_username_snapshot=user.username, action_type=action,
                 module_code=module[0], module_title=module[1], description=description, object_repr=obj,
-                request_method=method, request_path=path, status_code=status,
-                ip_address=IPS[user.username], user_agent=UA,
+                request_method=method, request_path=path or module[2], status_code=status,
+                ip_address=self.ip(user), user_agent=UA,
             )))
 
         for d in self.workdays(22):
-            for user, start_h in ((laman, 9), (araz, 9)):
-                if self.rng.random() < 0.12 and d != 0:
+            for username in ACTIVE_USERS:
+                user = self.u(username)
+                if self.rng.random() < 0.15 and d != 0:
                     continue  # məzuniyyət / ezamiyyət günü
-                login = self.at(d, start_h, self.rng.randint(0, 25))
+                login = self.at(d, 9, self.rng.randint(0, 40))
                 add(user, login, ActivityLog.ACTION_LOGIN, f"{user.username} sistemə daxil oldu",
-                    path="/api/authentication/token/", method="POST", status=200)
+                    method="POST", status=200, path="/api/authentication/token/")
                 ts = login
-                for code, title, path in self.rng.sample(visits[user.username], k=self.rng.randint(2, 4)):
-                    ts += timedelta(minutes=self.rng.randint(4, 70))
-                    add(user, ts, ActivityLog.ACTION_VIEWED, f"{title} moduluna daxil oldu", (code, title), path, "GET", 200)
+                choices = visits[username]
+                for key in self.rng.sample(choices, k=min(len(choices), self.rng.randint(1, 3))):
+                    ts += timedelta(minutes=self.rng.randint(4, 90))
+                    m = modules[key]
+                    add(user, ts, ActivityLog.ACTION_VIEWED, f"{m[1]} moduluna daxil oldu", m, "GET", 200)
                 if d != 0:
-                    out = self.at(d, 18, self.rng.randint(0, 20))
+                    out = self.at(d, 18, self.rng.randint(0, 25))
                     add(user, out, ActivityLog.ACTION_LOGOUT, f"{user.username} sistemdən çıxış etdi",
-                        path="/api/authentication/logout/", method="POST", status=200)
+                        method="POST", status=200, path="/api/authentication/logout/")
 
         # Yaratma / redaktə qeydləri - real obyektlərlə uyğun
-        for risk in Risk.objects.select_related("created_by"):
-            user = risk.created_by
-            add(user, risk.created_at, ActivityLog.ACTION_CREATED,
+        for risk in Risk.objects.select_related("created_by", "updated_by"):
+            add(risk.created_by, risk.created_at, ActivityLog.ACTION_CREATED,
                 f"Risk Reyestri modulunda \"{risk.designation}\" adlı qeydi yaratdı",
-                ("risk", "Risk Reyestri"), "/api/risk/", "POST", 201, risk.designation)
+                modules["risk"], "POST", 201, risk.designation)
             if risk.updated_by_id and risk.updated_at - risk.created_at > timedelta(hours=1):
                 add(risk.updated_by, risk.updated_at, ActivityLog.ACTION_UPDATED,
                     f"Risk Reyestri modulunda \"{risk.designation}\" adlı qeydi redaktə etdi",
-                    ("risk", "Risk Reyestri"), f"/api/risk/{risk.pk}/", "PATCH", 200, risk.designation)
+                    modules["risk"], "PATCH", 200, risk.designation, path=f"/api/risk/{risk.pk}/")
         for inv in Inventory.objects.select_related("created_by"):
             add(inv.created_by, inv.created_at, ActivityLog.ACTION_CREATED,
                 f"İnventar Uçotu modulunda \"{inv.product_name}\" adlı qeydi yaratdı",
-                ("inventory", "İnventar Uçotu"), "/api/inventory/", "POST", 201, inv.product_name)
+                modules["inventory"], "POST", 201, inv.product_name)
         for post in NewsPost.objects.select_related("created_by"):
             add(post.created_by, post.published_at, ActivityLog.ACTION_CREATED,
                 f"Elanlar lövhəsi modulunda \"{post.title}\" adlı qeydi yaratdı",
-                ("bulletin", "Elanlar lövhəsi"), "/api/bulletin/news/", "POST", 201, post.title)
-        for t in Training.objects.all():
-            add(araz, t.created_at, ActivityLog.ACTION_CREATED,
+                modules["bulletin"], "POST", 201, post.title, path="/api/bulletin/news/")
+        for t in Training.objects.select_related("created_by"):
+            add(t.created_by, t.created_at, ActivityLog.ACTION_CREATED,
                 f"Təlimlər modulunda \"{t.title}\" adlı qeydi yaratdı",
-                ("trainings", "Təlimlər"), "/api/trainings/materials/", "POST", 201, t.title)
-        for perm in AttendancePermission.objects.all():
-            add(laman, perm.created_at, ActivityLog.ACTION_CREATED,
+                modules["trainings"], "POST", 201, t.title)
+        for perm in AttendancePermission.objects.select_related("user"):
+            add(perm.user, perm.created_at, ActivityLog.ACTION_CREATED,
                 f"İcazələr modulunda \"{perm}\" adlı qeydi yaratdı",
-                ("attendance_permissions", "İcazələr"), "/api/attendance-permissions/", "POST", 201, str(perm))
-            if perm.reviewed_at:
-                add(araz, perm.reviewed_at, ActivityLog.ACTION_UPDATED,
+                modules["permissions"], "POST", 201, str(perm))
+        for perm, reviewer, ts in self.permission_events:
+            if ts:
+                add(reviewer, ts, ActivityLog.ACTION_UPDATED,
                     f"İcazələr modulunda \"{perm}\" adlı qeydi redaktə etdi",
-                    ("attendance_permissions", "İcazələr"), f"/api/attendance-permissions/{perm.pk}/review/", "POST", 200, str(perm))
+                    modules["permissions"], "POST", 200, str(perm),
+                    path=f"/api/attendance-permissions/{perm.pk}/review/")
+        laman = self.u("laman.bashirova")
         add(laman, self.at(1, 11, 26), ActivityLog.ACTION_EXPORTED, "Risk Reyestri modulunda Excel-ə ixrac etdi",
-            ("risk", "Risk Reyestri"), "/api/risk/export/", "GET", 200)
+            modules["risk"], "GET", 200, path="/api/risk/export/")
 
         for ts, entry in sorted(entries, key=lambda x: x[0]):
             if ts > self.now:
@@ -801,24 +846,34 @@ class Command(BaseCommand):
             ActivityLog.objects.filter(pk=entry.pk).update(timestamp=ts)
 
     # ------------------------------------------------------------------ bildirişlər
-    def _notifications(self, laman, araz):
+    def _notifications(self):
         rows = []
-        for perm in AttendancePermission.objects.all():
-            rows.append((araz, Notification.TYPE_ATTENDANCE_PERMISSION_NEW, "Yeni icazə sorğusu",
-                         f"Laman Bashirova {perm.date:%d.%m.%Y} tarixi üçün icazə sorğusu göndərdi.",
-                         perm.created_at, perm.status != AttendancePermission.STATUS_PENDING, perm.pk))
-            if perm.status == AttendancePermission.STATUS_APPROVED:
-                rows.append((laman, Notification.TYPE_ATTENDANCE_PERMISSION_APPROVED, "İcazə sorğunuz təsdiqləndi",
-                             f"{perm.date:%d.%m.%Y} tarixli icazə sorğunuz Araz Mustafa tərəfindən təsdiqləndi.",
-                             perm.reviewed_at, True, perm.pk))
+        for perm, reviewer, ts in self.permission_events:
+            perm.refresh_from_db()
+            name = perm.user.name
+            if ts is None:
+                rows.append((reviewer, Notification.TYPE_ATTENDANCE_PERMISSION_NEW, "Yeni icazə sorğusu",
+                             f"{name} {perm.date:%d.%m.%Y} tarixi üçün icazə sorğusu göndərdi.",
+                             perm.created_at, False, perm.pk))
+                continue
+            rows.append((reviewer, Notification.TYPE_ATTENDANCE_PERMISSION_NEW, "Yeni icazə sorğusu",
+                         f"{name} {perm.date:%d.%m.%Y} tarixi üçün icazə sorğusu göndərdi.",
+                         ts - timedelta(hours=1), True, perm.pk))
+            if perm.status == AttendancePermission.STATUS_APPROVED and reviewer == perm.reviewed_by:
+                rows.append((perm.user, Notification.TYPE_ATTENDANCE_PERMISSION_APPROVED, "İcazə sorğunuz təsdiqləndi",
+                             f"{perm.date:%d.%m.%Y} tarixli icazə sorğunuz təsdiqləndi.", ts, True, perm.pk))
             elif perm.status == AttendancePermission.STATUS_REJECTED:
-                rows.append((laman, Notification.TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazə sorğunuz rədd edildi",
-                             f"{perm.date:%d.%m.%Y} tarixli sorğu: {perm.review_comment}",
-                             perm.reviewed_at, False, perm.pk))
-        for user in (laman, araz):
-            rows.append((user, Notification.TYPE_OTHER, "Yeni təlim materialı",
-                         "«Məxfi sənədlərlə iş qaydaları» təlimi əlavə edildi.",
-                         Training.objects.order_by("-created_at").first().created_at, user == araz, None))
+                rows.append((perm.user, Notification.TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazə sorğunuz rədd edildi",
+                             f"{perm.date:%d.%m.%Y} tarixli sorğu: {perm.review_comment}", ts, False, perm.pk))
+            elif perm.status == AttendancePermission.STATUS_AWAITING_APPARATUS:
+                rows.append((self.u(APPARATUS_HEAD), Notification.TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED,
+                             "Təsdiq gözləyən icazə sorğusu",
+                             f"{name} - {perm.date:%d.%m.%Y} tarixli sorğu şöbə müdiri tərəfindən təsdiqlənib.",
+                             ts, False, perm.pk))
+        latest = Training.objects.order_by("-created_at").first()
+        for name in ("laman.bashirova", "araz.mustafa"):
+            rows.append((self.u(name), Notification.TYPE_OTHER, "Yeni təlim materialı",
+                         f"«{latest.title}» təlimi əlavə edildi.", latest.created_at, name == "araz.mustafa", None))
         for user, ntype, title, body, ts, is_read, obj_id in rows:
             n = Notification.objects.create(
                 recipient=user, notification_type=ntype, title=title, body=body,
