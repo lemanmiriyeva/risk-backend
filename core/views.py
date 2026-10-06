@@ -96,6 +96,7 @@ class ModuleOrganizationAccessView(APIView):
                     "id": sub.id,
                     "title": sub.title,
                     "organization_ids": list(sub.permitted_organizations.values_list("id", flat=True)),
+                    "is_restricted": sub.is_restricted,
                 })
 
             modules_data.append({
@@ -128,6 +129,17 @@ class ModuleOrganizationAccessView(APIView):
             module.save(update_fields=["is_public"])
             logger.info(f"{request.user} - {module} modulunu 'hər kəsə açıq' = {grant} olaraq dəyişdi")
             return Response({"is_public": grant}, status=HTTP_200_OK)
+
+        # "sub_module_restricted" - açıq modulun alt modulunu "məhdud" edir:
+        # əsas modul hamıya açıq olsa belə, bu alt modula yalnız icazəlilər girir.
+        if target == "sub_module_restricted":
+            sub = SubModule.objects.filter(id=obj_id).first() if obj_id else None
+            if not sub:
+                return Response({"detail": "Alt modul tapılmadı."}, status=HTTP_404_NOT_FOUND)
+            sub.is_restricted = grant
+            sub.save(update_fields=["is_restricted"])
+            logger.info(f"{request.user} - {sub} alt modulunu 'məhdud' = {grant} olaraq dəyişdi")
+            return Response({"is_restricted": grant}, status=HTTP_200_OK)
 
         organization_id = request.data.get("organization_id")
 
@@ -188,6 +200,7 @@ class OrgModuleAccessView(APIView):
                 sub_modules_data.append({
                     "id": sub.id,
                     "title": sub.title,
+                    "is_restricted": sub.is_restricted,
                     "users": [
                         _sub_user_payload(u, sub_permitted_ids, module_admin_ids, sub_admin_ids)
                         for u in org_users
@@ -198,6 +211,8 @@ class OrgModuleAccessView(APIView):
                 "id": module.id,
                 "title": module.title,
                 "description": module.description,
+                "is_public": module.is_public,
+                "can_toggle_public": bool(request.user.is_superuser),
                 "sub_modules": sub_modules_data,
                 "users": [_user_payload(u, module_permitted_ids, module_admin_ids) for u in org_users],
             })

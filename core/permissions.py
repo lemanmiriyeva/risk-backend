@@ -13,15 +13,16 @@ def get_user_modules(user):
     if user.is_superuser:
         return Module.objects.all()
 
+    # "Hər kəsə açıq" (is_public) modullar bütün istifadəçilərə görünür.
     if getattr(user, "is_org_admin", False) and getattr(user, "organization_id", None):
         return Module.objects.filter(
-            Q(permitted_users=user) | Q(permitted_organizations=user.organization_id)
+            Q(is_public=True) | Q(permitted_users=user) | Q(permitted_organizations=user.organization_id)
             | Q(admin_users=user)
         ).distinct()
 
     # Modul admini (admin_users) Module.has_permission()-də olduğu kimi
     # permitted_users-da olmasa belə modula giriş əldə edir.
-    return Module.objects.filter(Q(permitted_users=user) | Q(admin_users=user)).distinct()
+    return Module.objects.filter(Q(is_public=True) | Q(permitted_users=user) | Q(admin_users=user)).distinct()
 
 
 def get_user_sub_modules(user, module=None):
@@ -34,12 +35,17 @@ def get_user_sub_modules(user, module=None):
         qs = SubModule.objects.filter(module_id__in=permitted_module_ids)
     elif getattr(user, "is_org_admin", False) and getattr(user, "organization_id", None):
         qs = SubModule.objects.filter(
-            Q(permitted_users=user) | Q(permitted_organizations=user.organization_id),
+            Q(module__is_public=True, is_restricted=False)
+            | Q(permitted_users=user) | Q(permitted_organizations=user.organization_id),
             module_id__in=permitted_module_ids,
         ).distinct()
     else:
+        # Açıq modulun alt modulları (məhdud olanlar istisna) hamıya açıqdır;
+        # əsas modulun admini isə bütün alt modullara girişə malikdir.
         qs = SubModule.objects.filter(
-            Q(permitted_users=user) | Q(admin_users=user),
+            Q(module__is_public=True, is_restricted=False)
+            | Q(module__admin_users=user)
+            | Q(permitted_users=user) | Q(admin_users=user),
             module_id__in=permitted_module_ids,
         ).distinct()
 

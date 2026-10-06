@@ -35,6 +35,7 @@ class Command(BaseCommand):
                 "title": "Elanlar lövhəsi",
                 "description": "Sərəncamlar, fərmanlar, daxili qaydalar, xəbərlər və doğum günləri.",
                 "url_endpoint": "elanlar",
+                "is_public": True,  # sistemə daxil olan hər kəsə açıq
             }
         )
 
@@ -46,6 +47,7 @@ class Command(BaseCommand):
                 "title": "Təlimlər",
                 "description": "Təlim videoları, quizlər və təlim statistikası.",
                 "url_endpoint": "telimler",
+                "is_public": True,  # sistemə daxil olan hər kəsə açıq
             }
         )
         SubModule.objects.update_or_create(
@@ -62,6 +64,8 @@ class Command(BaseCommand):
                 "title": "Təlim statistikası",
                 "description": "Kim hansı təlimə nə vaxt baxıb, quiz nəticələri və rəylər.",
                 "url_endpoint": "statistika",
+                # Təlimlər hamıya açıq olsa da, statistika yalnız icazəlilərə görünür
+                "is_restricted": True,
             }
         )
 

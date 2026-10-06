@@ -138,6 +138,13 @@ class SubModule(TimestampsModel):
     image = models.ImageField(
         upload_to='sub_module_images/%Y/%m/%d', null=True, blank=True, verbose_name="Alt modul ikonu"
     )
+    is_restricted = models.BooleanField(
+        default=False, verbose_name="Məhdud alt modul",
+        help_text=(
+            "Əsas modul hər kəsə açıq olsa belə, bu alt modula yalnız icazə verilmiş "
+            "şəxslər daxil ola bilər (məs. Təlimlər hamıya açıqdır, Təlim statistikası isə yox)."
+        ),
+    )
 
     def __str__(self):
         return "%s / %s" % (self.module.title, self.title)
@@ -148,7 +155,7 @@ class SubModule(TimestampsModel):
         unique_together = ("module", "title")
 
     def is_user_eligible(self, user):
-        if self.module.is_public:
+        if self.module.is_public and not self.is_restricted:
             return True
         if not self.permitted_organizations.exists():
             return True
@@ -159,8 +166,9 @@ class SubModule(TimestampsModel):
         if not user or not user.is_authenticated:
             return False
         # Modul "hər kəsə açıq" (is_public) olaraq işarələnibsə, əsas modulla
-        # birlikdə bütün alt modulları da avtomatik hər kəsə açıq olur.
-        if self.module.is_public:
+        # birlikdə alt modulları da avtomatik hər kəsə açıq olur - "məhdud"
+        # (is_restricted) işarələnmiş alt modullar istisna olmaqla.
+        if self.module.is_public and not self.is_restricted:
             return True
         if not self.module.has_permission(user):
             return False
