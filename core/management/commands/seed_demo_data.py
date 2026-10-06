@@ -481,6 +481,12 @@ class Command(BaseCommand):
             description="Aparat rəhbəri və şöbə müdirləri üzrə təsdiq axınının tənzimlənməsi.",
         )
 
+        # Bütün modullar və alt modullar Nazirliyə açılır («Qurum girişləri»)
+        for module in Module.objects.all():
+            module.permitted_organizations.add(self.org)
+        for sub in SubModule.objects.all():
+            sub.permitted_organizations.add(self.org)
+
         everyone = [u for u in self.users.values() if not u.is_superuser]
         by_dep = lambda *codes: [u for u in everyone if u.department and (
             u.department.shortname in codes or (u.department.parent_id and u.department.parent.shortname in codes))]

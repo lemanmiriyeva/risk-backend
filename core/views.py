@@ -42,6 +42,10 @@ def _user_payload(user, permitted_ids, admin_ids=None):
         "has_access": implicit_access or is_module_admin or (user.id in permitted_ids),
         "implicit_access": implicit_access,
         "is_module_admin": is_module_admin,
+        # Paneldə istifadəçiləri şöbələrə görə qruplaşdırmaq və axtarmaq üçün
+        "department_id": user.department_id,
+        "department_title": user.department.title if user.department_id else "",
+        "role_title": user.role.title if user.role_id else "",
     }
 
 
@@ -166,7 +170,10 @@ class OrgModuleAccessView(APIView):
         if not organization:
             return Response({"detail": NO_ORGANIZATION}, status=HTTP_400_BAD_REQUEST)
 
-        org_users = list(organization.users.filter(is_active=True).order_by("firstname"))
+        org_users = list(
+            organization.users.filter(is_active=True)
+            .select_related("department", "role").order_by("firstname")
+        )
 
         modules_data = []
         for module in Module.objects.filter(permitted_organizations=organization).order_by("id"):
