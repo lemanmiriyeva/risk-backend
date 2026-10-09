@@ -2744,3 +2744,85 @@ INFO 2026-10-06 13:12:59,934 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-10-06 13:13:00,037 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
 INFO 2026-10-06 13:13:14,637 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
 INFO 2026-10-06 13:13:33,911 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:24:14,017 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:24:27,316 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:24:27,362 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-07 09:24:27,371 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-07 09:24:27,415 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:24:27,480 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu (uğursuz oldu) - ip=::1
+INFO 2026-10-07 09:25:10,979 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:25:11,098 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu (uğursuz oldu) - ip=::1
+INFO 2026-10-07 09:25:11,122 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:25:12,297 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:25:26,219 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:25:26,261 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-07 09:25:26,269 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-07 09:25:26,318 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:25:26,374 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu (uğursuz oldu) - ip=::1
+INFO 2026-10-07 09:25:44,461 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:25:44,487 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:25:44,516 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:25:45,153 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:25:47,573 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:25:51,846 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-07 09:25:51,887 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-07 09:25:51,895 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-07 09:25:51,935 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:25:53,033 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:26:09,262 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:26:31,379 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:26:31,402 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:03,633 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:10,260 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-10-07 09:27:10,283 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:10,308 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-10-07 09:27:20,866 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:23,066 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-10-07 09:27:23,084 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:23,108 views AttendancePermissionListCreateView.get - laman.bashirova icazə siyahısını sorğuladı
+INFO 2026-10-07 09:27:27,109 middleware [LOQ] laman.bashirova - Baxdı - modul=Əməliyyatlar - Əməliyyatlar moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:38,727 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:46,967 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:27:46,982 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:29:49,051 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:29:57,211 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:29:57,231 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:05,686 middleware [LOQ] laman.bashirova - Baxdı - modul=Əməliyyatlar - Əməliyyatlar moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:08,540 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:08,560 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:15,165 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi modulunda baxdı - ip=::1
+INFO 2026-10-07 09:30:15,727 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi modulunda baxdı - ip=::1
+INFO 2026-10-07 09:30:17,420 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:17,443 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:21,129 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər modulunda baxdı - ip=::1
+INFO 2026-10-07 09:30:21,273 middleware [LOQ] laman.bashirova - Yaratdı - modul=Təlimlər - Təlimlər modulunda yaratdı - ip=::1
+INFO 2026-10-07 09:30:31,683 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:31,709 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:30:33,519 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər modulunda baxdı - ip=::1
+INFO 2026-10-07 09:30:33,643 middleware [LOQ] laman.bashirova - Yaratdı - modul=Təlimlər - Təlimlər modulunda yaratdı - ip=::1
+INFO 2026-10-07 09:33:54,200 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:33:54,229 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:34:26,902 views NotificationMarkAllReadView.patch - laman.bashirova 1 bildirişi oxundu etdi
+INFO 2026-10-07 09:34:30,469 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:34:30,538 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 09:34:30,572 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-07 09:34:30,669 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:22:22,735 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:22:22,748 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:03,534 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:03,545 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:25,251 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:25,272 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:30,342 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:36,163 middleware [LOQ] laman.bashirova - Baxdı - modul=Əməliyyatlar - Əməliyyatlar moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:38,777 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 12:27:43,094 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:10:44,271 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:10:51,842 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:02,633 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:02,716 middleware [LOQ] laman.bashirova - Baxdı - modul=Risk Reyestri - Risk Reyestri moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:09,381 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:09,409 middleware [LOQ] laman.bashirova - Baxdı - modul=İnventar Uçotu - İnventar Uçotu moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:11,663 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:14,012 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-07 15:11:14,035 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
