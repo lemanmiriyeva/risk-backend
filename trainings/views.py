@@ -466,7 +466,7 @@ class StatisticsSummaryView(_StatsScopeMixin, APIView):
             )
         }
         feedback_stats = {
-            r["training_id"]: r for r in feedback_qs.values("training_id").annotate(
+            r["training_id"]: r for r in feedback_qs.order_by().values("training_id").annotate(
                 count=Count("id"), avg_rating=Avg("rating"),
             )
         }
