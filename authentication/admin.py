@@ -92,7 +92,7 @@ class UserAdmin(BaseUserAdmin):
                 "special_permissions", "groups", "user_permissions",
             )
         }),
-        ("2FA", {
+        ("İki mərhələli doğrulama (2FA)", {
             "fields": ("two_fa_confirmed", "two_fa_secret"),
         }),
         ("Tarixlər", {

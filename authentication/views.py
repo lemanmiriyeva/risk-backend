@@ -2,6 +2,7 @@ import logging
 import pyotp
 from datetime import timedelta
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -379,7 +380,10 @@ class RequestTwoFAResetView(APIView):
 
         user = _find_active_user(username)
 
-        if user and user.check_password(password):
+        # Şifrə yalnız lokal bazada deyil, Active Directory-də də yoxlanılmalıdır:
+        # domen istifadəçilərinin lokal şifrəsi yoxdur (unusable password), ona görə
+        # check_password() onlar üçün həmişə False qaytarırdı və 2FA sıfırlanmırdı.
+        if user and self._password_ok(request, user, password):
             try:
                 self._reset_and_notify(user)
             except Exception as e:
@@ -389,6 +393,16 @@ class RequestTwoFAResetView(APIView):
 
         # İstifadəçi/şifrə mövcudluğunu ifşa etməmək üçün həmişə eyni cavab qaytarılır
         return Response({"detail": TWO_FA_RESET_MESSAGE}, status=HTTP_200_OK)
+
+    @staticmethod
+    def _password_ok(request, user, password):
+        try:
+            authed = authenticate(request, username=user.username, password=password)
+        except Exception as e:  # AD əlçatmazdır və ya hesab AD-də kilidlənib
+            logger.info(f"RequestTwoFAResetView._password_ok - {user.username}: {e}")
+            # Lokal hesab üçün şifrəni birbaşa yoxlayırıq (domen hesabında lokal şifrə yoxdur)
+            return user.has_usable_password() and user.check_password(password)
+        return authed is not None and authed.pk == user.pk
 
     def _reset_and_notify(self, user):
         user.two_fa_secret = None
