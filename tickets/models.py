@@ -208,6 +208,47 @@ class TicketDepartment(TimestampsModel):
         return f"{self.ticket.number} -> {self.department}"
 
 
+class TicketAssignee(TimestampsModel):
+    """Müraciətin icraçısı. Bir müraciətdə bir neçə icraçı ola bilər (şöbə əməkdaşları özləri
+    götürə bilər), hər icraçının öz icra statusu var."""
+
+    STATUS_ASSIGNED = 'assigned'
+    STATUS_IN_PROGRESS = 'in_progress'
+    STATUS_DONE = 'done'
+    STATUS_CHOICES = [
+        (STATUS_ASSIGNED, 'Təyin olunub'),
+        (STATUS_IN_PROGRESS, 'İcradadır'),
+        (STATUS_DONE, 'Tamamlayıb'),
+    ]
+
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='assignee_links')
+    user = models.ForeignKey(
+        'authentication.User', on_delete=models.CASCADE, related_name='ticket_assignments', verbose_name="İcraçı",
+    )
+    department = models.ForeignKey(
+        'authentication.Department', on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='+', verbose_name="Hansı şöbə adından",
+    )
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_ASSIGNED, verbose_name="İcraçının statusu")
+    self_assigned = models.BooleanField(default=False, verbose_name="Özü götürüb")
+    assigned_by = models.ForeignKey(
+        'authentication.User', on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='+', verbose_name="Təyin edən",
+    )
+    note = models.CharField(max_length=500, blank=True, default='', verbose_name="Qeyd")
+    started_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('ticket', 'user')
+        ordering = ('id',)
+        verbose_name = "Müraciət - icraçı"
+        verbose_name_plural = "Müraciət - icraçılar"
+
+    def __str__(self):
+        return f"{self.ticket.number} -> {self.user}"
+
+
 class TicketComment(TimestampsModel):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(
@@ -274,6 +315,9 @@ class TicketActivity(models.Model):
     A_RATED = 'rated'
     A_ESCALATED = 'escalated'
     A_WATCHER = 'watcher_changed'
+    A_ASSIGNEE_ADDED = 'assignee_added'
+    A_ASSIGNEE_REMOVED = 'assignee_removed'
+    A_ASSIGNEE_STATUS = 'assignee_status'
 
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='activities')
     actor = models.ForeignKey(

@@ -172,6 +172,86 @@ class TicketFlowTests(APITestCase):
         r = self.api(self.it_manager).post(f'{BASE}{tid}/assignee/', {'assignee': self.hr_agent.id}, format='json')
         self.assertEqual(r.status_code, 200)
 
+    def test_department_staff_self_assign_multiple_assignees(self):
+        tid = self.create()['id']
+        # təyin olunmamış şöbənin əməkdaşı müraciəti görmür/götürə bilmir
+        r = self.api(self.stranger).post(f'{BASE}{tid}/take/')
+        self.assertIn(r.status_code, (403, 404))
+
+        r = self.api(self.it_agent).post(f'{BASE}{tid}/take/')
+        self.assertEqual(r.status_code, 200, r.data)
+        self.assertEqual(r.data['status'], 'in_progress')
+        self.assertEqual([a['user'] for a in r.data['assignees']], [self.it_agent.id])
+        self.assertEqual(r.data['assignees'][0]['status'], 'in_progress')
+        self.assertTrue(r.data['assignees'][0]['self_assigned'])
+        self.assertEqual(r.data['assignee'], self.it_agent.id)
+        # təkrar götürmək olmaz
+        r = self.api(self.it_agent).post(f'{BASE}{tid}/take/')
+        self.assertEqual(r.status_code, 400)
+        # eyni şöbədən daha biri və digər şöbədən biri də götürür
+        self.assertEqual(self.api(self.it_manager).post(f'{BASE}{tid}/take/').status_code, 200)
+        r = self.api(self.hr_agent).post(f'{BASE}{tid}/take/')
+        self.assertEqual(len(r.data['assignees']), 3)
+        self.assertEqual(r.data['permissions']['my_assignee_status'], 'in_progress')
+        # siyahıda bir neçə icraçı göstərilir
+        row = self.api(self.requester).get(BASE).data['results'][0]
+        self.assertEqual(len(row['assignees']), 3)
+        self.assertTrue(row['assignee_name'].endswith('+2'))
+        # müraciətçi (və izləyənlər) bildirişi alır
+        self.assertTrue(Notification.objects.filter(recipient=self.requester, related_object_id=tid).exists())
+
+        # icraçı statusları: hər şöbənin bütün icraçıları bitirəndə şöbə, sonra müraciət tamamlanır
+        def done(user):
+            return self.api(user).post(f'{BASE}{tid}/assignee-status/', {'status': 'done'}, format='json')
+        r = done(self.it_agent)
+        self.assertEqual(r.status_code, 200, r.data)
+        links = {l['department']: l['status'] for l in r.data['department_links']}
+        self.assertEqual(links[self.it.id], 'in_progress')       # menecer hələ bitirməyib
+        self.assertEqual(r.data['status'], 'in_progress')
+        r = done(self.it_manager)
+        links = {l['department']: l['status'] for l in r.data['department_links']}
+        self.assertEqual(links[self.it.id], 'done')
+        self.assertEqual(r.data['status'], 'in_progress')
+        r = done(self.hr_agent)
+        self.assertEqual(r.data['status'], 'resolved')
+
+        # müraciət yenidən açılanda tamamlayanlar yenidən icradadır
+        r = self.api(self.requester).post(f'{BASE}{tid}/status/', {'status': 'in_progress', 'comment': 'Yenə'}, format='json')
+        self.assertEqual({a['status'] for a in r.data['assignees']}, {'in_progress'})
+
+    def test_release_add_and_assignee_status_rules(self):
+        tid = self.create()['id']
+        self.api(self.it_agent).post(f'{BASE}{tid}/take/')
+        # götürən çıxır -> icraçı yoxdur, müraciət yenidən 'Qəbul edildi'
+        r = self.api(self.it_agent).post(f'{BASE}{tid}/release/', {}, format='json')
+        self.assertEqual(r.status_code, 200, r.data)
+        self.assertEqual(r.data['assignees'], [])
+        self.assertIsNone(r.data['assignee'])
+        self.assertEqual(r.data['status'], 'open')
+        # icraçı olmayan çıxa bilməz
+        self.assertEqual(self.api(self.it_agent).post(f'{BASE}{tid}/release/', {}, format='json').status_code, 400)
+        # admin başqasını təyin edir: status 'Təyin olunub', bildiriş gedir
+        r = self.api(self.admin).post(f'{BASE}{tid}/assignees/', {'users': [self.hr_agent.id, self.it_agent.id]}, format='json')
+        self.assertEqual(r.status_code, 200, r.data)
+        self.assertEqual({a['status'] for a in r.data['assignees']}, {'assigned'})
+        self.assertTrue(Notification.objects.filter(recipient=self.hr_agent, related_object_id=tid).exists())
+        # təyin olunmamış şöbənin əməkdaşı təyin edilə bilməz
+        r = self.api(self.it_manager).post(f'{BASE}{tid}/assignees/', {'users': [self.stranger.id]}, format='json')
+        self.assertEqual(r.status_code, 400)
+        # icraçı öz statusunu dəyişir -> müraciət 'İcradadır'
+        r = self.api(self.hr_agent).post(f'{BASE}{tid}/assignee-status/', {'status': 'in_progress'}, format='json')
+        self.assertEqual(r.data['status'], 'in_progress')
+        # başqasının statusunu yalnız admin dəyişə bilər
+        r = self.api(self.it_agent).post(f'{BASE}{tid}/assignee-status/',
+                                         {'status': 'done', 'user': self.hr_agent.id}, format='json')
+        self.assertEqual(r.status_code, 403)
+        r = self.api(self.admin).post(f'{BASE}{tid}/assignee-status/',
+                                      {'status': 'done', 'user': self.hr_agent.id}, format='json')
+        self.assertEqual(r.status_code, 200, r.data)
+        # köhnə təkli API hələ də işləyir
+        r = self.api(self.it_manager).post(f'{BASE}{tid}/assignee/', {'assignee': self.it_manager.id}, format='json')
+        self.assertEqual([a['user'] for a in r.data['assignees']], [self.it_manager.id])
+
     def test_attachments(self):
         tid = self.create()['id']
         ok = SimpleUploadedFile('screen.png', b'\x89PNG....', content_type='image/png')

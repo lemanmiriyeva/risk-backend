@@ -13,7 +13,7 @@ from notifications.models import Notification
 from notifications.services import notify
 
 from .models import (
-    Ticket, TicketActivity, TicketAttachment, TicketComment, TicketDepartment,
+    Ticket, TicketActivity, TicketAssignee, TicketAttachment, TicketComment, TicketDepartment,
 )
 
 logger = logging.getLogger('colored')
@@ -82,7 +82,7 @@ def visible_queryset(user, qs=None):
     dept_ids = user_department_ids(user)
     cond = (
         Q(requester=user) | Q(watchers=user) | Q(assignee=user)
-        | Q(department_links__assignee=user)
+        | Q(assignee_links__user=user) | Q(department_links__assignee=user)
     )
     if dept_ids:
         cond |= Q(department_links__department_id__in=dept_ids)
@@ -97,7 +97,7 @@ def is_agent(ticket, user):
     """Müraciət üzərində işləmə (status, daxili qeyd, təyinat) səlahiyyəti."""
     if is_ticket_admin(user):
         return True
-    if ticket.assignee_id == user.id:
+    if ticket.assignee_id == user.id or ticket.assignee_links.filter(user_id=user.id).exists():
         return True
     links = ticket.department_links.all()
     dept_ids = user_department_ids(user)
@@ -172,9 +172,13 @@ def notify_users(ticket, users, title, body='', actor=None, ntype=Notification.T
         )
 
 
+def assignee_users(ticket):
+    return [r.user for r in ticket.assignee_links.select_related('user')]
+
+
 def ticket_participants(ticket, include_internal=True):
     """Müraciətlə bağlı bütün tərəflər (müraciətçi, icraçılar, izləyənlər)."""
-    users = [ticket.requester, ticket.assignee]
+    users = [ticket.requester] + assignee_users(ticket)
     users += list(ticket.watchers.all())
     if include_internal:
         for link in ticket.department_links.select_related('assignee'):
@@ -341,15 +345,202 @@ def _apply_link_assignee(ticket, actor, link, assignee_id):
         log_activity(ticket, actor, TicketActivity.A_ASSIGNEE, {
             'department': link.department.title, 'assignee': assignee.name, 'assignee_id': assignee.id,
         })
+        add_assignee(ticket, actor, assignee, department=link.department, log=False)
+
+
+def _user_link_for(ticket, user):
+    """İstifadəçinin əməkdaşı olduğu (və ya rəhbəri olduğu) təyin olunmuş şöbənin bağlantısı."""
+    links = list(ticket.department_links.select_related('department'))
+    for l in links:
+        if l.department_id == user.department_id:
+            return l
+    dept_ids = user_department_ids(user)
+    for l in links:
+        if l.department_id in dept_ids:
+            return l
+    return None
+
+
+def is_assignee(ticket, user):
+    return ticket.assignee_links.filter(user_id=user.id).exists()
+
+
+def can_take(ticket, user):
+    """Şöbə əməkdaşı (və ya admin) müraciəti özünə götürə bilərmi."""
+    if ticket.status in Ticket.FINAL_STATUSES or ticket.status == Ticket.STATUS_RESOLVED:
+        return False
+    if is_assignee(ticket, user):
+        return False
+    return is_ticket_admin(user) or _user_link_for(ticket, user) is not None
+
+
+def _sync_primary(ticket):
+    """Ticket.assignee - ilk icraçı (siyahı, filtr və köhnə API uyğunluğu üçün)."""
+    first = ticket.assignee_links.order_by('id').first()
+    new_id = first.user_id if first else None
+    if ticket.assignee_id != new_id:
+        ticket.assignee_id = new_id
+        ticket.save(update_fields=['assignee', 'updated_at'])
+
+
+def _start_ticket(ticket, actor):
+    """İcra başlayanda müraciət 'İcradadır' olur, ilk cavab vaxtı yazılır."""
+    if ticket.status in (Ticket.STATUS_NEW, Ticket.STATUS_OPEN):
+        old = ticket.status
+        ticket.status = Ticket.STATUS_IN_PROGRESS
+        fields = ['status', 'updated_at']
+        if not ticket.first_response_at:
+            ticket.first_response_at = timezone.now()
+            fields.append('first_response_at')
+        ticket.save(update_fields=fields)
+        log_activity(ticket, actor, TicketActivity.A_STATUS, {'from': old, 'to': ticket.status})
+
+
+def _recompute_link(ticket, actor, department_id):
+    """Şöbənin icra statusunu onun icraçılarının statuslarından çıxarır."""
+    if not department_id:
+        return
+    link = ticket.department_links.filter(department_id=department_id).first()
+    if not link:
+        return
+    statuses = list(ticket.assignee_links.filter(department_id=department_id).values_list('status', flat=True))
+    if not statuses:
+        return
+    if all(s == TicketAssignee.STATUS_DONE for s in statuses):
+        target = TicketDepartment.STATUS_DONE
+    elif any(s in (TicketAssignee.STATUS_IN_PROGRESS, TicketAssignee.STATUS_DONE) for s in statuses):
+        target = TicketDepartment.STATUS_IN_PROGRESS
+    else:
+        return
+    if target != link.status:
+        set_department_status(ticket, actor, department_id, target)
+
+
+def _notify_progress(ticket, actor, text):
+    notify_users(ticket, [ticket.requester] + list(ticket.watchers.all()),
+                 f"{ticket.number}: {text}", ticket.title, actor=actor, ntype=Notification.TYPE_TICKET_UPDATE)
+
+
+@transaction.atomic
+def add_assignee(ticket, actor, user, department=None, self_assigned=False, notify=True, log=True):
+    """Müraciətə icraçı əlavə edir. Artıq varsa mövcud sətri qaytarır."""
+    existing = ticket.assignee_links.filter(user_id=user.id).first()
+    if existing:
+        return existing
+    if department is None:
+        link = _user_link_for(ticket, user)
+        department = link.department if link else None
+    row = TicketAssignee.objects.create(
+        ticket=ticket, user=user, department=department, assigned_by=actor, self_assigned=self_assigned,
+        status=TicketAssignee.STATUS_IN_PROGRESS if self_assigned else TicketAssignee.STATUS_ASSIGNED,
+        started_at=timezone.now() if self_assigned else None,
+    )
+    if log:
+        log_activity(ticket, actor, TicketActivity.A_ASSIGNEE_ADDED, {
+            'assignee': user.name, 'assignee_id': user.id, 'self': self_assigned,
+            'department': department.title if department else None,
+        })
+    _sync_primary(ticket)
+    if ticket.status == Ticket.STATUS_NEW:
+        ticket.status = Ticket.STATUS_OPEN
+        ticket.save(update_fields=['status', 'updated_at'])
+    if self_assigned:
+        _start_ticket(ticket, actor)
+        _recompute_link(ticket, actor, department.id if department else None)
+        if notify:
+            _notify_progress(ticket, actor, f"{user.name} müraciəti üzərinə götürdü")
+    elif notify and user.id != getattr(actor, 'id', None):
         notify_users(
-            ticket, [assignee], f"Müraciət sizə təyin edildi: {ticket.number}", ticket.title,
+            ticket, [user], f"Müraciət sizə təyin edildi: {ticket.number}", ticket.title,
             actor=actor, ntype=Notification.TYPE_TICKET_ASSIGNED,
         )
+    return row
+
+
+def take_ticket(ticket, user):
+    """Şöbə əməkdaşı müraciəti 'özümə götür' edir: icraçı siyahısına düşür, statusu 'İcradadır' olur."""
+    if ticket.status in Ticket.FINAL_STATUSES or ticket.status == Ticket.STATUS_RESOLVED:
+        raise ValidationError({'detail': 'Bu statusda müraciəti götürmək olmaz.'})
+    row = ticket.assignee_links.filter(user_id=user.id).first()
+    if row:
+        # artıq təyin olunubsa, "götür" işə başlamaq deməkdir
+        if row.status == TicketAssignee.STATUS_ASSIGNED:
+            set_assignee_status(ticket, user, TicketAssignee.STATUS_IN_PROGRESS)
+            return ticket
+        raise ValidationError({'detail': 'Siz artıq bu müraciətin icraçısısınız.'})
+    if not can_take(ticket, user):
+        raise PermissionDenied("Bu müraciəti yalnız təyin olunmuş şöbənin əməkdaşları götürə bilər.")
+    add_assignee(ticket, user, user, self_assigned=True)
+    return ticket
+
+
+@transaction.atomic
+def release_assignee(ticket, actor, user_id=None):
+    """İcraçını siyahıdan çıxarır (özünü və ya, səlahiyyəti varsa, başqasını)."""
+    target_id = user_id or actor.id
+    row = ticket.assignee_links.select_related('user').filter(user_id=target_id).first()
+    if not row:
+        raise ValidationError({'detail': 'Bu istifadəçi müraciətin icraçısı deyil.'})
+    if target_id != actor.id and not (is_ticket_admin(actor) or is_agent(ticket, actor)):
+        raise PermissionDenied("İcraçını çıxarmaq icazəniz yoxdur.")
+    if ticket.status in Ticket.FINAL_STATUSES or ticket.status == Ticket.STATUS_RESOLVED:
+        raise ValidationError({'detail': 'Bu statusda icraçını çıxarmaq olmaz.'})
+    department_id = row.department_id
+    user = row.user
+    row.delete()
+    log_activity(ticket, actor, TicketActivity.A_ASSIGNEE_REMOVED, {
+        'assignee': user.name, 'assignee_id': user.id, 'self': target_id == actor.id,
+    })
+    _sync_primary(ticket)
+    if not TicketAssignee.objects.filter(ticket=ticket).exists() and ticket.status == Ticket.STATUS_IN_PROGRESS:
+        ticket.status = Ticket.STATUS_OPEN
+        ticket.save(update_fields=['status', 'updated_at'])
+    _recompute_link(ticket, actor, department_id)
+    if target_id != actor.id:
+        notify_users(ticket, [user], f"Siz {ticket.number} müraciətindən çıxarıldınız", ticket.title,
+                     actor=actor, ntype=Notification.TYPE_TICKET_UPDATE)
+    return ticket
+
+
+@transaction.atomic
+def set_assignee_status(ticket, actor, status, user_id=None, note=''):
+    """İcraçının öz statusunu dəyişir (Təyin olunub / İcradadır / Tamamlayıb)."""
+    if status not in dict(TicketAssignee.STATUS_CHOICES):
+        raise ValidationError({'status': 'Yanlış status.'})
+    target_id = user_id or actor.id
+    row = ticket.assignee_links.select_related('user').filter(user_id=target_id).first()
+    if not row:
+        raise ValidationError({'detail': 'Bu istifadəçi müraciətin icraçısı deyil.'})
+    if target_id != actor.id and not is_ticket_admin(actor):
+        raise PermissionDenied("Başqasının icra statusunu dəyişmək icazəniz yoxdur.")
+    if ticket.status in Ticket.FINAL_STATUSES or ticket.status == Ticket.STATUS_RESOLVED:
+        raise ValidationError({'detail': 'Bu statusda icra statusunu dəyişmək olmaz.'})
+    if row.status == status:
+        return ticket
+    now = timezone.now()
+    row.status = status
+    if status == TicketAssignee.STATUS_IN_PROGRESS and not row.started_at:
+        row.started_at = now
+    row.completed_at = now if status == TicketAssignee.STATUS_DONE else None
+    if note:
+        row.note = note[:500]
+    row.save()
+    log_activity(ticket, actor, TicketActivity.A_ASSIGNEE_STATUS, {
+        'assignee': row.user.name, 'assignee_id': row.user_id, 'to': status,
+    })
+    if status in (TicketAssignee.STATUS_IN_PROGRESS, TicketAssignee.STATUS_DONE):
+        _start_ticket(ticket, actor)
+    _recompute_link(ticket, actor, row.department_id)
+    ticket.refresh_from_db()
+    if status == TicketAssignee.STATUS_DONE and ticket.status in Ticket.ACTIVE_STATUSES:
+        _notify_progress(ticket, actor, f"{row.user.name} öz hissəsini tamamladı")
+    return ticket
 
 
 @transaction.atomic
 def set_assignee(ticket, actor, assignee_id):
-    """Müraciətin əsas cavabdeh icraçısını təyin edir."""
+    """Köhnə uyğunluq API-si: müraciətin icraçısını təkli təyin edir (digərlərini çıxarır).
+    Boş dəyər bütün icraçıları təmizləyir."""
     if not is_agent(ticket, actor) and not is_ticket_admin(actor):
         raise PermissionDenied("İcraçı təyin etmək icazəniz yoxdur.")
     if ticket.status in Ticket.FINAL_STATUSES:
@@ -362,35 +553,30 @@ def set_assignee(ticket, actor, assignee_id):
         linked = {l.department_id for l in ticket.department_links.all()}
         if not is_ticket_admin(actor) and not (user_department_ids(new) & linked):
             raise ValidationError({'assignee': 'İcraçı təyin olunmuş şöbələrdən birinin əməkdaşı olmalıdır.'})
-    old = ticket.assignee
-    if (old.id if old else None) == (new.id if new else None):
-        return ticket
-    ticket.assignee = new
-    if new and ticket.status == Ticket.STATUS_NEW:
-        ticket.status = Ticket.STATUS_OPEN
-    ticket.save(update_fields=['assignee', 'status', 'updated_at'])
-    log_activity(ticket, actor, TicketActivity.A_ASSIGNEE, {
-        'from': old.name if old else None, 'assignee': new.name if new else None,
-        'assignee_id': new.id if new else None,
-    })
+    for row in list(ticket.assignee_links.select_related('user').exclude(user=new) if new else ticket.assignee_links.select_related('user')):
+        row.delete()
+        log_activity(ticket, actor, TicketActivity.A_ASSIGNEE_REMOVED, {'assignee': row.user.name, 'assignee_id': row.user_id})
     if new:
-        notify_users(
-            ticket, [new], f"Müraciət sizə təyin edildi: {ticket.number}", ticket.title,
-            actor=actor, ntype=Notification.TYPE_TICKET_ASSIGNED,
-        )
+        add_assignee(ticket, actor, new)
+    _sync_primary(ticket)
     return ticket
 
 
-def take_ticket(ticket, user):
-    """İcraçı müraciəti 'özümə götür' edir."""
-    if not is_agent(ticket, user):
-        raise PermissionDenied("Bu müraciəti götürmək icazəniz yoxdur.")
+def add_assignees(ticket, actor, user_ids):
+    """Şöbə əməkdaşlarını (və ya admin istənilən istifadəçini) icraçı kimi əlavə edir."""
+    if not is_agent(ticket, actor) and not is_ticket_admin(actor):
+        raise PermissionDenied("İcraçı təyin etmək icazəniz yoxdur.")
     if ticket.status in Ticket.FINAL_STATUSES or ticket.status == Ticket.STATUS_RESOLVED:
-        raise ValidationError({'detail': 'Bu statusda müraciəti götürmək olmaz.'})
-    set_assignee(ticket, user, user.id)
-    ticket.refresh_from_db()
-    if ticket.status in (Ticket.STATUS_NEW, Ticket.STATUS_OPEN):
-        change_status(ticket, user, Ticket.STATUS_IN_PROGRESS)
+        raise ValidationError({'detail': 'Bu statusda icraçı əlavə etmək olmaz.'})
+    users = list(User.objects.filter(id__in=user_ids, is_active=True))
+    if len(users) != len(set(user_ids)):
+        raise ValidationError({'assignees': 'İstifadəçi tapılmadı.'})
+    linked = {l.department_id for l in ticket.department_links.all()}
+    for u in users:
+        if not is_ticket_admin(actor) and not (user_department_ids(u) & linked):
+            raise ValidationError({'assignees': f'{u.name} təyin olunmuş şöbələrin əməkdaşı deyil.'})
+    for u in users:
+        add_assignee(ticket, actor, u, self_assigned=(u.id == actor.id))
     return ticket
 
 
@@ -423,6 +609,8 @@ def change_status(ticket, user, new_status, comment=''):
         # bütün şöbələr yenidən işə qayıdır
         ticket.department_links.filter(status=TicketDepartment.STATUS_DONE).update(
             status=TicketDepartment.STATUS_IN_PROGRESS, completed_at=None)
+        ticket.assignee_links.filter(status=TicketAssignee.STATUS_DONE).update(
+            status=TicketAssignee.STATUS_IN_PROGRESS, completed_at=None)
     if new_status == Ticket.STATUS_RESOLVED:
         ticket.resolved_at = now
         fields.append('resolved_at')
@@ -454,9 +642,9 @@ def change_status(ticket, user, new_status, comment=''):
 
     status_label = dict(Ticket.STATUS_CHOICES)[new_status]
     if is_requester(ticket, user) and not is_agent(ticket, user):
-        recipients = [ticket.assignee] + [l.assignee for l in ticket.department_links.all()]
+        recipients = assignee_users(ticket) + [l.assignee for l in ticket.department_links.all()]
         for l in ticket.department_links.select_related('department__manager'):
-            if not ticket.assignee_id:
+            if not TicketAssignee.objects.filter(ticket=ticket).exists():
                 recipients += _department_recipients(l.department)
     else:
         recipients = [ticket.requester] + list(ticket.watchers.all())
@@ -544,11 +732,11 @@ def add_comment(ticket, user, body, is_internal=False, _notify=True):
 
     if _notify:
         if is_internal:
-            recipients = [ticket.assignee] + [l.assignee for l in ticket.department_links.all()]
+            recipients = assignee_users(ticket) + [l.assignee for l in ticket.department_links.all()]
             recipients += [w for w in ticket.watchers.all() if is_agent(ticket, w)]
         elif is_requester(ticket, user):
-            recipients = [ticket.assignee] + [l.assignee for l in ticket.department_links.all()]
-            if not ticket.assignee_id:
+            recipients = assignee_users(ticket) + [l.assignee for l in ticket.department_links.all()]
+            if not TicketAssignee.objects.filter(ticket=ticket).exists():
                 for l in ticket.department_links.select_related('department__manager'):
                     recipients += _department_recipients(l.department)
             recipients += list(ticket.watchers.all())
@@ -617,7 +805,7 @@ def update_ticket_fields(ticket, user, validated):
         ticket.apply_sla(ticket.created_at)
         changed += ['priority', 'first_response_due_at', 'due_at']
         log_activity(ticket, user, TicketActivity.A_PRIORITY, {'from': old, 'to': ticket.priority})
-        notify_users(ticket, [ticket.requester, ticket.assignee], f"{ticket.number}: prioritet dəyişdi",
+        notify_users(ticket, [ticket.requester] + assignee_users(ticket), f"{ticket.number}: prioritet dəyişdi",
                      ticket.get_priority_display(), actor=user, ntype=Notification.TYPE_TICKET_UPDATE)
     if changed:
         ticket.save(update_fields=list(dict.fromkeys(changed + ['updated_at'])))

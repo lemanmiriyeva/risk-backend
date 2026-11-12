@@ -1,13 +1,19 @@
 from django.contrib import admin
 
 from .models import (
-    Ticket, TicketActivity, TicketAttachment, TicketCategory, TicketComment, TicketDepartment,
+    Ticket, TicketActivity, TicketAssignee, TicketAttachment, TicketCategory, TicketComment, TicketDepartment,
 )
 
 
 class TicketDepartmentInline(admin.TabularInline):
     model = TicketDepartment
     extra = 0
+
+
+class TicketAssigneeInline(admin.TabularInline):
+    model = TicketAssignee
+    extra = 0
+    raw_id_fields = ('user', 'department', 'assigned_by')
 
 
 class TicketCommentInline(admin.TabularInline):
@@ -21,7 +27,7 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = ('status', 'priority', 'ticket_type', 'category')
     search_fields = ('title', 'description', 'requester__username')
     date_hierarchy = 'created_at'
-    inlines = [TicketDepartmentInline, TicketCommentInline]
+    inlines = [TicketDepartmentInline, TicketAssigneeInline, TicketCommentInline]
     raw_id_fields = ('requester', 'assignee', 'requester_department', 'organization')
 
 

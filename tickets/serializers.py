@@ -5,7 +5,7 @@ from core.media_urls import media_url
 
 from . import services
 from .models import (
-    Ticket, TicketActivity, TicketAttachment, TicketCategory, TicketComment, TicketDepartment,
+    Ticket, TicketActivity, TicketAssignee, TicketAttachment, TicketCategory, TicketComment, TicketDepartment,
 )
 
 
@@ -77,6 +77,23 @@ class TicketDepartmentSerializer(serializers.ModelSerializer):
         return d.manager.name if d.manager_id else None
 
 
+class TicketAssigneeSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='user.name', read_only=True)
+    department_title = serializers.SerializerMethodField()
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = TicketAssignee
+        fields = (
+            'id', 'user', 'name', 'department', 'department_title', 'status', 'status_display',
+            'self_assigned', 'note', 'started_at', 'completed_at', 'created_at',
+        )
+
+    def get_department_title(self, obj):
+        d = obj.department
+        return (d.shortname or d.title) if d else None
+
+
 class AttachmentSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     uploaded_by_name = serializers.SerializerMethodField()
@@ -135,6 +152,7 @@ class TicketListSerializer(serializers.ModelSerializer):
     requester_name = serializers.SerializerMethodField()
     requester_department = serializers.SerializerMethodField()
     assignee_name = serializers.SerializerMethodField()
+    assignees = serializers.SerializerMethodField()
     departments = serializers.SerializerMethodField()
     is_overdue = serializers.BooleanField(read_only=True)
     first_response_overdue = serializers.BooleanField(read_only=True)
@@ -147,7 +165,7 @@ class TicketListSerializer(serializers.ModelSerializer):
             'status', 'status_display', 'priority', 'priority_display',
             'category', 'category_title', 'category_color',
             'requester', 'requester_name', 'requester_department',
-            'assignee', 'assignee_name', 'departments',
+            'assignee', 'assignee_name', 'assignees', 'departments',
             'due_at', 'is_overdue', 'first_response_overdue', 'first_response_at',
             'comment_count', 'rating', 'created_at', 'updated_at', 'last_activity_at',
         )
@@ -165,7 +183,14 @@ class TicketListSerializer(serializers.ModelSerializer):
         return obj.requester_department.shortname or obj.requester_department.title if obj.requester_department_id else None
 
     def get_assignee_name(self, obj):
-        return obj.assignee.name if obj.assignee_id else None
+        rows = list(obj.assignee_links.all())
+        if not rows:
+            return None
+        return rows[0].user.name + (f' +{len(rows) - 1}' if len(rows) > 1 else '')
+
+    def get_assignees(self, obj):
+        return [{'id': r.user_id, 'name': r.user.name, 'status': r.status, 'status_display': r.get_status_display()}
+                for r in obj.assignee_links.all()]
 
     def get_departments(self, obj):
         return [
@@ -183,6 +208,7 @@ class TicketListSerializer(serializers.ModelSerializer):
 class TicketDetailSerializer(TicketListSerializer):
     description = serializers.CharField(read_only=True)
     department_links = TicketDepartmentSerializer(many=True, read_only=True)
+    assignees = TicketAssigneeSerializer(source='assignee_links', many=True, read_only=True)
     comments = serializers.SerializerMethodField()
     attachments = serializers.SerializerMethodField()
     activities = serializers.SerializerMethodField()
@@ -241,18 +267,22 @@ class TicketDetailSerializer(TicketListSerializer):
         requester = services.is_requester(obj, user)
         active = obj.status not in Ticket.FINAL_STATUSES
         transitions = services.allowed_transitions(obj, user)
+        my_row = next((r for r in obj.assignee_links.all() if r.user_id == user.id), None)
         labels = dict(Ticket.STATUS_CHOICES)
         return {
+            'user_id': user.id,
             'is_agent': agent,
             'is_requester': requester,
             'is_admin': services.is_ticket_admin(user),
             'can_edit': active and (agent or (requester and obj.status == Ticket.STATUS_NEW)),
             'can_assign': active and services.can_assign(obj, user),
-            'can_set_assignee': active and agent,
+            'can_set_assignee': active and agent and obj.status != Ticket.STATUS_RESOLVED,
             'can_comment': active and (agent or requester or obj.watchers.filter(id=user.id).exists()),
             'can_comment_internal': active and agent,
-            'can_take': active and agent and obj.assignee_id != user.id
-                        and obj.status not in (Ticket.STATUS_RESOLVED,),
+            'can_take': active and services.can_take(obj, user),
+            'can_release': active and my_row is not None and obj.status != Ticket.STATUS_RESOLVED,
+            'my_assignee_status': my_row.status if my_row else None,
+            'can_set_my_status': active and my_row is not None and obj.status != Ticket.STATUS_RESOLVED,
             'can_rate': requester and obj.status in (Ticket.STATUS_RESOLVED, Ticket.STATUS_CLOSED),
             'is_watching': obj.watchers.filter(id=user.id).exists(),
             'transitions': [{'value': t, 'label': labels[t]} for t in transitions],
@@ -310,6 +340,20 @@ class DepartmentStatusSerializer(serializers.Serializer):
     department = serializers.IntegerField()
     status = serializers.ChoiceField(choices=TicketDepartment.STATUS_CHOICES)
     note = serializers.CharField(required=False, allow_blank=True, max_length=500, default='')
+
+
+class AssigneesAddSerializer(serializers.Serializer):
+    users = serializers.ListField(child=serializers.IntegerField(), allow_empty=False, max_length=20)
+
+
+class ReleaseSerializer(serializers.Serializer):
+    user = serializers.IntegerField(required=False, allow_null=True)
+
+
+class AssigneeStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=TicketAssignee.STATUS_CHOICES)
+    user = serializers.IntegerField(required=False, allow_null=True)
+    note = serializers.CharField(required=False, allow_blank=True, default='', max_length=500)
 
 
 class AssigneeSerializer(serializers.Serializer):

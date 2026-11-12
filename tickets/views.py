@@ -21,9 +21,9 @@ from . import services
 from .filters import TicketFilterSet
 from .models import Ticket, TicketCategory, TicketDepartment, SLA_HOURS
 from .serializers import (
-    AssigneeSerializer, AttachmentSerializer, CategorySerializer, CommentCreateSerializer,
+    AssigneeSerializer, AssigneesAddSerializer, AssigneeStatusSerializer, AttachmentSerializer, CategorySerializer, CommentCreateSerializer,
     CommentSerializer, DepartmentMiniSerializer, DepartmentStatusSerializer,
-    RatingSerializer, SetDepartmentsSerializer, StatusSerializer, TicketCreateSerializer,
+    RatingSerializer, ReleaseSerializer, SetDepartmentsSerializer, StatusSerializer, TicketCreateSerializer,
     TicketDetailSerializer, TicketListSerializer, TicketUpdateSerializer, UserMiniSerializer,
     WatchersSerializer,
 )
@@ -75,7 +75,8 @@ class TicketViewSet(viewsets.GenericViewSet):
         qs = qs.select_related(
             'category', 'requester', 'requester_department', 'assignee', 'organization',
         ).prefetch_related(
-            'department_links__department__manager', 'comments', 'watchers',
+            'department_links__department__manager', 'comments', 'watchers', 'assignee_links__user',
+            'assignee_links__department',
         ).annotate(priority_rank=PRIORITY_RANK)
         return qs
 
@@ -175,6 +176,31 @@ class TicketViewSet(viewsets.GenericViewSet):
     def take(self, request, pk=None):
         ticket = self._get(pk)
         services.take_ticket(ticket, request.user)
+        return self._detail(ticket)
+
+    @action(detail=True, methods=['post'], url_path='assignees')
+    def add_assignees(self, request, pk=None):
+        ticket = self._get(pk)
+        ser = AssigneesAddSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        services.add_assignees(ticket, request.user, ser.validated_data['users'])
+        return self._detail(ticket)
+
+    @action(detail=True, methods=['post'])
+    def release(self, request, pk=None):
+        ticket = self._get(pk)
+        ser = ReleaseSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        services.release_assignee(ticket, request.user, ser.validated_data.get('user'))
+        return self._detail(ticket)
+
+    @action(detail=True, methods=['post'], url_path='assignee-status')
+    def assignee_status(self, request, pk=None):
+        ticket = self._get(pk)
+        ser = AssigneeStatusSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        d = ser.validated_data
+        services.set_assignee_status(ticket, request.user, d['status'], d.get('user'), d['note'])
         return self._detail(ticket)
 
     @action(detail=True, methods=['post'])
@@ -277,7 +303,7 @@ class TicketViewSet(viewsets.GenericViewSet):
             'total': qs.count(),
             'active': active.count(),
             'overdue': active.filter(due_at__lt=now).count(),
-            'unassigned': active.filter(assignee__isnull=True).count(),
+            'unassigned': active.filter(assignee_links__isnull=True).count(),
             'by_status': by_status,
             'by_priority': by_priority,
             'avg_resolution_hours': round(avg.total_seconds() / 3600, 1) if avg else None,

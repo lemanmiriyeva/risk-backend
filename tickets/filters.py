@@ -16,7 +16,7 @@ class TicketFilterSet(django_filters.FilterSet):
     ticket_type = CharInFilter(field_name='ticket_type', lookup_expr='in')
     category = django_filters.NumberFilter(field_name='category_id')
     department = django_filters.NumberFilter(method='filter_department')
-    assignee = django_filters.NumberFilter(field_name='assignee_id')
+    assignee = django_filters.NumberFilter(method='filter_assignee')
     requester = django_filters.NumberFilter(field_name='requester_id')
     overdue = django_filters.BooleanFilter(method='filter_overdue')
     unassigned = django_filters.BooleanFilter(method='filter_unassigned')
@@ -32,12 +32,15 @@ class TicketFilterSet(django_filters.FilterSet):
     def filter_department(self, qs, name, value):
         return qs.filter(department_links__department_id=value).distinct()
 
+    def filter_assignee(self, qs, name, value):
+        return qs.filter(assignee_links__user_id=value).distinct()
+
     def filter_overdue(self, qs, name, value):
         cond = Q(status__in=Ticket.ACTIVE_STATUSES, due_at__lt=timezone.now())
         return qs.filter(cond) if value else qs.exclude(cond)
 
     def filter_unassigned(self, qs, name, value):
-        cond = Q(assignee__isnull=True, status__in=Ticket.ACTIVE_STATUSES)
+        cond = Q(assignee_links__isnull=True, status__in=Ticket.ACTIVE_STATUSES)
         return qs.filter(cond) if value else qs.exclude(cond)
 
     def filter_active(self, qs, name, value):
@@ -48,7 +51,7 @@ class TicketFilterSet(django_filters.FilterSet):
         if value == 'mine':
             return qs.filter(requester=user)
         if value == 'assigned':
-            return qs.filter(Q(assignee=user) | Q(department_links__assignee=user)).distinct()
+            return qs.filter(Q(assignee_links__user=user) | Q(department_links__assignee=user)).distinct()
         if value == 'department':
             ids = services.user_department_ids(user)
             return qs.filter(department_links__department_id__in=ids).distinct() if ids else qs.none()
