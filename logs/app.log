@@ -2826,3 +2826,61 @@ INFO 2026-10-07 15:11:09,409 middleware [LOQ] laman.bashirova - Baxdı - modul=�
 INFO 2026-10-07 15:11:11,663 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
 INFO 2026-10-07 15:11:14,012 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
 INFO 2026-10-07 15:11:14,035 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-10-12 11:08:37,487 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-12 11:08:37,629 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-12 11:08:50,090 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-12 11:09:02,135 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-12 11:09:02,213 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-12 11:09:02,235 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-12 11:09:02,274 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-12 11:09:02,349 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 11:09:02,595 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 11:09:08,731 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 15:53:50,902 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-12 15:53:50,963 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 15:53:51,032 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-12 15:53:51,301 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 15:53:53,957 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 16:08:08,115 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-12 16:08:08,192 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 16:08:08,327 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-12 16:08:14,383 middleware [LOQ] laman.bashirova - Baxdı - modul=Təlimlər - Təlimlər modulunda baxdı - ip=192.168.1.126
+INFO 2026-10-12 16:08:14,566 middleware [LOQ] laman.bashirova - Yaratdı - modul=Təlimlər - Təlimlər modulunda yaratdı - ip=192.168.1.126
+INFO 2026-10-12 16:08:19,006 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-16 12:02:16,470 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 12:02:16,739 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-16 12:02:33,192 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 12:02:33,288 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-16 12:02:47,632 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 12:02:47,698 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-16 12:03:07,246 views LoginView.post - giriş cəhdi: root
+INFO 2026-10-16 12:03:07,337 views LoginView.post - root üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-16 13:46:10,356 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:46:18,400 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-10-16 13:46:18,430 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-10-16 13:46:33,058 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:47:06,619 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-10-16 13:47:06,640 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-10-16 13:47:28,775 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:47:39,586 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-10-16 13:47:39,600 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-10-16 13:48:48,295 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:48:48,389 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-16 13:49:02,357 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:49:04,866 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-10-16 13:49:04,884 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-10-16 13:49:20,646 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:49:20,706 views LoginView.post - laman.bashirova üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-10-16 13:49:30,293 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 13:49:50,211 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+INFO 2026-10-16 13:49:50,232 views RequestTwoFAResetView.post - laman.bashirova üçün yanlış istifadəçi adı/şifrə
+INFO 2026-10-16 14:06:48,635 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 14:06:50,587 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+ERROR 2026-10-16 14:07:06,471 views RequestTwoFAResetView.post - laman.bashirova üçün xəta: {'laman.bashirova@mdi.gov.az': (550, b'laman.bashirova@mdi.gov.az... No such user')}
+INFO 2026-10-16 14:07:18,362 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-10-16 14:07:18,454 views laman.bashirova uğurla daxil oldu
+INFO 2026-10-16 14:07:18,506 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-10-16 14:07:18,538 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-10-16 14:07:18,622 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-10-16 14:07:34,978 middleware [LOQ] laman.bashirova - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=192.168.1.126
+INFO 2026-10-16 14:07:35,348 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=192.168.1.126
