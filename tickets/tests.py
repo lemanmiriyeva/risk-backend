@@ -252,6 +252,24 @@ class TicketFlowTests(APITestCase):
         r = self.api(self.it_manager).post(f'{BASE}{tid}/assignee/', {'assignee': self.it_manager.id}, format='json')
         self.assertEqual([a['user'] for a in r.data['assignees']], [self.it_manager.id])
 
+    def test_non_admin_sees_only_own_department_people_and_stats(self):
+        self.create()
+        # adi istifadəçi başqa şöbənin əməkdaşlarını axtarışda görmür
+        users = self.api(self.it_agent).get('/api/tickets/users/').data
+        self.assertTrue(users)
+        self.assertEqual({u['department_title'] for u in users}, {self.it.title})
+        self.assertEqual(self.api(self.it_agent).get(f'/api/tickets/users/?department={self.hr.id}').data, [])
+        # modul admini hamısını görür
+        admin_users = self.api(self.admin).get('/api/tickets/users/').data
+        self.assertGreater(len({u['department_title'] for u in admin_users}), 1)
+        # statistikada yalnız öz şöbəsi
+        st = self.api(self.it_agent).get(BASE + 'stats/').data
+        self.assertEqual({d['id'] for d in st['by_department']}, {self.it.id})
+        st = self.api(self.admin).get(BASE + 'stats/').data
+        self.assertEqual({d['id'] for d in st['by_department']}, {self.it.id, self.hr.id})
+        # başqa şöbənin müraciətini görmür
+        self.assertEqual(self.api(self.stranger).get(BASE).data['count'], 0)
+
     def test_attachments(self):
         tid = self.create()['id']
         ok = SimpleUploadedFile('screen.png', b'\x89PNG....', content_type='image/png')
@@ -299,7 +317,9 @@ class TicketFlowTests(APITestCase):
         m = self.api(self.requester).get(BASE + 'meta/').data
         self.assertEqual(len(m['priorities']), 4)
         self.assertNotIn(self.foreign.id, [d['id'] for d in m['departments']])
-        u = self.api(self.requester).get(f'{BASE}users/?department={self.it.id}').data
+        # başqa şöbənin əməkdaşları adi istifadəçiyə görünmür, öz şöbəsininkilər görünür
+        self.assertEqual(self.api(self.requester).get(f'{BASE}users/?department={self.it.id}').data, [])
+        u = self.api(self.it_agent).get(f'{BASE}users/?department={self.it.id}').data
         self.assertEqual({x['username'] for x in u}, {'itmanager', 'itagent'})
 
     def test_maintenance_jobs(self):

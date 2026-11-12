@@ -2884,3 +2884,200 @@ INFO 2026-10-16 14:07:18,538 views UserView.get - laman.bashirova öz məlumatı
 INFO 2026-10-16 14:07:18,622 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=192.168.1.126
 INFO 2026-10-16 14:07:34,978 middleware [LOQ] laman.bashirova - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=192.168.1.126
 INFO 2026-10-16 14:07:35,348 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=192.168.1.126
+INFO 2026-11-12 10:13:29,771 views LoginView.post - giriş cəhdi: root
+INFO 2026-11-12 10:13:29,818 views LoginView.post - root üçün autentifikasiya xətası: İstifadəçi adı və ya şifrə yalnışdır.
+INFO 2026-11-12 10:13:33,492 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-11-12 10:13:47,600 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-11-12 10:13:47,660 views laman.bashirova - 2FA kodu yanlış daxil edildi
+INFO 2026-11-12 10:13:47,660 views LoginView.post - laman.bashirova üçün icazə rədd edildi: 2FA kodu yanlışdır.
+INFO 2026-11-12 10:13:53,623 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-11-12 10:13:53,686 views laman.bashirova - 2FA kodu yanlış daxil edildi
+INFO 2026-11-12 10:13:53,686 views LoginView.post - laman.bashirova üçün icazə rədd edildi: 2FA kodu yanlışdır.
+INFO 2026-11-12 10:14:02,412 views RequestTwoFAResetView.post - 2FA sıfırlama sorğusu: laman.bashirova
+ERROR 2026-11-12 10:14:02,992 views RequestTwoFAResetView.post - laman.bashirova üçün xəta: {'laman.bashirova@mdi.gov.az': (550, b'laman.bashirova@mdi.gov.az... No such user')}
+INFO 2026-11-12 10:14:24,004 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-11-12 10:14:24,053 views laman.bashirova uğurla daxil oldu
+INFO 2026-11-12 10:14:24,058 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-11-12 10:14:24,098 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-11-12 10:14:24,124 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:14:37,560 middleware [LOQ] laman.bashirova - Yaratdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi modulunda yaratdı - ip=::1
+INFO 2026-11-12 10:14:39,089 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:14:39,107 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:16:05,241 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:18:53,189 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:19:10,434 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:19:10,466 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:21:57,938 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:22:07,175 middleware [LOQ] laman.bashirova - Baxdı - modul=İcazələr - İcazələr moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:23:16,001 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:23:19,987 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:23:20,010 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:25:29,729 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,731 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,732 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:29,760 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,784 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,801 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,835 middleware [LOQ] requester - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,841 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,846 middleware [LOQ] tadmin - Yaratdı - modul=- - sistem modulunda "Yeni kat" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,851 middleware [LOQ] requester - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,862 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,863 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,865 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:29,899 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,916 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,918 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:29,947 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:29,957 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,958 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:29,960 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:29,986 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,028 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,041 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,053 services [BİLDİRİŞ] requester <- TKT-00001: bütün şöbələr işi tamamladı
+INFO 2026-11-12 10:25:30,076 middleware [LOQ] hragent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,086 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,087 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,088 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:30,108 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,112 middleware [LOQ] stranger - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,127 services [BİLDİRİŞ] requester <- TKT-00001: Itagent Test müraciəti üzərinə götürdü
+INFO 2026-11-12 10:25:30,145 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,151 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,170 services [BİLDİRİŞ] requester <- TKT-00001: Itmanager Test müraciəti üzərinə götürdü
+INFO 2026-11-12 10:25:30,191 middleware [LOQ] itmanager - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,205 services [BİLDİRİŞ] requester <- TKT-00001: Hragent Test müraciəti üzərinə götürdü
+INFO 2026-11-12 10:25:30,227 middleware [LOQ] hragent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,241 middleware [LOQ] requester - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,256 services [BİLDİRİŞ] requester <- TKT-00001: Itagent Test öz hissəsini tamamladı
+INFO 2026-11-12 10:25:30,276 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,292 services [BİLDİRİŞ] requester <- TKT-00001: Itmanager Test öz hissəsini tamamladı
+INFO 2026-11-12 10:25:30,311 middleware [LOQ] itmanager - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,326 services [BİLDİRİŞ] requester <- TKT-00001: bütün şöbələr işi tamamladı
+INFO 2026-11-12 10:25:30,347 middleware [LOQ] hragent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,368 services [BİLDİRİŞ] itagent <- TKT-00001: status — İcradadır
+INFO 2026-11-12 10:25:30,369 services [BİLDİRİŞ] itmanager <- TKT-00001: status — İcradadır
+INFO 2026-11-12 10:25:30,370 services [BİLDİRİŞ] hragent <- TKT-00001: status — İcradadır
+INFO 2026-11-12 10:25:30,400 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,411 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,412 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,414 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:30,433 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,472 middleware [LOQ] requester - Dəyişiklik etdi - modul=- - sistem modulunda "Yeni mövzu burada" adlı qeydi redaktə etdi - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,486 services [BİLDİRİŞ] requester <- TKT-00001: prioritet dəyişdi
+INFO 2026-11-12 10:25:30,505 middleware [LOQ] itagent - Dəyişiklik etdi - modul=- - sistem modulunda "Yeni mövzu burada" adlı qeydi redaktə etdi - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,516 services [BİLDİRİŞ] requester <- TKT-00001: status — İcradadır
+INFO 2026-11-12 10:25:30,544 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Yeni mövzu burada" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,553 middleware [LOQ] requester - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,558 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,567 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,568 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,570 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:30,593 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,610 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "#1" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,620 services [BİLDİRİŞ] requester <- TKT-00001: yeni şərh
+INFO 2026-11-12 10:25:30,623 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "#2" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,648 middleware [LOQ] itagent - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,672 middleware [LOQ] requester - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,681 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,925 middleware [LOQ] no2fa - Baxdı - modul=- - sistem moduluna daxil oldu (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,937 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,938 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:30,939 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:30,968 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:30,977 services [BİLDİRİŞ] tadmin <- SLA keçdi: TKT-00001
+INFO 2026-11-12 10:25:30,977 services [BİLDİRİŞ] itmanager <- SLA keçdi: TKT-00001
+INFO 2026-11-12 10:25:30,981 services [BİLDİRİŞ] requester <- TKT-00001 avtomatik bağlandı
+INFO 2026-11-12 10:25:30,988 middleware [LOQ] requester - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,004 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,005 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,005 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,035 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,043 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,044 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,065 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,078 services [BİLDİRİŞ] hragent <- Sizin şöbəyə müraciət təyin edildi: TKT-00001
+INFO 2026-11-12 10:25:31,083 services [BİLDİRİŞ] itagent <- Müraciət sizə təyin edildi: TKT-00001
+INFO 2026-11-12 10:25:31,108 middleware [LOQ] itmanager - Dəyişiklik etdi - modul=- - sistem modulunda "Printer işləmir" adlı qeydi redaktə etdi - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,124 middleware [LOQ] itmanager - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,129 middleware [LOQ] stranger - Dəyişiklik etdi - modul=- - sistem modulunda redaktə etdi (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,143 services [BİLDİRİŞ] hragent <- Müraciət sizə təyin edildi: TKT-00001
+INFO 2026-11-12 10:25:31,171 middleware [LOQ] itmanager - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,181 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,182 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,182 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,202 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,217 services [BİLDİRİŞ] requester <- TKT-00001: Itagent Test müraciəti üzərinə götürdü
+INFO 2026-11-12 10:25:31,235 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,301 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,310 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,334 services [BİLDİRİŞ] itagent <- Müraciət sizə təyin edildi: TKT-00001
+INFO 2026-11-12 10:25:31,337 services [BİLDİRİŞ] hragent <- Müraciət sizə təyin edildi: TKT-00001
+INFO 2026-11-12 10:25:31,355 middleware [LOQ] tadmin - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,369 middleware [LOQ] itmanager - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,401 middleware [LOQ] hragent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,417 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,435 services [BİLDİRİŞ] requester <- TKT-00001: Hragent Test öz hissəsini tamamladı
+INFO 2026-11-12 10:25:31,449 middleware [LOQ] tadmin - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,489 middleware [LOQ] itmanager - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,499 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,500 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,501 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,522 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,533 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00002
+INFO 2026-11-12 10:25:31,534 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00002
+INFO 2026-11-12 10:25:31,535 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00002 - İnternet kəsilib
+INFO 2026-11-12 10:25:31,554 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "İnternet kəsilib" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,566 middleware [LOQ] tadmin - Baxdı - modul=- - sistem moduluna daxil oldu - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,635 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,636 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,638 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,660 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,673 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,689 services [BİLDİRİŞ] requester <- TKT-00001: Itagent Test müraciəti üzərinə götürdü
+INFO 2026-11-12 10:25:31,706 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,717 services [BİLDİRİŞ] requester <- TKT-00001: status — Həll edildi
+INFO 2026-11-12 10:25:31,739 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,758 services [BİLDİRİŞ] itagent <- TKT-00001: status — İcradadır
+INFO 2026-11-12 10:25:31,768 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,791 services [BİLDİRİŞ] requester <- TKT-00001: status — Həll edildi
+INFO 2026-11-12 10:25:31,812 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,827 services [BİLDİRİŞ] itagent <- TKT-00001: status — Bağlandı
+INFO 2026-11-12 10:25:31,829 services [ƏMƏLİYYAT] requester - Redaktə etdi - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,848 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,878 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,888 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda yaratdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,902 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,903 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:31,904 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:31,926 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,947 middleware [LOQ] requester - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,966 middleware [LOQ] itagent - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:31,986 middleware [LOQ] hragent - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:32,003 middleware [LOQ] tadmin - Baxdı - modul=- - sistem modulunda baxdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:32,009 middleware [LOQ] stranger - Baxdı - modul=- - sistem modulunda baxdı (uğursuz oldu) - ip=127.0.0.1
+INFO 2026-11-12 10:25:32,050 services [BİLDİRİŞ] itmanager <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:32,050 services [BİLDİRİŞ] hragent <- Yeni müraciət: TKT-00001
+INFO 2026-11-12 10:25:32,050 services [ƏMƏLİYYAT] requester - Yaratdı - kateqoriya=Müraciətlər - TKT-00001 - Printer işləmir
+INFO 2026-11-12 10:25:32,083 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:32,092 services [BİLDİRİŞ] requester <- TKT-00001: status — Cavab gözlənilir
+INFO 2026-11-12 10:25:32,115 middleware [LOQ] itagent - Yaratdı - modul=- - sistem modulunda "Printer işləmir" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:25:32,130 services [BİLDİRİŞ] itmanager <- TKT-00001: yeni şərh
+INFO 2026-11-12 10:25:32,131 services [BİLDİRİŞ] hragent <- TKT-00001: yeni şərh
+INFO 2026-11-12 10:25:32,133 middleware [LOQ] requester - Yaratdı - modul=- - sistem modulunda "#1" adlı qeydi yaratdı - ip=127.0.0.1
+INFO 2026-11-12 10:28:42,613 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-11-12 10:28:50,603 views LoginView.post - giriş cəhdi: laman.bashirova
+INFO 2026-11-12 10:28:50,649 views laman.bashirova uğurla daxil oldu
+INFO 2026-11-12 10:28:50,663 services [LOQ] laman.bashirova - Daxil oldu - modul=- - laman.bashirova sistemə daxil oldu
+INFO 2026-11-12 10:28:50,697 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-11-12 10:28:50,726 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:28:51,827 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:29:05,694 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:29:21,890 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:29:41,985 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:29:44,607 middleware [LOQ] laman.bashirova - Baxdı - modul=- - sistem moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:30:17,871 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-11-12 10:30:17,915 middleware [LOQ] laman.bashirova - Baxdı - modul=İstifadəçi idarəetməsi - İstifadəçi idarəetməsi moduluna daxil oldu - ip=::1
+INFO 2026-11-12 10:30:17,931 views UserView.get - laman.bashirova öz məlumatını sorğuladı
+INFO 2026-11-12 10:30:18,049 middleware [LOQ] laman.bashirova - Baxdı - modul=Elanlar lövhəsi - Elanlar lövhəsi moduluna daxil oldu - ip=::1

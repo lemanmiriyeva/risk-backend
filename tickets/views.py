@@ -286,6 +286,8 @@ class TicketViewSet(viewsets.GenericViewSet):
 
         dept_rows = (
             TicketDepartment.objects.filter(ticket__in=active.values('id'))
+            .filter(**({} if services.is_ticket_admin(request.user)
+                       else {'department_id__in': services.user_department_ids(request.user)}))
             .values('department_id', 'department__title', 'department__shortname')
             .annotate(c=Count('ticket_id', distinct=True)).order_by('-c')[:8]
         )
@@ -348,6 +350,10 @@ class TicketUsersView(APIView):
         qs = User.objects.filter(is_active=True, is_approved=True).select_related('department')
         if not user.is_superuser and user.organization_id:
             qs = qs.filter(organization_id=user.organization_id)
+        # modul admini bütün əməkdaşları görür, digərləri yalnız öz şöbələrinin əməkdaşlarını
+        allowed = None if services.is_ticket_admin(user) else services.user_department_ids(user)
+        if allowed is not None:
+            qs = qs.filter(department_id__in=allowed)
         dept = request.query_params.get('department')
         if dept:
             ids = {int(dept)} | set(Department.objects.filter(parent_id=dept).values_list('id', flat=True)) \
