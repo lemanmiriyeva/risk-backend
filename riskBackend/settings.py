@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'operations',
     'bulletin',
     'trainings',
+    'tickets',
 ]
 # settings.py
 

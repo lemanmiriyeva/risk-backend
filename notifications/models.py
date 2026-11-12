@@ -8,12 +8,20 @@ class Notification(TimestampsModel):
     TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED = "attendance_permission_dept_approved"
     TYPE_ATTENDANCE_PERMISSION_APPROVED = "attendance_permission_approved"
     TYPE_ATTENDANCE_PERMISSION_REJECTED = "attendance_permission_rejected"
+    TYPE_TICKET_ASSIGNED = "ticket_assigned"
+    TYPE_TICKET_COMMENT = "ticket_comment"
+    TYPE_TICKET_UPDATE = "ticket_update"
+    TYPE_TICKET_ESCALATED = "ticket_escalated"
     TYPE_OTHER = "other"
     TYPE_CHOICES = [
         (TYPE_ATTENDANCE_PERMISSION_NEW, "Yeni icazə sorğusu"),
         (TYPE_ATTENDANCE_PERMISSION_DEPT_APPROVED, "Şöbə müdiri təsdiqlədi"),
         (TYPE_ATTENDANCE_PERMISSION_APPROVED, "İcazə təsdiqləndi"),
         (TYPE_ATTENDANCE_PERMISSION_REJECTED, "İcazədən imtina edildi"),
+        (TYPE_TICKET_ASSIGNED, "Müraciət təyin edildi"),
+        (TYPE_TICKET_COMMENT, "Müraciətə yeni şərh"),
+        (TYPE_TICKET_UPDATE, "Müraciət yeniləndi"),
+        (TYPE_TICKET_ESCALATED, "Müraciətin SLA vaxtı keçdi"),
         (TYPE_OTHER, "Digər"),
     ]
 

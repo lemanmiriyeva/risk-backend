@@ -69,4 +69,15 @@ class Command(BaseCommand):
             }
         )
 
+        # Müraciətlər (ticket sistemi): hamıya açıq; kateqoriyalar tickets miqrasiyası ilə yaranır.
+        Module.objects.update_or_create(
+            code="tickets",
+            defaults={
+                "title": "Müraciətlər",
+                "description": "Problem və sorğuları şöbələrə təyin edərək izləyin (ticket sistemi).",
+                "url_endpoint": "muracietler",
+                "is_public": True,
+            }
+        )
+
         self.stdout.write(self.style.SUCCESS("Modullar seed edildi."))
